@@ -1,252 +1,279 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ledwall - Immacolata Capuana</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Libreria Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledwall Live | Immacolata Capuana 2026</title>
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #2A1B18;
-            overflow: hidden;
-            font-family: 'Quicksand', sans-serif;
-        }
-        
-        /* Sfondo sfumato dinamico per riempire lo spazio delle foto verticali */
-        #bg-blur {
-            position: absolute;
-            inset: -20px;
-            background-size: cover;
-            background-position: center;
-            filter: blur(30px) brightness(0.35);
-            transform: scale(1.1);
-            transition: opacity 1s ease-in-out;
-            opacity: 0;
-            z-index: 1;
-        }
+<!-- Preconnect & Preload -->
+<link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+<link rel="preconnect" href="https://crmobnweejiepmsbteme.supabase.co" crossorigin>
+<link rel="preload" href="Logo immacolata tondo 2.png" as="image">
 
-        /* Immagine principale in primo piano */
-        #slideshow {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: opacity 1s ease-in-out;
-            opacity: 0;
-            z-index: 2;
-        }
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'festive-dark': '#1a0d0c',
+        'festive-yellow': '#FFD700',
+        'festive-red': '#E63946',
+      },
+      fontFamily: {
+        'title': ['"Playfair Display"', 'serif'],
+        'body': ['"Quicksand"', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
 
-        /* Pannello stile vetro coordinato al sito */
-        .glass-panel {
-            background: rgba(42, 27, 24, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 215, 0, 0.35);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-        }
+<!-- Google Fonts & FontAwesome -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        /* Box in alto a sinistra con QR Code (Spostato sopra) */
-        .qr-top-overlay {
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            border-radius: 20px;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            z-index: 100;
-            border-color: #FFD700;
-        }
+<style>
+body {
+  background-color: #1a0d0c;
+  color: #FFD700;
+  overflow: hidden;
+  margin: 0;
+  height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+}
 
-        .qr-text h2 {
-            color: #FFD700;
-            margin: 0 0 4px 0;
-            font-size: 20px;
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-        }
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.4);
+}
 
-        .qr-text p {
-            color: #ffffff;
-            margin: 0;
-            font-size: 13px;
-            font-weight: 600;
-        }
+.text-glow-red {
+  text-shadow: 0 0 20px rgba(230, 57, 70, 0.9), 0 0 40px rgba(230, 57, 70, 0.5);
+}
 
-        .qr-box {
-            background: white;
-            padding: 8px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        }
+.glass-welcome {
+  background: radial-gradient(circle, rgba(50, 15, 14, 0.9) 0%, rgba(20, 8, 7, 0.95) 100%);
+  backdrop-filter: blur(16px);
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  box-shadow: 0 0 60px rgba(230, 57, 70, 0.5), inset 0 0 40px rgba(255, 215, 0, 0.2);
+}
 
-        .qr-box img {
-            width: 90px;
-            height: 90px;
-            display: block;
-        }
+@keyframes neonPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.01); }
+}
 
-        /* Logo in basso a destra (Spostato sotto) */
-        .logo-bottom-overlay {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            border-radius: 20px;
-            padding: 14px 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            z-index: 100;
-        }
+.neon-animation {
+  animation: neonPulse 3s ease-in-out infinite;
+}
 
-        /* Fiocchi di neve animati */
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            background: #ffffff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.8;
-            box-shadow: 0 0 8px #FFD700;
-            will-change: transform;
-            animation: fall linear infinite;
-        }
+.snowflake {
+  position: fixed;
+  top: -10px;
+  background: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.8;
+  box-shadow: 0 0 10px #FFD700;
+  animation: fall linear infinite;
+}
 
-        @keyframes fall {
-            0% { transform: translateY(-10vh) translateX(0); opacity: 1; }
-            100% { transform: translateY(110vh) translateX(20px); opacity: 0.2; }
-        }
-    </style>
+@keyframes fall {
+  0% { transform: translateY(-10vh) translateX(0); opacity: 1; }
+  100% { transform: translateY(110vh) translateX(30px); opacity: 0.2; }
+}
+
+.fade-transition {
+  transition: opacity 1s ease-in-out;
+}
+</style>
 </head>
-<body>
+<body class="relative w-screen h-screen flex items-center justify-center">
 
-    <!-- Sfondo sfumato per le foto verticali -->
-    <div id="bg-blur"></div>
+<!-- Sfondo con Neve e Gradiente Festivo -->
+<div class="fixed inset-0 z-[-2] bg-gradient-to-br from-[#2A1B18] via-[#1a0d0c] to-[#0a0403]"></div>
+<div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-950/50 via-transparent to-black/90"></div>
 
-    <!-- Foto principale -->
-    <img id="slideshow" src="" alt="Ledwall">
+<!-- QR CODE FISSO IN ALTO A SINISTRA PER LA PIAZZA -->
+<div class="absolute top-6 left-6 z-40 bg-black/80 border-2 border-festive-yellow/70 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,215,0,0.3)] flex items-center gap-4 backdrop-blur-md">
+  <div class="bg-white p-2 rounded-xl">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://mariozenga43-png.github.io/immacolata-capuana/" alt="QR Code" class="w-24 h-24 object-contain">
+  </div>
+  <div class="text-left">
+    <span class="block font-title font-bold text-festive-yellow text-lg text-glow-gold uppercase tracking-wider">Inquadra & Scatta!</span>
+    <span class="block text-white text-xs font-semibold mt-1">Manda il tuo selfie</span>
+    <span class="block text-festive-red text-[11px] font-bold uppercase mt-0.5">sul Maxischermo</span>
+  </div>
+</div>
 
-    <!-- QR Code in alto a sinistra -->
-    <div class="qr-top-overlay glass-panel">
-        <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mariozenga43-png.github.io/immacolata-capuana/" alt="QR Code Sito">
-        </div>
-        <div class="qr-text">
-            <h2>Inquadra e Scatta!</h2>
-            <p>Invia il tuo selfie sul Ledwall in piazza</p>
-        </div>
+<!-- LOGO FISSO IN BASSO A DESTRA -->
+<div class="absolute bottom-6 right-6 z-40 bg-black/70 border border-festive-yellow/40 rounded-2xl px-5 py-3 shadow-lg flex items-center gap-3 backdrop-blur-md">
+  <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain">
+  <div class="text-left">
+    <span class="block font-title font-bold text-festive-yellow text-sm tracking-wide">IMMACOLATA CAPUANA</span>
+    <span class="block text-gray-300 text-[10px] uppercase tracking-widest font-semibold">Ponte Romano • 5-8 Dicembre 2026</span>
+  </div>
+</div>
+
+<!-- CONTENITORE PRINCIPALE DINAMICO -->
+<div id="ledwall-container" class="w-full h-full flex items-center justify-center p-12">
+  
+  <!-- SCHERMATA DI BENVENUTO CON SCRITTA E LOGO CENTRALE -->
+  <div id="welcome-screen" class="glass-welcome rounded-[3rem] p-10 md:p-14 text-center max-w-4xl mx-auto flex flex-col items-center shadow-2xl relative neon-animation">
+    
+    <!-- Tag superiore -->
+    <div class="absolute -top-5 bg-festive-red text-white text-xs font-bold uppercase tracking-widest px-6 py-2 rounded-full border border-festive-yellow/60 shadow-lg animate-pulse">
+      <i class="fa-solid fa-star mr-2 text-festive-yellow"></i> Live in Piazza • Ponte Romano <i class="fa-solid fa-star ml-2 text-festive-yellow"></i>
+    </div>
+    
+    <!-- Logo al centro con effetto alone luminoso -->
+    <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-festive-yellow p-3 bg-black/60 shadow-[0_0_60px_rgba(255,215,0,0.6)] mb-6 flex items-center justify-center relative">
+      <div class="absolute inset-0 rounded-full border border-festive-red animate-ping opacity-40"></div>
+      <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(255,215,0,0.9)]">
     </div>
 
-    <!-- Logo e Titolo in basso a destra -->
-    <div class="logo-bottom-overlay glass-panel">
-        <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="h-14 w-14 object-contain">
-        <div>
-            <h1 class="text-yellow-400 font-bold text-lg uppercase tracking-wider m-0 leading-tight font-serif">Immacolata Capuana</h1>
-            <p class="text-white text-xs m-0 opacity-90">Ponte Romano • 5-8 Dicembre 2026</p>
-        </div>
+    <!-- Scritta Gialla e Rossa Richiesta -->
+    <h1 class="font-title text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight mb-4 leading-tight">
+      <span class="text-festive-yellow text-glow-gold">BENVENUTI ALL'</span><br/>
+      <span class="text-festive-red text-glow-red">IMMACOLATA CAPUANA</span>
+    </h1>
+    
+    <p class="text-white text-lg md:text-xl font-semibold max-w-2xl mx-auto mb-6 leading-relaxed">
+      Inquadra il QR code in alto a sinistra con il tuo smartphone, scatta un selfie e guardalo apparire <strong class="text-festive-yellow">in tempo reale</strong> sul maxischermo!
+    </p>
+
+    <div class="inline-flex items-center gap-3 bg-festive-red/30 border border-festive-red text-festive-yellow px-6 py-3 rounded-2xl text-sm md:text-base font-bold tracking-wider uppercase shadow-[0_0_20px_rgba(230,57,70,0.4)]">
+      <i class="fa-solid fa-camera-retro text-festive-yellow animate-bounce"></i> In attesa del primo selfie...
     </div>
+  </div>
 
-    <script>
-        // --- NEVE ANIMATA SUL LEDWALL ---
-        window.addEventListener('load', () => {
-            const snowCount = 40; 
-            const fragment = document.createDocumentFragment();
+  <!-- SLIDESHOW FOTO (Nascosto finché non arrivano foto) -->
+  <div id="photo-slideshow" class="hidden w-full h-full flex items-center justify-center relative">
+    <img id="active-photo" src="" alt="Selfie Live" class="max-w-full max-h-[85vh] object-contain rounded-2xl border-4 border-festive-yellow/60 shadow-[0_0_60px_rgba(255,215,0,0.4)] fade-transition">
+  </div>
 
-            for (let i = 0; i < snowCount; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
+</div>
 
-                const size = Math.random() * 6 + 3 + 'px';
-                snowflake.style.width = size;
-                snowflake.style.height = size;
-                snowflake.style.left = Math.random() * 100 + 'vw';
-                snowflake.style.animationDuration = Math.random() * 5 + 4 + 's';
-                snowflake.style.animationDelay = Math.random() * 5 + 's';
+<!-- SCRIPT SUPABASE & GESTIONE LEDWALL -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://crmobnweejiepmsbteme.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_0h_Hv7yY6XMyI6-nQusLfw_EGv4I1TO';
 
-                if (Math.random() > 0.7) {
-                    snowflake.style.background = '#FFD700'; 
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let photoList = [];
+let currentIndex = 0;
+let slideshowInterval = null;
+
+async function fetchPhotosForLedwall() {
+    try {
+        const { data, error } = await _supabase.storage
+            .from('foto-evento')
+            .list('', {
+                limit: 50,
+                sortBy: { column: 'created_at', order: 'desc' }
+            });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            const validFiles = data.filter(file => file.name && file.name !== '.emptyFolderPlaceholder');
+            
+            if (validFiles.length > 0) {
+                const newPhotos = validFiles.map(file => {
+                    const { data: { publicUrl } } = _supabase.storage
+                        .from('foto-evento')
+                        .getPublicUrl(file.name);
+                    return publicUrl;
+                });
+
+                if (newPhotos.length !== photoList.length || newPhotos[0] !== photoList[0]) {
+                    photoList = newPhotos;
+                    showPhotoScreen();
                 }
-                fragment.appendChild(snowflake);
+            } else {
+                showWelcomeScreen();
             }
-            document.body.appendChild(fragment);
-        });
-
-        // --- GESTIONE SUPABASE E SLIDESHOW ---
-        const SUPABASE_URL = 'https://crmobnweejiepmsbteme.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_0h_Hv7yY6XMyI6-nQusLfw_EGv4I1TO';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let images = [];
-        let currentIndex = 0;
-        const imgElement = document.getElementById('slideshow');
-        const bgBlurElement = document.getElementById('bg-blur');
-
-        async function fetchImages() {
-            const { data, error } = await _supabase.storage.from('foto-evento').list();
-            if (data && data.length > 0) {
-                const newImages = data
-                    .filter(file => file.name.match(/\.(jpeg|jpg|gif|png)$/i))
-                    .map(file => _supabase.storage.from('foto-evento').getPublicUrl(file.name).data.publicUrl);
-
-                if (newImages.length > 0) {
-                    images = newImages;
-                }
-            }
+        } else {
+            showWelcomeScreen();
         }
+    } catch (err) {
+        console.error('Errore nel recupero foto:', err);
+    }
+}
 
-        function showNextImage() {
-            if (images.length === 0) return;
-            
-            imgElement.style.opacity = 0;
-            bgBlurElement.style.opacity = 0;
-            
-            setTimeout(() => {
-                const currentImgUrl = images[currentIndex];
-                
-                imgElement.src = currentImgUrl;
-                bgBlurElement.style.backgroundImage = `url('${currentImgUrl}')`;
-                
-                imgElement.style.opacity = 1;
-                bgBlurElement.style.opacity = 1;
-                
-                currentIndex = (currentIndex + 1) % images.length;
-            }, 1000);
+function showWelcomeScreen() {
+    if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+    }
+    document.getElementById('welcome-screen').classList.remove('hidden');
+    document.getElementById('photo-slideshow').classList.add('hidden');
+}
+
+function showPhotoScreen() {
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const photoSlideshow = document.getElementById('photo-slideshow');
+    const activePhoto = document.getElementById('active-photo');
+
+    if (!welcomeScreen.classList.contains('hidden')) {
+        welcomeScreen.classList.add('hidden');
+        photoSlideshow.classList.remove('hidden');
+    }
+
+    if (photoList.length > 0) {
+        if (currentIndex >= photoList.length) currentIndex = 0;
+        
+        activePhoto.style.opacity = '0';
+        setTimeout(() => {
+            activePhoto.src = photoList[currentIndex];
+            activePhoto.style.opacity = '1';
+        }, 300);
+
+        if (photoList.length > 1 && !slideshowInterval) {
+            slideshowInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % photoList.length;
+                activePhoto.style.opacity = '0';
+                setTimeout(() => {
+                    activePhoto.src = photoList[currentIndex];
+                    activePhoto.style.opacity = '1';
+                }, 300);
+            }, 8000);
         }
+    }
+}
 
-        async function avviaLedwall() {
-            await fetchImages();
-            showNextImage();
-            
-            // Cambia foto ogni 10 secondi
-            setInterval(showNextImage, 10000);
-            
-            // Cerca nuove foto ogni 30 secondi
-            setInterval(fetchImages, 30000);
+// Avvio controllo immediato e polling ogni 5 secondi
+fetchPhotosForLedwall();
+setInterval(fetchPhotosForLedwall, 5000);
+
+// --- NEVE ANIMATA PER IL LEDWALL ---
+window.addEventListener('load', () => {
+    const snowCount = 40; 
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < snowCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+
+        const size = Math.random() * 8 + 4 + 'px';
+        snowflake.style.width = size;
+        snowflake.style.height = size;
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = Math.random() * 6 + 4 + 's';
+        snowflake.style.animationDelay = Math.random() * 5 + 's';
+
+        if (Math.random() > 0.6) {
+            snowflake.style.background = '#FFD700'; 
         }
-
-        avviaLedwall();
-    </script>
+        fragment.appendChild(snowflake);
+    }
+    document.body.appendChild(fragment);
+});
+</script>
 </body>
 </html>
