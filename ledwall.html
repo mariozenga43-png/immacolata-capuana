@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ledwall - Immacolata Capuana</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Libreria Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #2A1B18;
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        /* Sfondo sfumato dinamico per riempire lo spazio delle foto verticali */
+        #bg-blur {
+            position: absolute;
+            inset: -20px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(30px) brightness(0.35);
+            transform: scale(1.1);
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* Immagine principale in primo piano */
+        #slideshow {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        /* Pannello stile vetro coordinato al sito */
+        .glass-panel {
+            background: rgba(42, 27, 24, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 215, 0, 0.35);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+
+        /* Header in alto a sinistra con il Logo */
+        .header-overlay {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            border-radius: 20px;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+        }
+
+        /* Box in basso a destra con QR Code */
+        .promo-overlay {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            border-radius: 20px;
+            padding: 18px 28px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            z-index: 100;
+            border-color: #FFD700;
+        }
+
+        .promo-text h2 {
+            color: #FFD700;
+            margin: 0 0 4px 0;
+            font-size: 22px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .promo-text p {
+            color: #ffffff;
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .qr-box {
+            background: white;
+            padding: 8px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .qr-box img {
+            width: 85px;
+            height: 85px;
+            display: block;
+        }
+
+        /* Fiocchi di neve animati */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            background: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.8;
+            box-shadow: 0 0 8px #FFD700;
+            will-change: transform;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 1; }
+            100% { transform: translateY(110vh) translateX(20px); opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sfondo sfumato per le foto verticali -->
+    <div id="bg-blur"></div>
+
+    <!-- Foto principale -->
+    <img id="slideshow" src="" alt="Ledwall">
+
+    <!-- Header in alto a sinistra (Logo e Titolo) -->
+    <div class="header-overlay glass-panel">
+        <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="h-12 w-12 object-contain">
+        <div>
+            <h1 class="text-yellow-400 font-bold text-lg uppercase tracking-wider m-0 leading-tight font-serif">Immacolata Capuana</h1>
+            <p class="text-white text-xs m-0 opacity-90">Ponte Romano • 5-8 Dicembre 2026</p>
+        </div>
+    </div>
+
+    <!-- Overlay fisso in basso a destra (QR Code) -->
+    <div class="promo-overlay glass-panel">
+        <div class="promo-text">
+            <h2>Inquadra e Scatta!</h2>
+            <p>Invia il tuo selfie sul Ledwall in piazza</p>
+        </div>
+        <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mariozenga43-png.github.io/immacolata-capuana/" alt="QR Code Sito">
+        </div>
+    </div>
+
+    <script>
+        // --- NEVE ANIMATA SUL LEDWALL ---
+        window.addEventListener('load', () => {
+            const snowCount = 40; 
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < snowCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+
+                const size = Math.random() * 6 + 3 + 'px';
+                snowflake.style.width = size;
+                snowflake.style.height = size;
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = Math.random() * 5 + 4 + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+
+                if (Math.random() > 0.7) {
+                    snowflake.style.background = '#FFD700'; 
+                }
+                fragment.appendChild(snowflake);
+            }
+            document.body.appendChild(fragment);
+        });
+
+        // --- GESTIONE SUPABASE E SLIDESHOW ---
+        const SUPABASE_URL = 'https://crmobnweejiepmsbteme.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_0h_Hv7yY6XMyI6-nQusLfw_EGv4I1TO';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let images = [];
+        let currentIndex = 0;
+        const imgElement = document.getElementById('slideshow');
+        const bgBlurElement = document.getElementById('bg-blur');
+
+        async function fetchImages() {
+            const { data, error } = await _supabase.storage.from('foto-evento').list();
+            if (data && data.length > 0) {
+                const newImages = data
+                    .filter(file => file.name.match(/\.(jpeg|jpg|gif|png)$/i))
+                    .map(file => _supabase.storage.from('foto-evento').getPublicUrl(file.name).data.publicUrl);
+
+                if (newImages.length > 0) {
+                    images = newImages;
+                }
+            }
+        }
+
+        function showNextImage() {
+            if (images.length === 0) return;
+            
+            imgElement.style.opacity = 0;
+            bgBlurElement.style.opacity = 0;
+            
+            setTimeout(() => {
+                const currentImgUrl = images[currentIndex];
+                
+                imgElement.src = currentImgUrl;
+                bgBlurElement.style.backgroundImage = `url('${currentImgUrl}')`;
+                
+                imgElement.style.opacity = 1;
+                bgBlurElement.style.opacity = 1;
+                
+                currentIndex = (currentIndex + 1) % images.length;
+            }, 1000);
+        }
+
+        async function avviaLedwall() {
+            await fetchImages();
+            showNextImage();
+            
+            // Cambia foto ogni 10 secondi
+            setInterval(showNextImage, 10000);
+            
+            // Cerca nuove foto ogni 30 secondi
+            setInterval(fetchImages, 30000);
+        }
+
+        avviaLedwall();
+    </script>
+</body>
+</html>
