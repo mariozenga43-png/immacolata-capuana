@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immacolata Capuana | 5-6-7-8 Dicembre</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Pre-connessioni per velocizzare il caricamento della mappa -->
+    <link rel="preconnect" href="https://maps.googleapis.com">
+    <link rel="preconnect" href="https://maps.gstatic.com" crossorigin>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'festive-dark': '#2A1B18',
+                        'festive-yellow': '#FFD700',
+                        'festive-red': '#E63946',
+                    },
+                    fontFamily: {
+                        'title': ['"Playfair Display"', 'serif'],
+                        'body': ['"Quicksand"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #2A1B18;
+            color: #FFD700;
+            overflow-x: hidden;
+        }
+
+        .text-glow-yellow {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .text-glow-red {
+            text-shadow: 0 0 10px rgba(230, 57, 70, 0.6), 0 0 20px rgba(230, 57, 70, 0.4);
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(42, 27, 24, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Snow Animation Originale + Accelerazione Hardware */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            background: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.8;
+            box-shadow: 0 0 8px #FFD700;
+            will-change: transform; /* Evita gli scatti su iPhone/Mac */
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) translateX(20px);
+                opacity: 0.2;
+            }
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px -5px rgba(230, 57, 70, 0.4);
+            border-color: #FFD700;
+        }
+    </style>
+</head>
+<body class="font-body antialiased relative">
+
+<!-- Sfondo con Logo Immacolata -->
+<div class="fixed inset-0 z-[-2] flex items-center justify-center bg-festive-dark">
+    <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana Sfondo" class="w-full h-full max-w-4xl object-contain opacity-30 p-4" fetchpriority="high" decoding="async">
+</div>
+
+<!-- Overlay leggero caldo -->
+<div class="fixed inset-0 bg-gradient-to-b from-black/30 via-orange-900/20 to-black/60 z-[-1]"></div>
+
+<!-- Navbar Sticky -->
+<nav class="fixed w-full z-40 glass-panel border-b border-festive-red/30 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <!-- Logo miniatura -->
+                <img src="Logo immacolata tondo 2.png" alt="Logo Miniatura" class="h-12 w-12 object-contain">
+                <span class="font-title font-bold text-2xl text-festive-red text-glow-red hidden sm:block">Immacolata Capuana</span>
+            </div>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#evento" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">L'Evento</a>
+                <a href="#programma" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">Programma</a>
+                <a href="#dove-siamo" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">Dove Siamo</a>
+                <a href="#contatti" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">Contatti</a>
+            </div>
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button type="button" class="text-festive-yellow hover:text-white focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 1. Hero Banner -->
+<section id="home" class="relative min-h-screen flex items-center justify-center pt-20 z-10 overflow-hidden">
+    <div class="glass-panel p-8 md:p-12 rounded-[3rem] shadow-2xl relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mx-4">
+        <div class="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full border border-festive-yellow/50 bg-black/40">
+            <i class="fa-solid fa-calendar-day text-festive-red"></i>
+            <span class="text-festive-yellow font-bold uppercase tracking-widest text-sm">5-6-7-8 Dicembre 2026</span>
+        </div>
+
+        <h1 class="font-title text-6xl md:text-8xl font-black mb-4 text-festive-yellow text-glow-yellow leading-tight uppercase">
+            IMMACOLATA <br/> <span class="text-festive-red text-glow-red text-5xl md:text-7xl">CAPUANA</span>
+        </h1>
+
+        <p class="mt-6 text-xl md:text-2xl text-white font-medium max-w-2xl mx-auto mb-10 flex items-center justify-center gap-3">
+            <i class="fa-solid fa-location-dot text-festive-red"></i>
+            Riviera del Ponte Romano, Capua
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#programma" class="group relative px-8 py-4 bg-festive-red text-white font-bold text-lg rounded-full overflow-hidden transition-all hover:bg-red-700 hover:scale-105 shadow-[0_0_15px_rgba(230,57,70,0.5)]">
+<span class="relative z-10 flex items-center gap-2">
+Scopri il Programma <i class="fa-solid fa-arrow-down transition-transform group-hover:translate-y-1"></i>
+</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. L'Evento -->
+<section id="evento" class="relative py-24 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 glass-panel rounded-[3rem] p-8 md:p-12 shadow-2xl">
+        <div class="text-center mb-16">
+            <i class="fa-solid fa-holly-berry text-4xl text-festive-red mb-4"></i>
+            <h2 class="font-title text-4xl md:text-5xl font-bold text-festive-yellow text-glow-yellow mb-6">La Magia sul Volturno</h2>
+            <div class="w-24 h-1 bg-festive-red mx-auto rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 text-lg text-white leading-relaxed">
+                <p>
+                    <span class="text-festive-red font-bold text-3xl">B</span>envenuti alla prima edizione dell'<strong>Immacolata Capuana</strong>. Quest'anno, per ben quattro giorni, la storica <em>Riviera del Ponte Romano</em> si trasforma in un vero e proprio villaggio incantato, illuminato dai caldi colori del tramonto e delle feste.
+                </p>
+                <p>
+                    Passeggiando lungo le sponde del fiume, sarete avvolti da luci scintillanti, profumi speziati e melodie tradizionali. Un evento pensato per le famiglie e per chiunque voglia riscoprire la meraviglia del Natale.
+                </p>
+            </div>
+
+            <div class="relative">
+                <div class="aspect-video md:aspect-[4/3] rounded-3xl overflow-hidden border-4 border-festive-red shadow-[0_0_30px_rgba(230,57,70,0.3)] relative group">
+                    <!-- Immagine Placeholder generica per il mood festivo -->
+                    <img src="https://placehold.co/800x600/2A1B18/FFD700?text=Atmosfera+Magica\nRiviera+di+Capua" alt="Atmosfera Evento" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. Programma -->
+<section id="programma" class="relative py-24 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 glass-panel rounded-[3rem] p-8 md:p-12 shadow-2xl">
+        <div class="text-center mb-16">
+            <i class="fa-solid fa-scroll text-4xl text-festive-yellow mb-4"></i>
+            <h2 class="font-title text-4xl md:text-5xl font-bold text-festive-red text-glow-red mb-6">Il Programma</h2>
+            <p class="text-white text-xl max-w-2xl mx-auto">Dal 5 all'8 Dicembre: tre grandi aree tematiche vi aspettano per giornate indimenticabili.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1: Mercatini -->
+            <div class="bg-black/40 border-2 border-festive-yellow/50 rounded-2xl p-8 card-hover relative overflow-hidden group">
+                <i class="fa-solid fa-store text-5xl text-festive-yellow mb-6"></i>
+                <h3 class="font-title text-2xl font-bold text-festive-red mb-4">Mercatini Artigianali</h3>
+                <p class="text-gray-300 mb-6">
+                    Casette in legno con le migliori creazioni artigianali locali. L'occasione perfetta per i primi regali di Natale.
+                </p>
+                <div class="inline-flex items-center text-festive-yellow font-bold text-sm bg-festive-red/20 px-4 py-2 rounded-full">
+                    <i class="fa-regular fa-clock mr-2"></i> Dalle 10:00 alle 22:00
+                </div>
+            </div>
+
+            <!-- Card 2: Food -->
+            <div class="bg-black/40 border-2 border-festive-red/50 rounded-2xl p-8 card-hover relative overflow-hidden group">
+                <i class="fa-solid fa-mug-hot text-5xl text-festive-red mb-6"></i>
+                <h3 class="font-title text-2xl font-bold text-festive-yellow mb-4">Food & Warm Drinks</h3>
+                <p class="text-gray-300 mb-6">
+                    Area ristoro con specialità dello street food campano, caldarroste fumanti, cioccolata calda e vin brulè.
+                </p>
+                <div class="inline-flex items-center text-white font-bold text-sm bg-festive-yellow/20 px-4 py-2 rounded-full">
+                    <i class="fa-solid fa-utensils mr-2"></i> Area sempre aperta
+                </div>
+            </div>
+
+            <!-- Card 3: Musica -->
+            <div class="bg-black/40 border-2 border-festive-yellow/50 rounded-2xl p-8 card-hover relative overflow-hidden group">
+                <i class="fa-solid fa-music text-5xl text-festive-yellow mb-6"></i>
+                <h3 class="font-title text-2xl font-bold text-festive-red mb-4">Musica & Spettacoli</h3>
+                <p class="text-gray-300 mb-6">
+                    Esibizioni dal vivo di zampognari, cori gospel e cantastorie. In serata, spettacolo speciale di giocoleria col fuoco.
+                </p>
+                <div class="inline-flex items-center text-festive-yellow font-bold text-sm bg-festive-red/20 px-4 py-2 rounded-full">
+                    <i class="fa-solid fa-calendar-star mr-2"></i> Evento clou: ore 18:30
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. Dove Siamo (Mappa Interattiva) -->
+<section id="dove-siamo" class="relative py-24 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-panel border-2 border-festive-red rounded-[3rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl">
+
+            <!-- Info Testuali e Indicazioni -->
+            <div class="p-10 lg:w-1/2 flex flex-col justify-center bg-black/40">
+                <div class="mb-4 inline-block bg-festive-yellow/20 px-3 py-1 rounded text-festive-yellow font-bold uppercase text-xs tracking-wider border border-festive-yellow/50 w-max">Location</div>
+                <h2 class="font-title text-4xl font-bold text-festive-red text-glow-red mb-6">Riviera del Ponte Romano</h2>
+                <p class="text-white text-lg mb-6">
+                    L'evento si svolgerà lungo la suggestiva Riviera del Ponte Romano a Capua. Un luogo storico che si veste di magia per l'occasione.
+                </p>
+
+                <h3 class="text-2xl font-title font-bold text-festive-yellow mb-4">Come Raggiungerci</h3>
+                <ul class="text-gray-300 space-y-4 mb-6">
+                    <li>
+                        <i class="fa-solid fa-car text-festive-red w-6 text-center"></i> <strong>In Auto:</strong> Uscita autostrada Capua, seguire le indicazioni per il centro storico. Parcheggi consigliati nei pressi di Piazza dei Giudici o lungo le mura.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-train text-festive-red w-6 text-center"></i> <strong>In Treno:</strong> Dalla stazione ferroviaria di Capua, la Riviera dista circa 10-15 minuti a piedi passeggiando attraverso il centro.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mappa Google Embedded -->
+            <div class="lg:w-1/2 relative min-h-[400px]">
+                <iframe
+                        title="Mappa del Ponte Romano di Capua"
+                        src="https://maps.google.com/maps?q=Ponte%20Romano,%20Capua,%20Italy&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                        class="w-full h-full border-0 absolute inset-0"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer / Contatti -->
+<footer id="contatti" class="glass-panel border-t-4 border-festive-red py-12 relative z-10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="flex justify-center items-center gap-2 mb-6">
+            <img src="Logo immacolata tondo 2.png" alt="Logo Miniatura Footer" class="h-10 w-10 object-contain">
+            <span class="font-title font-bold text-3xl text-festive-red">Immacolata Capuana</span>
+        </div>
+        <p class="text-white max-w-md mx-auto mb-8">
+            Celebriamo insieme le festività natalizie nella splendida cornice storica di Capua, dal 5 all'8 Dicembre.
+        </p>
+        <div class="flex justify-center gap-6 mb-8">
+            <a href="#" class="w-10 h-10 rounded-full bg-black border border-festive-yellow flex items-center justify-center text-festive-yellow hover:bg-festive-yellow hover:text-black transition-colors">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-black border border-festive-red flex items-center justify-center text-festive-red hover:bg-festive-red hover:text-white transition-colors">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+        </div>
+        <div class="border-t border-festive-red/20 pt-8 text-gray-400 text-sm">
+            <p>&copy; 2026 Immacolata Capuana. Tutti i diritti riservati.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Script JavaScript per Neve -->
+<script>
+    const isMobile = window.innerWidth < 768;
+    const snowCount = isMobile ? 25 : 60;
+
+    for (let i = 0; i < snowCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+
+        const size = Math.random() * 6 + 3 + 'px';
+        snowflake.style.width = size;
+        snowflake.style.height = size;
+
+        snowflake.style.left = Math.random() * 100 + 'vw';
+
+        const duration = Math.random() * 5 + 4 + 's';
+        snowflake.style.animationDuration = duration;
+
+        const delay = Math.random() * 5 + 's';
+        snowflake.style.animationDelay = delay;
+
+        if (Math.random() > 0.7) {
+            snowflake.style.background = '#FFD700'; // Alcuni fiocchi dorati
+        }
+
+        document.body.appendChild(snowflake);
+    }
+</script>
+</body>
+</html>
