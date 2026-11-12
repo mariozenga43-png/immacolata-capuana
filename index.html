@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immacolata Capuana | 5-6-7-8 Dicembre 2026</title>
+
+    <!-- PRECONNECT CRITICI PER VELOCIZZARE IL CARICAMENTO SU MOBILE -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://crmobnweejiepmsbteme.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Pre-caricamento del logo tondo -->
+    <link rel="preload" href="Logo immacolata tondo 2.png" as="image">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'festive-dark': '#2A1B18',
+                        'festive-yellow': '#FFD700',
+                        'festive-red': '#E63946',
+                    },
+                    fontFamily: {
+                        'title': ['"Playfair Display"', 'serif'],
+                        'body': ['"Quicksand"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & FontAwesome caricati in modo ottimizzato -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+
+    <style>
+        body {
+            background-color: #2A1B18;
+            color: #FFD700;
+            overflow-x: hidden;
+        }
+
+        .text-glow-yellow {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .text-glow-red {
+            text-shadow: 0 0 10px rgba(230, 57, 70, 0.6), 0 0 20px rgba(230, 57, 70, 0.4);
+        }
+
+        .glass-panel {
+            background: rgba(42, 27, 24, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            background: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.8;
+            box-shadow: 0 0 8px #FFD700;
+            will-change: transform;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 1; }
+            100% { transform: translateY(110vh) translateX(20px); opacity: 0.2; }
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px -5px rgba(230, 57, 70, 0.4);
+            border-color: #FFD700;
+        }
+    </style>
+</head>
+<body class="font-body antialiased relative">
+
+<!-- Sfondo con Logo Immacolata -->
+<div class="fixed inset-0 z-[-2] flex items-center justify-center bg-festive-dark">
+    <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana Sfondo" class="w-full h-full max-w-4xl object-contain opacity-50 p-4" fetchpriority="high" decoding="async">
+</div>
+
+<!-- Overlay leggero caldo -->
+<div class="fixed inset-0 bg-gradient-to-b from-black/30 via-orange-900/20 to-black/60 z-[-1]"></div>
+
+<!-- Navbar Sticky -->
+<nav class="fixed w-full z-40 glass-panel border-b border-festive-red/30 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <img src="Logo immacolata tondo 2.png" alt="Logo Miniatura" class="h-10 w-10 object-contain">
+                <span class="font-title font-bold text-lg md:text-2xl text-white">'Ngopp 'o Pont</span>
+            </div>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="#evento" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">L'Evento</a>
+                <a href="#programma" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">Programma</a>
+                <a href="#ricordi" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">Foto Live</a>
+                <a href="#dove-siamo" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">Dove Siamo</a>
+                <a href="#contatti" class="text-festive-yellow hover:text-white transition-colors font-semibold uppercase tracking-wider text-sm">Contatti</a>
+            </div>
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button type="button" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-festive-yellow hover:text-white focus:outline-none p-2">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-festive-dark/95 backdrop-blur-md border-b border-festive-red/30 w-full absolute left-0 top-20 shadow-2xl">
+        <div class="px-4 pt-4 pb-8 space-y-6 text-center">
+            <a href="#evento" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="block text-festive-yellow hover:text-white font-bold uppercase tracking-wider text-xl">L'Evento</a>
+            <a href="#programma" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="block text-festive-yellow hover:text-white font-bold uppercase tracking-wider text-xl">Programma</a>
+            <a href="#ricordi" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="block text-festive-yellow hover:text-white font-bold uppercase tracking-wider text-xl">Foto Live</a>
+            <a href="#dove-siamo" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="block text-festive-yellow hover:text-white font-bold uppercase tracking-wider text-xl">Dove Siamo</a>
+            <a href="#contatti" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="block text-festive-yellow hover:text-white font-bold uppercase tracking-wider text-xl">Contatti</a>
+        </div>
+    </div>
+</nav>
+
+<!-- 1. Hero Banner -->
+<section id="home" class="relative min-h-screen flex items-center justify-center pt-20 z-10 overflow-hidden">
+    <div class="glass-panel p-6 md:p-12 rounded-[3rem] shadow-2xl relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mx-4 w-full">
+        <div class="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full border border-festive-yellow/50 bg-black/40">
+            <i class="fa-solid fa-calendar-day text-festive-red"></i>
+            <span class="text-festive-yellow font-bold uppercase tracking-widest text-xs md:text-sm">5-6-7-8 Dicembre 2026</span>
+        </div>
+
+        <h1 class="font-title text-4xl sm:text-5xl md:text-8xl font-black mb-4 text-festive-yellow text-glow-yellow leading-tight uppercase tracking-tight">
+            IMMACOLATA <br/> <span class="text-festive-red text-glow-red text-3xl sm:text-4xl md:text-7xl">CAPUANA</span>
+        </h1>
+
+        <div class="mt-4 md:mt-6 mb-10 flex justify-center items-center gap-2 text-base md:text-xl text-white font-medium max-w-2xl mx-auto">
+            <i class="fa-solid fa-location-dot text-festive-red"></i>
+            <span>Ponte Romano</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#programma" class="group relative px-6 md:px-8 py-3 md:py-4 bg-festive-red text-white font-bold text-base md:text-lg rounded-full overflow-hidden transition-all hover:bg-red-700 hover:scale-105 shadow-[0_0_15px_rgba(230,57,70,0.5)]">
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    Scopri il Programma Ufficiale <i class="fa-solid fa-arrow-down transition-transform group-hover:translate-y-1"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. L'Evento -->
+<section id="evento" class="relative py-24 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 glass-panel rounded-[3rem] p-8 md:p-12 shadow-2xl">
+        <div class="text-center mb-16">
+            <i class="fa-solid fa-holly-berry text-4xl text-festive-red mb-4"></i>
+            <h2 class="font-title text-3xl md:text-5xl font-bold text-festive-yellow text-glow-yellow mb-6">La Magia di Capua</h2>
+            <div class="w-24 h-1 bg-festive-red mx-auto rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 text-base md:text-lg text-white leading-relaxed">
+                <p>
+                    Quest'anno per quattro giorni imperdibili (5-8 Dicembre), l'area del <strong class="text-festive-yellow">Ponte Romano, Via Conte Landone e Via Gran Quartiere</strong> si anima con la grande manifestazione dell'Immacolata Capuana.
+                </p>
+                <p>
+                    Street food locale, attività commerciali d'eccellenza, DJ set, spettacoli dal vivo, cabaret e intrattenimento per tutte le età vi aspettano per celebrare insieme l'atmosfera delle feste nel cuore storico di Capua.
+                </p>
+            </div>
+
+            <!-- CONTO ALLA ROVESCIA DINAMICO -->
+            <div class="relative">
+                <div class="bg-black/50 rounded-3xl p-6 sm:p-8 border-2 border-festive-red shadow-[0_0_30px_rgba(230,57,70,0.3)] text-center">
+                    <div class="inline-flex items-center gap-2 text-festive-yellow font-bold uppercase tracking-widest text-xs sm:text-sm mb-6 bg-festive-red/20 px-4 py-1.5 rounded-full border border-festive-red/40">
+                        <i class="fa-regular fa-hourglass-half text-festive-red"></i>
+                        <span>Manca pochissimo all'inizio</span>
+                    </div>
+
+                    <div id="countdown-container" class="grid grid-cols-4 gap-2 sm:gap-4 mb-6">
+                        <div class="bg-festive-dark/90 border border-festive-yellow/40 rounded-2xl p-3 sm:p-4 shadow-inner">
+                            <span id="cd-days" class="block font-title text-2xl sm:text-4xl md:text-5xl font-black text-festive-yellow text-glow-yellow">00</span>
+                            <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-300 font-semibold mt-1 block">Giorni</span>
+                        </div>
+                        <div class="bg-festive-dark/90 border border-festive-yellow/40 rounded-2xl p-3 sm:p-4 shadow-inner">
+                            <span id="cd-hours" class="block font-title text-2xl sm:text-4xl md:text-5xl font-black text-festive-red text-glow-red">00</span>
+                            <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-300 font-semibold mt-1 block">Ore</span>
+                        </div>
+                        <div class="bg-festive-dark/90 border border-festive-yellow/40 rounded-2xl p-3 sm:p-4 shadow-inner">
+                            <span id="cd-minutes" class="block font-title text-2xl sm:text-4xl md:text-5xl font-black text-festive-yellow text-glow-yellow">00</span>
+                            <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-300 font-semibold mt-1 block">Minuti</span>
+                        </div>
+                        <div class="bg-festive-dark/90 border border-festive-yellow/40 rounded-2xl p-3 sm:p-4 shadow-inner">
+                            <span id="cd-seconds" class="block font-title text-2xl sm:text-4xl md:text-5xl font-black text-festive-red text-glow-red">00</span>
+                            <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-300 font-semibold mt-1 block">Secondi</span>
+                        </div>
+                    </div>
+
+                    <p id="countdown-label" class="text-white text-xs sm:text-sm font-medium flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-calendar-check text-festive-yellow"></i>
+                        <span>Apertura ufficiale: Sabato 5 Dicembre • Ore 19:00</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. PROGRAMMA UFFICIALE (4 GIORNI) -->
+<section id="programma" class="relative py-24 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 glass-panel rounded-[3rem] p-8 md:p-12 shadow-2xl">
+        <div class="text-center mb-16">
+            <i class="fa-solid fa-scroll text-4xl text-festive-yellow mb-4"></i>
+            <h2 class="font-title text-3xl md:text-5xl font-bold text-festive-red text-glow-red mb-4">Programma Ufficiale</h2>
+            <p class="text-white text-base md:text-xl max-w-2xl mx-auto">Tutti gli appuntamenti dal 5 all'8 Dicembre.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- SABATO 5 -->
+            <div class="bg-black/50 border-2 border-festive-yellow/50 rounded-3xl p-6 md:p-8 card-hover">
+                <div class="flex items-center justify-between mb-4 border-b border-festive-yellow/30 pb-3">
+                    <h3 class="font-title text-2xl font-bold text-festive-yellow"><i class="fa-solid fa-calendar-day mr-2 text-festive-red"></i> Sabato 5 Dicembre</h3>
+                    <span class="bg-festive-red/20 text-festive-yellow text-xs font-bold px-3 py-1 rounded-full">Day 1</span>
+                </div>
+                <ul class="space-y-3 text-sm md:text-base text-gray-200">
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Inizio manifestazione con DJ set e benvenuto da vocalist</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Streetfood locale e attività commerciali capuane</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Primo Spettacolo Gymhart</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Secondo Spettacolo Gymhart</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span><strong>Tribute band Pino Daniele</strong></span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>DJ set accompagnamento e chiusura</span></li>
+                </ul>
+            </div>
+
+            <!-- DOMENICA 6 -->
+            <div class="bg-black/50 border-2 border-festive-red/50 rounded-3xl p-6 md:p-8 card-hover">
+                <div class="flex items-center justify-between mb-4 border-b border-festive-red/30 pb-3">
+                    <h3 class="font-title text-2xl font-bold text-festive-red"><i class="fa-solid fa-calendar-day mr-2 text-festive-yellow"></i> Domenica 6 Dicembre</h3>
+                    <span class="bg-festive-yellow/20 text-festive-yellow text-xs font-bold px-3 py-1 rounded-full">Day 2</span>
+                </div>
+                <ul class="space-y-3 text-sm md:text-base text-gray-200">
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>Inizio manifestazione con DJ set e benvenuto da vocalist</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>Streetfood locale e attività commerciali capuane</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>DJ set di accompagnamento</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span><strong>Spettacolo Cabaret e Live Show con Biagio Izzo</strong></span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>DJ Set conclusivo</span></li>
+                </ul>
+            </div>
+
+            <!-- LUNEDI 7 -->
+            <div class="bg-black/50 border-2 border-festive-red/50 rounded-3xl p-6 md:p-8 card-hover">
+                <div class="flex items-center justify-between mb-4 border-b border-festive-red/30 pb-3">
+                    <h3 class="font-title text-2xl font-bold text-festive-red"><i class="fa-solid fa-calendar-day mr-2 text-festive-yellow"></i> Lunedì 7 Dicembre</h3>
+                    <span class="bg-festive-yellow/20 text-festive-yellow text-xs font-bold px-3 py-1 rounded-full">Day 3</span>
+                </div>
+                <ul class="space-y-3 text-sm md:text-base text-gray-200">
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>Inizio manifestazione con DJ set e benvenuto da vocalist</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>Streetfood locale e attività commerciali capuane</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>DJ set di accompagnamento</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span><strong>Live Show DJ Set con DDM</strong></span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-red text-xs mt-1"></i> <span>DJ Set finale</span></li>
+                </ul>
+            </div>
+
+            <!-- MARTEDI 8 - L'IMMACOLATA -->
+            <div class="bg-black/50 border-2 border-festive-yellow/50 rounded-3xl p-6 md:p-8 card-hover">
+                <div class="flex items-center justify-between mb-4 border-b border-festive-yellow/30 pb-3">
+                    <h3 class="font-title text-2xl font-bold text-festive-yellow"><i class="fa-solid fa-calendar-day mr-2 text-festive-red"></i> Martedì 8 Dicembre</h3>
+                    <span class="bg-festive-red/20 text-festive-yellow text-xs font-bold px-3 py-1 rounded-full">Day 4</span>
+                </div>
+                <ul class="space-y-3 text-sm md:text-base text-gray-200">
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Inizio manifestazione con DJ set e benvenuto da vocalist</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Streetfood capuano e attività commerciali</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Primo Spettacolo Gymhart</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>Secondo Spettacolo Gymhart</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span><strong>Dirtygun moment</strong></span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-asterisk text-festive-yellow text-xs mt-1"></i> <span>DJ set di chiusura</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEZIONE FOTO & SELFIES LIVE (SUPABASE INTEGRATO - UPLOAD DIRETTO E PULITO) -->
+<section id="ricordi" class="relative py-24 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 glass-panel rounded-[3rem] p-8 md:p-12 shadow-2xl border-2 border-festive-yellow/40">
+        <div class="text-center mb-12">
+            <i class="fa-solid fa-camera-retro text-4xl text-festive-yellow mb-4"></i>
+            <h2 class="font-title text-3xl md:text-5xl font-bold text-festive-yellow text-glow-yellow mb-4">Galleria Ricordi Live</h2>
+            <p class="text-white text-base md:text-lg max-w-2xl mx-auto">Scatta un selfie o carica una foto ricordo: apparirà subito in alta definizione sul Ledwall in piazza!</p>
+        </div>
+
+        <!-- Box Caricamento Foto -->
+        <div class="max-w-xl mx-auto bg-black/50 border border-festive-red/50 rounded-2xl p-6 text-center mb-12">
+            <label for="file-upload" class="cursor-pointer bg-festive-red hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full inline-flex items-center gap-3 transition-transform hover:scale-105 shadow-lg">
+                <i class="fa-solid fa-camera text-xl"></i> Scatta o Carica una Foto
+            </label>
+            <input id="file-upload" type="file" accept="image/*" capture="environment" class="hidden" onchange="uploadPhotoToSupabase(event)">
+            <p id="upload-status" class="text-gray-300 text-sm mt-4">Le foto originali appariranno subito qui sotto nella galleria pubblica.</p>
+        </div>
+
+        <!-- Griglia Foto in Tempo Reale -->
+        <div id="photo-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="aspect-square rounded-xl overflow-hidden border-2 border-festive-yellow/30 relative group bg-black/40 flex items-center justify-center">
+                <img src="https://placehold.co/400x400/2A1B18/FFD700?text=Immacolata+Capuana" alt="Foto Ricordo" class="w-full h-full object-cover">
+                <span class="absolute bottom-2 left-2 bg-black/70 text-festive-yellow text-xs px-2 py-1 rounded">Ufficiale</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. Dove Siamo (Mappa Interattiva) -->
+<section id="dove-siamo" class="relative py-24 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-panel border-2 border-festive-red rounded-[3rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl">
+
+            <div class="p-8 md:p-10 lg:w-1/2 flex flex-col justify-center bg-black/40">
+                <div class="mb-4 inline-block bg-festive-yellow/20 px-3 py-1 rounded text-festive-yellow font-bold uppercase text-xs tracking-wider border border-festive-yellow/50 w-max">Location</div>
+                <h2 class="font-title text-3xl md:text-4xl font-bold text-festive-red text-glow-red mb-6">Zone dell'Evento</h2>
+                <p class="text-white text-base md:text-lg mb-6">
+                    La manifestazione si sviluppa lungo il <strong class="text-festive-yellow">Ponte Romano</strong>, <strong class="text-festive-yellow">Via Conte Landone</strong> e <strong class="text-festive-yellow">Via Gran Quartiere</strong>.
+                </p>
+
+                <h3 class="text-lg md:text-xl font-title font-bold text-festive-yellow mb-4">Come Raggiungerci</h3>
+                <ul class="text-gray-300 space-y-4 mb-6 text-sm md:text-base">
+                    <li>
+                        <i class="fa-solid fa-car text-festive-red w-6 text-center"></i> <strong>In Auto:</strong> Uscita autostrada Capua, seguire indicazioni centro e parcheggi nelle vicinanze.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-train text-festive-red w-6 text-center"></i> <strong>In Treno:</strong> Dalla stazione ferroviaria, le zone dell'evento sono facilmente raggiungibili a piedi.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="lg:w-1/2 relative h-[300px] lg:h-auto min-h-[300px]">
+                <iframe
+                        title="Mappa delle zone dell'evento a Capua"
+                        src="https://maps.google.com/maps?q=Ponte%20Romano,%20Capua,%20Italy&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                        class="w-full h-full border-0 absolute inset-0"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer / Contatti -->
+<footer id="contatti" class="glass-panel border-t-4 border-festive-red py-12 relative z-10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="flex justify-center items-center gap-2 mb-6">
+            <img src="Logo immacolata tondo 2.png" alt="Logo Miniatura Footer" class="h-8 w-8 md:h-10 md:w-10 object-contain">
+            <span class="font-title font-bold text-xl md:text-3xl text-festive-red">Immacolata Capuana</span>
+        </div>
+        <p class="text-white max-w-md mx-auto mb-8 text-sm md:text-base">
+            Celebriamo insieme le festività natalizie nella splendida cornice storica di Capua, dal 5 all'8 Dicembre.
+        </p>
+        <!-- Instagram ufficiale collegato -->
+        <div class="flex justify-center gap-6 mb-8">
+            <a href="https://www.instagram.com/immacolatacapuana?cplk=d2pxNXpobDBiODNz" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-black border border-festive-red flex items-center justify-center text-festive-red hover:bg-festive-red hover:text-white transition-all hover:scale-110 shadow-lg" title="Seguici su Instagram">
+                <i class="fa-brands fa-instagram text-2xl"></i>
+            </a>
+        </div>
+        <div class="border-t border-festive-red/20 pt-8 text-gray-400 text-xs md:text-sm">
+            <p>&copy; 2026 Immacolata Capuana. Tutti i diritti riservati.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- SCRIPT DI SISTEMA (CONTO ALLA ROVESCIA E NEVE) -->
+<script>
+    // --- CONTO ALLA ROVESCIA (5 Dicembre 2026 ore 19:00) ---
+    const eventStartDate = new Date('2026-12-05T19:00:00').getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = eventStartDate - now;
+
+        if (distance <= 0) {
+            const container = document.getElementById('countdown-container');
+            const label = document.getElementById('countdown-label');
+            if (container) {
+                container.innerHTML = '<div class="col-span-4 py-4 font-title text-2xl sm:text-3xl font-bold text-festive-yellow text-glow-yellow">L\'Evento è Iniziato!</div>';
+            }
+            if (label) {
+                label.innerHTML = '<i class="fa-solid fa-champagne-glasses text-festive-red"></i><span>Vi aspettiamo a Capua!</span>';
+            }
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // --- NEVE ANIMATA ---
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const isMobile = window.innerWidth < 768;
+            const snowCount = isMobile ? 20 : 50;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < snowCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+
+                const size = Math.random() * 6 + 3 + 'px';
+                snowflake.style.width = size;
+                snowflake.style.height = size;
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = Math.random() * 5 + 4 + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+
+                if (Math.random() > 0.7) {
+                    snowflake.style.background = '#FFD700';
+                }
+                fragment.appendChild(snowflake);
+            }
+            document.body.appendChild(fragment);
+        }, 100);
+    });
+</script>
+
+<!-- SUPABASE INTEGRATO PER UPLOAD DIRETTO E PULITO -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = 'https://crmobnweejiepmsbteme.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_0h_Hv7yY6XMyI6-nQusLfw_EGv4I1TO';
+
+    const { createClient } = supabase;
+    const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function uploadPhotoToSupabase(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const status = document.getElementById('upload-status');
+        status.textContent = "Caricamento foto originale in corso...";
+
+        try {
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}_${file.name}`;
+
+            const { data: uploadData, error: uploadError } = await _supabase.storage
+                .from('foto-evento')
+                .upload(fileName, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = _supabase.storage
+                .from('foto-evento')
+                .getPublicUrl(fileName);
+
+            const grid = document.getElementById('photo-grid');
+            const div = document.createElement('div');
+            div.className = "aspect-square rounded-xl overflow-hidden border-2 border-festive-yellow/50 relative group bg-black/40";
+            div.innerHTML = `<img src="${publicUrl}" alt="Foto Live" class="w-full h-full object-cover"><span class="absolute bottom-2 left-2 bg-festive-red text-white text-xs px-2 py-1 rounded">Live</span>`;
+            grid.prepend(div);
+
+            status.textContent = "Foto caricata con successo!";
+        } catch (error) {
+            console.error('Errore durante l\'upload:', error);
+            status.textContent = "Errore durante il caricamento della foto.";
+        }
+    }
+</script>
+</body>
+</html>
