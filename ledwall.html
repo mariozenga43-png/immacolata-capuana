@@ -22,7 +22,7 @@ tailwind.config = {
         'festive-red': '#E63946',
       },
       fontFamily: {
-        'title': ['"Playfair Display"', 'serif'],
+        'title': ['"Bebas Neue"', 'sans-serif'],
         'body': ['"Quicksand"', 'sans-serif'],
       }
     }
@@ -30,8 +30,8 @@ tailwind.config = {
 }
 </script>
 
-<!-- Google Fonts & FontAwesome -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- Google Fonts (Bebas Neue & Quicksand) & FontAwesome -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
@@ -45,11 +45,11 @@ body {
 }
 
 .text-glow-gold {
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.4);
+  text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.4);
 }
 
 .text-glow-red {
-  text-shadow: 0 0 20px rgba(230, 57, 70, 0.9), 0 0 40px rgba(230, 57, 70, 0.5);
+  text-shadow: 0 0 25px rgba(230, 57, 70, 0.9), 0 0 50px rgba(230, 57, 70, 0.5);
 }
 
 .glass-welcome {
@@ -61,7 +61,7 @@ body {
 
 @keyframes neonPulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.01); }
+  50% { opacity: 0.95; transform: scale(1.005); }
 }
 
 .neon-animation {
@@ -96,15 +96,16 @@ body {
 <div class="fixed inset-0 z-[-2] bg-gradient-to-br from-[#2A1B18] via-[#1a0d0c] to-[#0a0403]"></div>
 <div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-950/50 via-transparent to-black/90"></div>
 
-<!-- QR CODE FISSO IN ALTO A SINISTRA PER LA PIAZZA -->
-<div class="absolute top-6 left-6 z-40 bg-black/80 border-2 border-festive-yellow/70 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,215,0,0.3)] flex items-center gap-4 backdrop-blur-md">
-  <div class="bg-white p-2 rounded-xl">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://mariozenga43-png.github.io/immacolata-capuana/" alt="QR Code" class="w-24 h-24 object-contain">
+<!-- QR CODE INGRANDITO IN ALTO A SINISTRA (Punta direttamente a #ricordi) -->
+<div class="absolute top-6 left-6 z-40 bg-black/90 border-2 border-festive-yellow rounded-3xl p-5 shadow-[0_0_35px_rgba(255,215,0,0.4)] flex items-center gap-5 backdrop-blur-md">
+  <div class="bg-white p-2.5 rounded-2xl shadow-inner">
+    <!-- QR Code puntato direttamente a #ricordi per l'upload immediato -->
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://mariozenga43-png.github.io/immacolata-capuana/#ricordi" alt="QR Code Foto Live" class="w-36 h-36 object-contain">
   </div>
-  <div class="text-left">
-    <span class="block font-title font-bold text-festive-yellow text-lg text-glow-gold uppercase tracking-wider">Inquadra & Scatta!</span>
-    <span class="block text-white text-xs font-semibold mt-1">Manda il tuo selfie</span>
-    <span class="block text-festive-red text-[11px] font-bold uppercase mt-0.5">sul Maxischermo</span>
+  <div class="text-left max-w-[200px]">
+    <span class="block font-title tracking-wide text-festive-yellow text-2xl text-glow-gold uppercase leading-none mb-1">Inquadra & Scatta!</span>
+    <span class="block text-white text-xs font-bold leading-tight mt-1">Carica il tuo selfie e vai subito in onda</span>
+    <span class="block text-festive-red text-xs font-black uppercase tracking-wider mt-2 bg-festive-red/20 px-2.5 py-1 rounded-lg border border-festive-red/40 text-center">Sul Maxischermo</span>
   </div>
 </div>
 
@@ -112,7 +113,7 @@ body {
 <div class="absolute bottom-6 right-6 z-40 bg-black/70 border border-festive-yellow/40 rounded-2xl px-5 py-3 shadow-lg flex items-center gap-3 backdrop-blur-md">
   <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain">
   <div class="text-left">
-    <span class="block font-title font-bold text-festive-yellow text-sm tracking-wide">IMMACOLATA CAPUANA</span>
+    <span class="block font-title tracking-wider text-festive-yellow text-base">IMMACOLATA CAPUANA</span>
     <span class="block text-gray-300 text-[10px] uppercase tracking-widest font-semibold">Ponte Romano • 5-8 Dicembre 2026</span>
   </div>
 </div>
@@ -120,7 +121,7 @@ body {
 <!-- CONTENITORE PRINCIPALE DINAMICO -->
 <div id="ledwall-container" class="w-full h-full flex items-center justify-center p-12">
   
-  <!-- SCHERMATA DI BENVENUTO CON SCRITTA PULITA E LOGO CENTRALE -->
+  <!-- SCHERMATA DI BENVENUTO CON FONT MODERNO BEBAS NEUE -->
   <div id="welcome-screen" class="glass-welcome rounded-[3rem] p-10 md:p-14 text-center max-w-4xl mx-auto flex flex-col items-center shadow-2xl relative neon-animation">
     
     <!-- Tag superiore -->
@@ -134,10 +135,10 @@ body {
       <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(255,215,0,0.9)]">
     </div>
 
-    <!-- Scritta Perfetta -->
-    <h1 class="font-title text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight mb-4 leading-tight">
-      <span class="text-festive-yellow text-glow-gold">BENVENUTI</span><br/>
-      <span class="text-festive-red text-glow-red">IMMACOLATA CAPUANA</span>
+    <!-- Scritta Principale con Bebas Neue -->
+    <h1 class="font-title text-6xl sm:text-7xl md:text-8xl tracking-wider mb-3 leading-none">
+      <span class="text-festive-yellow text-glow-gold block">BENVENUTI</span>
+      <span class="text-festive-red text-glow-red block mt-1">IMMACOLATA CAPUANA</span>
     </h1>
     
     <p class="text-white text-lg md:text-xl font-semibold max-w-2xl mx-auto mb-6 leading-relaxed">
