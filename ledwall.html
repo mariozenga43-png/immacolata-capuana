@@ -58,37 +58,24 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.7);
         }
 
-        /* Header in alto a sinistra con il Logo */
-        .header-overlay {
+        /* Box in alto a sinistra con QR Code (Spostato sopra) */
+        .qr-top-overlay {
             position: fixed;
             top: 30px;
             left: 30px;
             border-radius: 20px;
-            padding: 14px 24px;
+            padding: 16px 24px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            z-index: 100;
-        }
-
-        /* Box in basso a destra con QR Code */
-        .promo-overlay {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            border-radius: 20px;
-            padding: 18px 28px;
-            display: flex;
-            align-items: center;
-            gap: 22px;
+            gap: 20px;
             z-index: 100;
             border-color: #FFD700;
         }
 
-        .promo-text h2 {
+        .qr-text h2 {
             color: #FFD700;
             margin: 0 0 4px 0;
-            font-size: 22px;
+            font-size: 20px;
             font-family: 'Playfair Display', serif;
             font-weight: 900;
             text-transform: uppercase;
@@ -96,10 +83,10 @@
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
         }
 
-        .promo-text p {
+        .qr-text p {
             color: #ffffff;
             margin: 0;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
         }
 
@@ -115,9 +102,22 @@
         }
 
         .qr-box img {
-            width: 85px;
-            height: 85px;
+            width: 90px;
+            height: 90px;
             display: block;
+        }
+
+        /* Logo in basso a destra (Spostato sotto) */
+        .logo-bottom-overlay {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            border-radius: 20px;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
         }
 
         /* Fiocchi di neve animati */
@@ -148,23 +148,23 @@
     <!-- Foto principale -->
     <img id="slideshow" src="" alt="Ledwall">
 
-    <!-- Header in alto a sinistra (Logo e Titolo) -->
-    <div class="header-overlay glass-panel">
-        <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="h-12 w-12 object-contain">
-        <div>
-            <h1 class="text-yellow-400 font-bold text-lg uppercase tracking-wider m-0 leading-tight font-serif">Immacolata Capuana</h1>
-            <p class="text-white text-xs m-0 opacity-90">Ponte Romano • 5-8 Dicembre 2026</p>
+    <!-- QR Code in alto a sinistra -->
+    <div class="qr-top-overlay glass-panel">
+        <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mariozenga43-png.github.io/immacolata-capuana/" alt="QR Code Sito">
         </div>
-    </div>
-
-    <!-- Overlay fisso in basso a destra (QR Code) -->
-    <div class="promo-overlay glass-panel">
-        <div class="promo-text">
+        <div class="qr-text">
             <h2>Inquadra e Scatta!</h2>
             <p>Invia il tuo selfie sul Ledwall in piazza</p>
         </div>
-        <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mariozenga43-png.github.io/immacolata-capuana/" alt="QR Code Sito">
+    </div>
+
+    <!-- Logo e Titolo in basso a destra -->
+    <div class="logo-bottom-overlay glass-panel">
+        <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="h-14 w-14 object-contain">
+        <div>
+            <h1 class="text-yellow-400 font-bold text-lg uppercase tracking-wider m-0 leading-tight font-serif">Immacolata Capuana</h1>
+            <p class="text-white text-xs m-0 opacity-90">Ponte Romano • 5-8 Dicembre 2026</p>
         </div>
     </div>
 
