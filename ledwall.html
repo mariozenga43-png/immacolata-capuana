@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ledwall Live | Immacolata Capuana 2026</title>
+<title>Ledwall 3x2m Sponsor Fissi + Rotazione | Immacolata Capuana 2026</title>
 
 <!-- Preconnect & Preload -->
 <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
@@ -31,37 +31,102 @@ tailwind.config = {
 </script>
 
 <!-- Google Fonts (Bebas Neue & Quicksand) & FontAwesome -->
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-body {
-  background-color: #1a0d0c;
+html, body {
+  background-color: #000000;
   color: #FFD700;
   overflow: hidden;
   margin: 0;
+  padding: 0;
+  width: 100vw;
   height: 100vh;
   font-family: 'Quicksand', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CONTENITORE TOTALE 3:2 (3,00m x 2,00m) */
+#ledwall-stage {
+  position: relative;
+  width: min(100vw, 150vh);
+  height: min(100vh, 66.6667vw);
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  background-color: #090303;
+}
+
+/* BARRE LATERALI SPONSOR: 0,50m x 2,00m ciascuna (16.6667%) */
+.sponsor-sidebar {
+  width: 16.6667%;
+  height: 100%;
+  background: linear-gradient(180deg, #1a0d0c 0%, #0d0505 100%);
+  padding: 1.2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5%;
+  z-index: 45;
+  flex-shrink: 0;
+}
+
+/* Slot standard (3 riquadri rotanti in basso) */
+.sponsor-slot {
+  flex: 1;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  border: 2px solid rgba(255, 215, 0, 0.65);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Slot Main Sponsor Fisso in alto (bordo oro evidenziato) */
+.sponsor-slot-fixed {
+  border: 3px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.35);
+}
+
+.sponsor-img-fade {
+  transition: opacity 0.45s ease-in-out;
+}
+
+/* AREA VIDEO CENTRALE: 2,00m x 2,00m (66.6667% -> Quadrato 1:1) */
+#center-video-area {
+  position: relative;
+  width: 66.6667%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, #3b1311 0%, #1a0d0c 60%, #090303 100%);
 }
 
 .text-glow-gold {
-  text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.4);
+  text-shadow: 0 0 18px rgba(255, 215, 0, 0.8), 0 0 36px rgba(255, 215, 0, 0.4);
 }
 
 .text-glow-red {
-  text-shadow: 0 0 25px rgba(230, 57, 70, 0.9), 0 0 50px rgba(230, 57, 70, 0.5);
+  text-shadow: 0 0 18px rgba(230, 57, 70, 0.9), 0 0 36px rgba(230, 57, 70, 0.5);
 }
 
 .glass-welcome {
-  background: radial-gradient(circle, rgba(50, 15, 14, 0.9) 0%, rgba(20, 8, 7, 0.95) 100%);
-  backdrop-filter: blur(16px);
-  border: 2px solid rgba(255, 215, 0, 0.5);
-  box-shadow: 0 0 60px rgba(230, 57, 70, 0.5), inset 0 0 40px rgba(255, 215, 0, 0.2);
+  background: radial-gradient(circle, rgba(48, 14, 13, 0.92) 0%, rgba(18, 7, 6, 0.96) 100%);
+  border: 3px solid rgba(255, 215, 0, 0.65);
+  box-shadow: 0 0 40px rgba(230, 57, 70, 0.5), inset 0 0 25px rgba(255, 215, 0, 0.2);
 }
 
 @keyframes neonPulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.95; transform: scale(1.005); }
+  50% { opacity: 0.96; transform: scale(1.006); }
 }
 
 .neon-animation {
@@ -69,95 +134,171 @@ body {
 }
 
 .snowflake {
-  position: fixed;
-  top: -10px;
+  position: absolute;
+  top: -12px;
   background: #ffffff;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 50;
-  opacity: 0.8;
-  box-shadow: 0 0 10px #FFD700;
+  z-index: 25;
+  opacity: 0.85;
+  box-shadow: 0 0 8px #FFD700;
   animation: fall linear infinite;
 }
 
 @keyframes fall {
-  0% { transform: translateY(-10vh) translateX(0); opacity: 1; }
-  100% { transform: translateY(110vh) translateX(30px); opacity: 0.2; }
+  0% { transform: translateY(-5%) translateX(0); opacity: 1; }
+  100% { transform: translateY(105%) translateX(20px); opacity: 0.2; }
 }
 
 .fade-transition {
-  transition: opacity 1s ease-in-out;
+  transition: opacity 0.8s ease-in-out;
 }
 </style>
 </head>
-<body class="relative w-screen h-screen flex items-center justify-center">
+<body>
 
-<!-- Sfondo con Neve e Gradiente Festivo -->
-<div class="fixed inset-0 z-[-2] bg-gradient-to-br from-[#2A1B18] via-[#1a0d0c] to-[#0a0403]"></div>
-<div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-950/50 via-transparent to-black/90"></div>
+<!-- SCHERMO INTERO 3,00m x 2,00m -->
+<div id="ledwall-stage">
 
-<!-- QR CODE INGRANDITO IN ALTO A SINISTRA (Punta direttamente a #ricordi) -->
-<div class="absolute top-6 left-6 z-40 bg-black/90 border-2 border-festive-yellow rounded-3xl p-5 shadow-[0_0_35px_rgba(255,215,0,0.4)] flex items-center gap-5 backdrop-blur-md">
-  <div class="bg-white p-2.5 rounded-2xl shadow-inner">
-    <!-- QR Code puntato direttamente a #ricordi per l'upload immediato -->
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://mariozenga43-png.github.io/immacolata-capuana/#ricordi" alt="QR Code Foto Live" class="w-36 h-36 object-contain">
-  </div>
-  <div class="text-left max-w-[200px]">
-    <span class="block font-title tracking-wide text-festive-yellow text-2xl text-glow-gold uppercase leading-none mb-1">Inquadra & Scatta!</span>
-    <span class="block text-white text-xs font-bold leading-tight mt-1">Carica il tuo selfie e vai subito in onda</span>
-    <span class="block text-festive-red text-xs font-black uppercase tracking-wider mt-2 bg-festive-red/20 px-2.5 py-1 rounded-lg border border-festive-red/40 text-center">Sul Maxischermo</span>
-  </div>
+  <!-- ========================================================= -->
+  <!-- BARRA LATERALE SINISTRA SPONSOR (1 FISSO + 3 A ROTAZIONE) -->
+  <!-- ========================================================= -->
+  <aside class="sponsor-sidebar border-r-2 border-festive-yellow/60">
+    <!-- 1. FISSO IN ALTO A SINISTRA -->
+    <div class="sponsor-slot sponsor-slot-fixed">
+      <img src="sponsor-fisso-sx.png" alt="Main Sponsor Sinistra" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+      <span class="hidden font-title text-zinc-900 text-xl tracking-wider text-center leading-tight">MAIN SPONSOR SX</span>
+    </div>
+    <!-- 2. ROTANTE SINISTRA A -->
+    <div class="sponsor-slot">
+      <img id="rot-sx-1" src="sponsor-sx-1.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <span id="fallback-sx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 1</span>
+    </div>
+    <!-- 3. ROTANTE SINISTRA B -->
+    <div class="sponsor-slot">
+      <img id="rot-sx-2" src="sponsor-sx-2.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <span id="fallback-sx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 2</span>
+    </div>
+    <!-- 4. ROTANTE SINISTRA C -->
+    <div class="sponsor-slot">
+      <img id="rot-sx-3" src="sponsor-sx-3.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <span id="fallback-sx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 3</span>
+    </div>
+  </aside>
+
+  <!-- ========================================================= -->
+  <!-- AREA VIDEO CENTRALE (2,00m x 2,00m - QUADRATO 1:1)        -->
+  <!-- ========================================================= -->
+  <main id="center-video-area">
+
+    <!-- FASCIA SUPERIORE MODALITÀ LIVE (QR + BADGE EVENTO) -->
+    <div id="top-bar-live" class="absolute top-3 left-3 right-3 z-40 flex items-start justify-between gap-2 pointer-events-none">
+      
+      <!-- QR CODE INGRANDITO AD ALTO CONTRASTO -->
+      <div class="bg-black/95 border-2 border-festive-yellow rounded-2xl p-2.5 shadow-[0_0_25px_rgba(255,215,0,0.45)] flex items-center gap-2.5">
+        <div class="bg-white p-1.5 rounded-xl flex-shrink-0">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=1&data=https://mariozenga43-png.github.io/immacolata-capuana/#ricordi" alt="QR Code Foto Live" class="w-24 h-24 object-contain block">
+        </div>
+        <div class="text-left pr-1 max-w-[140px]">
+          <span class="block font-title tracking-wide text-festive-yellow text-xl text-glow-gold uppercase leading-none">Inquadra & Scatta!</span>
+          <span class="block text-white text-[11px] font-bold leading-tight mt-1">Selfie in diretta</span>
+          <span class="block text-white bg-festive-red text-[10px] font-bold uppercase tracking-wider mt-1 px-1.5 py-0.5 rounded text-center">Sul Ledwall</span>
+        </div>
+      </div>
+
+      <!-- LOGO & INFO EVENTO -->
+      <div class="bg-black/85 border-2 border-festive-yellow/50 rounded-2xl px-3 py-2.5 shadow-lg flex items-center gap-2.5">
+        <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain flex-shrink-0">
+        <div class="text-left">
+          <span class="block font-title tracking-wider text-festive-yellow text-lg leading-none">IMMACOLATA CAPUANA</span>
+          <span class="block text-white text-[10px] font-bold uppercase tracking-wider mt-0.5">Ponte Romano • Capua</span>
+          <span class="block text-festive-red text-[10px] font-bold uppercase tracking-widest">5 - 8 Dicembre 2026</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MODALITÀ 1: BENVENUTO + SLIDESHOW FOTO LIVE -->
+    <div id="ledwall-container" class="w-full h-full flex items-end justify-center pb-5 px-4 pt-32 z-20">
+      
+      <!-- SCHERMATA DI BENVENUTO -->
+      <div id="welcome-screen" class="glass-welcome rounded-[2rem] px-6 py-6 text-center w-full max-w-[95%] mx-auto flex flex-col items-center justify-center shadow-2xl relative neon-animation">
+        
+        <div class="absolute -top-3.5 bg-festive-red text-white text-[11px] font-bold uppercase tracking-widest px-4 py-1 rounded-full border-2 border-festive-yellow shadow-lg">
+          <i class="fa-solid fa-star mr-1 text-festive-yellow"></i> Live in Piazza • Ponte Romano <i class="fa-solid fa-star ml-1 text-festive-yellow"></i>
+        </div>
+        
+        <div class="w-24 h-24 rounded-full border-4 border-festive-yellow p-2 bg-black/70 shadow-[0_0_35px_rgba(255,215,0,0.6)] mt-2 mb-3 flex items-center justify-center">
+          <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="w-full h-full object-contain">
+        </div>
+
+        <h1 class="font-title text-5xl tracking-wider leading-none mb-2">
+          <span class="text-festive-yellow text-glow-gold block">BENVENUTI</span>
+          <span class="text-festive-red text-glow-red block mt-0.5">IMMACOLATA CAPUANA</span>
+        </h1>
+        
+        <p class="text-white text-sm font-bold max-w-md mx-auto mb-3 leading-snug">
+          Inquadra il QR code in alto a sinistra con lo smartphone, scatta un selfie e guardalo apparire <span class="text-festive-yellow uppercase">in tempo reale</span> sul maxischermo!
+        </p>
+
+        <div class="inline-flex items-center gap-2 bg-festive-red/40 border-2 border-festive-red text-festive-yellow px-4 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase">
+          <i class="fa-solid fa-camera-retro text-festive-yellow animate-bounce"></i> In attesa del primo selfie...
+        </div>
+      </div>
+
+      <!-- SLIDESHOW FOTO CITTADINI -->
+      <div id="photo-slideshow" class="hidden w-full h-full flex items-center justify-center">
+        <img id="active-photo" src="" alt="Selfie Live" class="max-w-full max-h-full object-contain rounded-2xl border-4 border-festive-yellow/80 shadow-[0_0_40px_rgba(255,215,0,0.45)] fade-transition">
+      </div>
+
+    </div>
+
+    <!-- MODALITÀ 2: SLIDESHOW TRIBUTE BAND PINO DANIELE (Area 2x2m) -->
+    <div id="show-pino" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
+      <img id="pino-photo" src="pino1.jpg" alt="Tribute Band Pino Daniele" class="w-full h-full object-contain fade-transition">
+    </div>
+
+    <!-- MODALITÀ 3: LOCANDINA FISSA BIAGIO IZZO (Area 2x2m) -->
+    <div id="show-izzo" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
+      <img src="locandina-izzo.jpg" alt="Spettacolo Biagio Izzo" class="w-full h-full object-contain">
+    </div>
+
+    <!-- MODALITÀ 4: LOCANDINA FISSA DDM (Area 2x2m) -->
+    <div id="show-ddm" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
+      <img src="locandina-ddm.jpg" alt="Live Show DJ Set DDM" class="w-full h-full object-contain">
+    </div>
+
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- BARRA LATERALE DESTRA SPONSOR (1 FISSO + 3 A ROTAZIONE)   -->
+  <!-- ========================================================= -->
+  <aside class="sponsor-sidebar border-l-2 border-festive-yellow/60">
+    <!-- 1. FISSO IN ALTO A DESTRA -->
+    <div class="sponsor-slot sponsor-slot-fixed">
+      <img src="sponsor-fisso-dx.png" alt="Main Sponsor Destra" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+      <span class="hidden font-title text-zinc-900 text-xl tracking-wider text-center leading-tight">MAIN SPONSOR DX</span>
+    </div>
+    <!-- 2. ROTANTE DESTRA A -->
+    <div class="sponsor-slot">
+      <img id="rot-dx-1" src="sponsor-dx-1.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <span id="fallback-dx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 1</span>
+    </div>
+    <!-- 3. ROTANTE DESTRA B -->
+    <div class="sponsor-slot">
+      <img id="rot-dx-2" src="sponsor-dx-2.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <span id="fallback-dx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 2</span>
+    </div>
+    <!-- 4. ROTANTE DESTRA C -->
+    <div class="sponsor-slot">
+      <img id="rot-dx-3" src="sponsor-dx-3.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <span id="fallback-dx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 3</span>
+    </div>
+  </aside>
+
 </div>
 
-<!-- LOGO FISSO IN BASSO A DESTRA -->
-<div class="absolute bottom-6 right-6 z-40 bg-black/70 border border-festive-yellow/40 rounded-2xl px-5 py-3 shadow-lg flex items-center gap-3 backdrop-blur-md">
-  <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain">
-  <div class="text-left">
-    <span class="block font-title tracking-wider text-festive-yellow text-base">IMMACOLATA CAPUANA</span>
-    <span class="block text-gray-300 text-[10px] uppercase tracking-widest font-semibold">Ponte Romano • 5-8 Dicembre 2026</span>
-  </div>
-</div>
-
-<!-- CONTENITORE PRINCIPALE DINAMICO -->
-<div id="ledwall-container" class="w-full h-full flex items-center justify-center p-12">
-  
-  <!-- SCHERMATA DI BENVENUTO CON FONT MODERNO BEBAS NEUE -->
-  <div id="welcome-screen" class="glass-welcome rounded-[3rem] p-10 md:p-14 text-center max-w-4xl mx-auto flex flex-col items-center shadow-2xl relative neon-animation">
-    
-    <!-- Tag superiore -->
-    <div class="absolute -top-5 bg-festive-red text-white text-xs font-bold uppercase tracking-widest px-6 py-2 rounded-full border border-festive-yellow/60 shadow-lg animate-pulse">
-      <i class="fa-solid fa-star mr-2 text-festive-yellow"></i> Live in Piazza • Ponte Romano <i class="fa-solid fa-star ml-2 text-festive-yellow"></i>
-    </div>
-    
-    <!-- Logo al centro con effetto alone luminoso -->
-    <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-festive-yellow p-3 bg-black/60 shadow-[0_0_60px_rgba(255,215,0,0.6)] mb-6 flex items-center justify-center relative">
-      <div class="absolute inset-0 rounded-full border border-festive-red animate-ping opacity-40"></div>
-      <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(255,215,0,0.9)]">
-    </div>
-
-    <!-- Scritta Principale con Bebas Neue -->
-    <h1 class="font-title text-6xl sm:text-7xl md:text-8xl tracking-wider mb-3 leading-none">
-      <span class="text-festive-yellow text-glow-gold block">BENVENUTI</span>
-      <span class="text-festive-red text-glow-red block mt-1">IMMACOLATA CAPUANA</span>
-    </h1>
-    
-    <p class="text-white text-lg md:text-xl font-semibold max-w-2xl mx-auto mb-6 leading-relaxed">
-      Inquadra il QR code in alto a sinistra con il tuo smartphone, scatta un selfie e guardalo apparire <strong class="text-festive-yellow">in tempo reale</strong> sul maxischermo!
-    </p>
-
-    <div class="inline-flex items-center gap-3 bg-festive-red/30 border border-festive-red text-festive-yellow px-6 py-3 rounded-2xl text-sm md:text-base font-bold tracking-wider uppercase shadow-[0_0_20px_rgba(230,57,70,0.4)]">
-      <i class="fa-solid fa-camera-retro text-festive-yellow animate-bounce"></i> In attesa del primo selfie...
-    </div>
-  </div>
-
-  <!-- SLIDESHOW FOTO (Nascosto finché non arrivano foto) -->
-  <div id="photo-slideshow" class="hidden w-full h-full flex items-center justify-center relative">
-    <img id="active-photo" src="" alt="Selfie Live" class="max-w-full max-h-[85vh] object-contain rounded-2xl border-4 border-festive-yellow/60 shadow-[0_0_60px_rgba(255,215,0,0.4)] fade-transition">
-  </div>
-
-</div>
-
-<!-- SCRIPT SUPABASE & GESTIONE LEDWALL -->
+<!-- SCRIPT SUPABASE, ROTAZIONE SPONSOR & REGIA REMOTA -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = 'https://crmobnweejiepmsbteme.supabase.co';
@@ -166,11 +307,165 @@ const SUPABASE_ANON_KEY = 'sb_publishable_0h_Hv7yY6XMyI6-nQusLfw_EGv4I1TO';
 const { createClient } = supabase;
 const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// =========================================================================
+// CONFIGURAZIONE ELENCO SPONSOR A ROTAZIONE (Puoi aggiungerne quanti ne vuoi)
+// =========================================================================
+const sponsorSinistra = [
+  'sponsor-sx-1.png',
+  'sponsor-sx-2.png',
+  'sponsor-sx-3.png',
+  'sponsor-sx-4.png',
+  'sponsor-sx-5.png',
+  'sponsor-sx-6.png'
+];
+
+const sponsorDestra = [
+  'sponsor-dx-1.png',
+  'sponsor-dx-2.png',
+  'sponsor-dx-3.png',
+  'sponsor-dx-4.png',
+  'sponsor-dx-5.png',
+  'sponsor-dx-6.png'
+];
+
+let indiceSx = 0;
+let indiceDx = 0;
+
+function impostaImmagineSponsor(imgId, fallbackId, fileSrc, labelFallback) {
+  const img = document.getElementById(imgId);
+  const fallback = document.getElementById(fallbackId);
+  if (!img || !fallback) return;
+
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.onerror = function() {
+      img.style.display = 'none';
+      fallback.textContent = labelFallback;
+      fallback.classList.remove('hidden');
+    };
+    img.onload = function() {
+      fallback.classList.add('hidden');
+      img.style.display = 'block';
+      img.style.opacity = '1';
+    };
+    img.src = fileSrc;
+  }, 450);
+}
+
+function ruotaSponsorLaterali() {
+  if (sponsorSinistra.length > 0) {
+    for (let i = 0; i < 3; i++) {
+      const idx = (indiceSx + i) % sponsorSinistra.length;
+      const nomeFile = sponsorSinistra[idx];
+      impostaImmagineSponsor(`rot-sx-${i + 1}`, `fallback-sx-${i + 1}`, nomeFile, `SPONSOR SX ${idx + 1}`);
+    }
+    indiceSx = (indiceSx + 3) % sponsorSinistra.length;
+  }
+
+  if (sponsorDestra.length > 0) {
+    for (let i = 0; i < 3; i++) {
+      const idx = (indiceDx + i) % sponsorDestra.length;
+      const nomeFile = sponsorDestra[idx];
+      impostaImmagineSponsor(`rot-dx-${i + 1}`, `fallback-dx-${i + 1}`, nomeFile, `SPONSOR DX ${idx + 1}`);
+    }
+    indiceDx = (indiceDx + 3) % sponsorDestra.length;
+  }
+}
+
+// Primo caricamento immediato + rotazione ogni 5 secondi
+ruotaSponsorLaterali();
+setInterval(ruotaSponsorLaterali, 5000);
+
+// =========================================================================
+// GESTIONE SPETTACOLI (PINO DANIELE, BIAGIO IZZO, DDM) E REGIA REMOTA
+// =========================================================================
+const fotoPinoDaniele = ['pino1.jpg', 'pino2.jpg', 'pino3.jpg', 'pino4.jpg'];
+let pinoIndex = 0;
+let pinoInterval = null;
+
+let modalitaCorrente = 'live';
 let photoList = [];
 let currentIndex = 0;
 let slideshowInterval = null;
 
+async function controllaRegia() {
+    try {
+        const { data, error } = await _supabase
+            .from('regia_ledwall')
+            .select('modalita')
+            .eq('id', 1)
+            .single();
+
+        if (error) throw error;
+
+        if (data && data.modalita && data.modalita !== modalitaCorrente) {
+            modalitaCorrente = data.modalita;
+            applicaModalita(modalitaCorrente);
+        }
+    } catch (err) {
+        console.error('Errore lettura regia:', err);
+    }
+}
+
+function applicaModalita(mod) {
+    const topBarLive = document.getElementById('top-bar-live');
+    const ledwallContainer = document.getElementById('ledwall-container');
+    const showPino = document.getElementById('show-pino');
+    const showIzzo = document.getElementById('show-izzo');
+    const showDdm = document.getElementById('show-ddm');
+
+    if (pinoInterval) {
+        clearInterval(pinoInterval);
+        pinoInterval = null;
+    }
+
+    showPino.classList.add('hidden');
+    showIzzo.classList.add('hidden');
+    showDdm.classList.add('hidden');
+
+    if (mod === 'live') {
+        topBarLive.classList.remove('hidden');
+        ledwallContainer.classList.remove('hidden');
+        fetchPhotosForLedwall();
+    } else {
+        topBarLive.classList.add('hidden');
+        ledwallContainer.classList.add('hidden');
+
+        if (mod === 'pino') {
+            showPino.classList.remove('hidden');
+            avviaSlideshowPino();
+        } else if (mod === 'izzo') {
+            showIzzo.classList.remove('hidden');
+        } else if (mod === 'ddm') {
+            showDdm.classList.remove('hidden');
+        }
+    }
+}
+
+function avviaSlideshowPino() {
+    const pinoImg = document.getElementById('pino-photo');
+    pinoIndex = 0;
+    pinoImg.src = fotoPinoDaniele[pinoIndex];
+    pinoImg.style.opacity = '1';
+
+    if (fotoPinoDaniele.length > 1) {
+        pinoInterval = setInterval(() => {
+            pinoIndex = (pinoIndex + 1) % fotoPinoDaniele.length;
+            pinoImg.style.opacity = '0';
+            setTimeout(() => {
+                pinoImg.src = fotoPinoDaniele[pinoIndex];
+                pinoImg.style.opacity = '1';
+            }, 400);
+        }, 6000);
+    }
+}
+
+// =========================================================================
+// GESTIONE SELFIE DEI CITTADINI
+// =========================================================================
 async function fetchPhotosForLedwall() {
+    if (modalitaCorrente !== 'live') return;
+
     try {
         const { data, error } = await _supabase.storage
             .from('foto-evento')
@@ -237,6 +532,7 @@ function showPhotoScreen() {
 
         if (photoList.length > 1 && !slideshowInterval) {
             slideshowInterval = setInterval(() => {
+                if (modalitaCorrente !== 'live') return;
                 currentIndex = (currentIndex + 1) % photoList.length;
                 activePhoto.style.opacity = '0';
                 setTimeout(() => {
@@ -248,23 +544,25 @@ function showPhotoScreen() {
     }
 }
 
-// Avvio controllo immediato e polling ogni 5 secondi
+controllaRegia();
 fetchPhotosForLedwall();
+setInterval(controllaRegia, 3000);
 setInterval(fetchPhotosForLedwall, 5000);
 
-// --- NEVE ANIMATA PER IL LEDWALL ---
+// NEVE ANIMATA DENTRO L'AREA VIDEO CENTRALE
 window.addEventListener('load', () => {
-    const snowCount = 40; 
+    const centerArea = document.getElementById('center-video-area');
+    const snowCount = 25; 
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < snowCount; i++) {
         const snowflake = document.createElement('div');
         snowflake.classList.add('snowflake');
 
-        const size = Math.random() * 8 + 4 + 'px';
+        const size = Math.random() * 5 + 3 + 'px';
         snowflake.style.width = size;
         snowflake.style.height = size;
-        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.left = Math.random() * 100 + '%';
         snowflake.style.animationDuration = Math.random() * 6 + 4 + 's';
         snowflake.style.animationDelay = Math.random() * 5 + 's';
 
@@ -273,7 +571,7 @@ window.addEventListener('load', () => {
         }
         fragment.appendChild(snowflake);
     }
-    document.body.appendChild(fragment);
+    centerArea.appendChild(fragment);
 });
 </script>
 </body>
