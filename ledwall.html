@@ -155,38 +155,47 @@ html, body {
 }
 
 /* ========================================================================= */
-/* VISUAL CONCERTO PINO DANIELE: B&N CONTRASTATO + LUCI MODERN + CITAZIONI   */
+/* VISUAL CONCERTO PINO DANIELE: DOPPIO LIVELLO CROSSFADE + VISO CENTRATO    */
 /* ========================================================================= */
 @keyframes stageBeamSweep {
-  0% { transform: rotate(-12deg) scale(1.05); opacity: 0.55; }
-  50% { transform: rotate(12deg) scale(1.22); opacity: 0.85; }
-  100% { transform: rotate(-12deg) scale(1.05); opacity: 0.55; }
+  0% { transform: rotate(-10deg) scale(1.04); opacity: 0.50; }
+  50% { transform: rotate(10deg) scale(1.16); opacity: 0.80; }
+  100% { transform: rotate(-10deg) scale(1.04); opacity: 0.50; }
 }
 
-@keyframes kenBurnsModern {
-  0% { transform: scale(1.02) translate(0%, 0%); }
-  100% { transform: scale(1.16) translate(-1.8%, -1.2%); }
+@keyframes kenBurnsSubtle {
+  0% { transform: scale(1.00); }
+  100% { transform: scale(1.07); }
 }
 
 @keyframes quoteReveal {
-  0% { opacity: 0; transform: translateY(16px) scale(0.97); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-.pino-bw-filter {
-  filter: grayscale(100%) contrast(1.28) brightness(0.92);
-  transition: opacity 1.1s ease-in-out;
+.pino-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Ancora l'inquadratura sul volto/parte alta per non tagliare mai la testa */
+  object-position: center 14%;
+  filter: grayscale(100%) contrast(1.22) brightness(0.98);
+  image-rendering: -webkit-optimize-contrast;
+  transition: opacity 1.4s ease-in-out;
+  will-change: transform, opacity;
 }
 
 .pino-ken-burns {
-  animation: kenBurnsModern 7.5s ease-out forwards;
+  animation: kenBurnsSubtle 8.5s ease-out forwards;
 }
 
 .pino-modern-lights {
   background:
-    radial-gradient(ellipse at 25% 15%, rgba(0, 119, 255, 0.48) 0%, transparent 58%),
-    radial-gradient(ellipse at 78% 82%, rgba(255, 200, 0, 0.42) 0%, transparent 58%),
-    radial-gradient(circle at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.88) 100%);
+    radial-gradient(ellipse at 25% 15%, rgba(0, 119, 255, 0.45) 0%, transparent 58%),
+    radial-gradient(ellipse at 78% 82%, rgba(255, 200, 0, 0.38) 0%, transparent 58%),
+    radial-gradient(circle at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.85) 100%);
   mix-blend-mode: screen;
   animation: stageBeamSweep 10s ease-in-out infinite;
 }
@@ -195,15 +204,15 @@ html, body {
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.55) 0%,
-    rgba(0, 0, 0, 0.1) 35%,
-    rgba(0, 0, 0, 0.25) 60%,
+    rgba(0, 0, 0, 0.05) 35%,
+    rgba(0, 0, 0, 0.25) 62%,
     rgba(0, 0, 0, 0.94) 100%
   );
-  box-shadow: inset 0 0 80px 25px rgba(0, 0, 0, 0.95);
+  box-shadow: inset 0 0 75px 22px rgba(0, 0, 0, 0.92);
 }
 
 .quote-animate {
-  animation: quoteReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: quoteReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .font-quote {
@@ -314,8 +323,9 @@ html, body {
     <!-- ========================================================= -->
     <div id="show-pino" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
       
-      <!-- Immagine B&N ad alto contrasto con movimento Ken Burns -->
-      <img id="pino-photo" src="pino00001.jpg" alt="Pino Daniele" class="w-full h-full object-cover pino-bw-filter pino-ken-burns">
+      <!-- Doppio livello immagine per dissolvenza incrociata fluida senza scatti -->
+      <img id="pino-photo-a" src="pino00001.jpg" alt="Pino Daniele" class="pino-layer opacity-100">
+      <img id="pino-photo-b" src="pino00002.jpg" alt="Pino Daniele" class="pino-layer opacity-0">
       
       <!-- Luci moderne volumetriche blu & oro in sovrapposizione -->
       <div class="absolute inset-0 pino-modern-lights pointer-events-none"></div>
@@ -324,12 +334,12 @@ html, body {
       <div class="absolute inset-0 pino-vignette-heavy pointer-events-none"></div>
 
       <!-- Tag in alto discreto -->
-      <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 border border-festive-yellow/50 px-4 py-1 rounded-full backdrop-blur-md pointer-events-none">
+      <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/75 border border-festive-yellow/50 px-4 py-1 rounded-full backdrop-blur-md pointer-events-none z-10">
         <span class="font-title text-festive-yellow tracking-[0.25em] text-base uppercase">Tribute Live • Pino Daniele</span>
       </div>
 
       <!-- FRASE ICONICA IN SOVRAIMPRESSIONE -->
-      <div id="pino-quote-box" class="absolute bottom-7 left-6 right-6 text-center pointer-events-none quote-animate">
+      <div id="pino-quote-box" class="absolute bottom-7 left-6 right-6 text-center pointer-events-none z-10 quote-animate">
         <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mx-auto mb-3"></div>
         <p id="pino-quote-text" class="font-quote text-white text-2xl md:text-3xl font-bold leading-snug tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)]">
           “Napule è mille culure, Napule è mille paure...”
@@ -479,8 +489,15 @@ const slidesPinoDaniele = [
   { img: 'pino00015.jpg', frase: '“La musica è l’unico modo per restare eterni.”', brano: 'Pino Daniele • Forever' }
 ];
 
+// Precaricamento silenzioso in background delle 15 immagini
+slidesPinoDaniele.forEach(s => {
+  const preload = new Image();
+  preload.src = s.img;
+});
+
 let pinoIndex = 0;
 let pinoInterval = null;
+let livelloAttivo = 'a';
 
 let modalitaCorrente = 'live';
 let photoList = [];
@@ -541,44 +558,71 @@ function applicaModalita(mod) {
     }
 }
 
-function mostraSlidePino(index) {
-    const pinoImg = document.getElementById('pino-photo');
+function passaASlidePino(index) {
+    const slide = slidesPinoDaniele[index];
+    const imgAttiva = document.getElementById('pino-photo-' + livelloAttivo);
+    const prossimoLivello = (livelloAttivo === 'a') ? 'b' : 'a';
+    const imgProssima = document.getElementById('pino-photo-' + prossimoLivello);
+
     const quoteBox = document.getElementById('pino-quote-box');
     const quoteText = document.getElementById('pino-quote-text');
     const quoteSong = document.getElementById('pino-quote-song');
-    const slide = slidesPinoDaniele[index];
 
-    pinoImg.style.opacity = '0';
-    quoteBox.style.opacity = '0';
+    // Carica la nuova foto sul livello nascosto prima di fare la dissolvenza
+    const loader = new Image();
+    loader.onload = function() {
+        imgProssima.src = slide.img;
 
-    setTimeout(() => {
-        pinoImg.onerror = function() {
-            this.onerror = null;
-            this.src = 'pino00001.jpg';
-        };
-        pinoImg.src = slide.img;
+        // Prepara animazione Ken Burns pulita sul nuovo livello
+        imgProssima.classList.remove('pino-ken-burns');
+        void imgProssima.offsetWidth;
+        imgProssima.classList.add('pino-ken-burns');
+
+        // Dissolvenza incrociata morbida (zero flash)
+        imgProssima.style.opacity = '1';
+        imgAttiva.style.opacity = '0';
+
+        // Aggiorna la citazione sincronizzata
+        quoteBox.classList.remove('quote-animate');
+        void quoteBox.offsetWidth;
         quoteText.textContent = slide.frase;
         quoteSong.textContent = '— ' + slide.brano;
-
-        pinoImg.classList.remove('pino-ken-burns');
-        quoteBox.classList.remove('quote-animate');
-        void pinoImg.offsetWidth;
-        pinoImg.classList.add('pino-ken-burns');
         quoteBox.classList.add('quote-animate');
 
-        pinoImg.style.opacity = '1';
-        quoteBox.style.opacity = '1';
-    }, 950);
+        livelloAttivo = prossimoLivello;
+    };
+    loader.onerror = function() {
+        imgProssima.src = 'pino00001.jpg';
+        imgProssima.style.opacity = '1';
+        imgAttiva.style.opacity = '0';
+        livelloAttivo = prossimoLivello;
+    };
+    loader.src = slide.img;
 }
 
 function avviaSlideshowPino() {
     pinoIndex = 0;
-    mostraSlidePino(pinoIndex);
+    livelloAttivo = 'a';
+
+    const imgA = document.getElementById('pino-photo-a');
+    const imgB = document.getElementById('pino-photo-b');
+    const quoteText = document.getElementById('pino-quote-text');
+    const quoteSong = document.getElementById('pino-quote-song');
+
+    imgA.src = slidesPinoDaniele[0].img;
+    imgA.style.opacity = '1';
+    imgB.style.opacity = '0';
+    imgA.classList.remove('pino-ken-burns');
+    void imgA.offsetWidth;
+    imgA.classList.add('pino-ken-burns');
+
+    quoteText.textContent = slidesPinoDaniele[0].frase;
+    quoteSong.textContent = '— ' + slidesPinoDaniele[0].brano;
 
     pinoInterval = setInterval(() => {
         pinoIndex = (pinoIndex + 1) % slidesPinoDaniele.length;
-        mostraSlidePino(pinoIndex);
-    }, 7000);
+        passaASlidePino(pinoIndex);
+    }, 7500);
 }
 
 // =========================================================================
