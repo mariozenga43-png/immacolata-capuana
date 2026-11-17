@@ -155,22 +155,33 @@ html, body {
 }
 
 /* ========================================================================= */
-/* VISUAL CONCERTO PINO DANIELE: DOPPIO LIVELLO CROSSFADE + VISO CENTRATO    */
+/* VISUAL CONCERTO PINO DANIELE: EFFETTI MODERNI + INQUADRATURE CALIBRATE    */
 /* ========================================================================= */
-@keyframes stageBeamSweep {
-  0% { transform: rotate(-10deg) scale(1.04); opacity: 0.50; }
-  50% { transform: rotate(10deg) scale(1.16); opacity: 0.80; }
-  100% { transform: rotate(-10deg) scale(1.04); opacity: 0.50; }
+@keyframes stageBeamLeft {
+  0%, 100% { transform: rotate(-18deg) scale(1.1); opacity: 0.45; }
+  50% { transform: rotate(8deg) scale(1.25); opacity: 0.85; }
 }
 
-@keyframes kenBurnsSubtle {
+@keyframes stageBeamRight {
+  0%, 100% { transform: rotate(18deg) scale(1.1); opacity: 0.45; }
+  50% { transform: rotate(-8deg) scale(1.25); opacity: 0.85; }
+}
+
+@keyframes kenBurnsModern {
   0% { transform: scale(1.00); }
-  100% { transform: scale(1.07); }
+  100% { transform: scale(1.08); }
 }
 
 @keyframes quoteReveal {
-  0% { opacity: 0; transform: translateY(14px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(18px) scale(0.96); filter: blur(4px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes dustFloat {
+  0% { transform: translateY(105%) translateX(0) scale(0.6); opacity: 0; }
+  20% { opacity: 0.9; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(-10%) translateX(25px) scale(1.2); opacity: 0; }
 }
 
 .pino-layer {
@@ -179,40 +190,61 @@ html, body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Ancora l'inquadratura sul volto/parte alta per non tagliare mai la testa */
-  object-position: center 14%;
-  filter: grayscale(100%) contrast(1.22) brightness(0.98);
-  image-rendering: -webkit-optimize-contrast;
-  transition: opacity 1.4s ease-in-out;
+  filter: grayscale(100%) contrast(1.24) brightness(0.98);
+  transition: opacity 1.5s ease-in-out;
   will-change: transform, opacity;
 }
 
 .pino-ken-burns {
-  animation: kenBurnsSubtle 8.5s ease-out forwards;
+  animation: kenBurnsModern 8.5s ease-out forwards;
 }
 
-.pino-modern-lights {
-  background:
-    radial-gradient(ellipse at 25% 15%, rgba(0, 119, 255, 0.45) 0%, transparent 58%),
-    radial-gradient(ellipse at 78% 82%, rgba(255, 200, 0, 0.38) 0%, transparent 58%),
-    radial-gradient(circle at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.85) 100%);
+/* Fasci di luce concerto moderni (Blu Napoli + Oro Caldo) */
+.pino-beam-blue {
+  position: absolute;
+  top: -25%;
+  left: -15%;
+  width: 90%;
+  height: 130%;
+  background: conic-gradient(from 150deg at 30% 0%, transparent 0deg, rgba(0, 125, 255, 0.42) 22deg, transparent 48deg);
   mix-blend-mode: screen;
-  animation: stageBeamSweep 10s ease-in-out infinite;
+  animation: stageBeamLeft 9s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.pino-vignette-heavy {
+.pino-beam-gold {
+  position: absolute;
+  top: -25%;
+  right: -15%;
+  width: 90%;
+  height: 130%;
+  background: conic-gradient(from 170deg at 70% 0%, transparent 0deg, rgba(255, 200, 0, 0.38) 22deg, transparent 48deg);
+  mix-blend-mode: screen;
+  animation: stageBeamRight 11s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.pino-vignette-modern {
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.55) 0%,
-    rgba(0, 0, 0, 0.05) 35%,
-    rgba(0, 0, 0, 0.25) 62%,
+    rgba(0, 0, 0, 0.50) 0%,
+    rgba(0, 0, 0, 0.0) 30%,
+    rgba(0, 0, 0, 0.15) 62%,
     rgba(0, 0, 0, 0.94) 100%
   );
-  box-shadow: inset 0 0 75px 22px rgba(0, 0, 0, 0.92);
+  box-shadow: inset 0 0 70px 18px rgba(0, 0, 0, 0.90), inset 0 0 25px rgba(255, 215, 0, 0.25);
+}
+
+.pino-spark {
+  position: absolute;
+  background: radial-gradient(circle, #FFD700 0%, rgba(255, 215, 0, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: dustFloat linear infinite;
 }
 
 .quote-animate {
-  animation: quoteReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: quoteReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .font-quote {
@@ -229,22 +261,18 @@ html, body {
   <!-- BARRA LATERALE SINISTRA SPONSOR (1 FISSO + 3 A ROTAZIONE) -->
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-r-2 border-festive-yellow/60">
-    <!-- 1. FISSO IN ALTO A SINISTRA -->
     <div class="sponsor-slot sponsor-slot-fixed">
       <img src="sponsor-fisso-sx.png" alt="Main Sponsor Sinistra" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
       <span class="hidden font-title text-zinc-900 text-xl tracking-wider text-center leading-tight">MAIN SPONSOR SX</span>
     </div>
-    <!-- 2. ROTANTE SINISTRA A -->
     <div class="sponsor-slot">
       <img id="rot-sx-1" src="sponsor-sx-1.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
       <span id="fallback-sx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 1</span>
     </div>
-    <!-- 3. ROTANTE SINISTRA B -->
     <div class="sponsor-slot">
       <img id="rot-sx-2" src="sponsor-sx-2.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
       <span id="fallback-sx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 2</span>
     </div>
-    <!-- 4. ROTANTE SINISTRA C -->
     <div class="sponsor-slot">
       <img id="rot-sx-3" src="sponsor-sx-3.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
       <span id="fallback-sx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 3</span>
@@ -259,7 +287,6 @@ html, body {
     <!-- FASCIA SUPERIORE MODALITÀ LIVE (QR + BADGE EVENTO) -->
     <div id="top-bar-live" class="absolute top-3 left-3 right-3 z-40 flex items-start justify-between gap-2 pointer-events-none">
       
-      <!-- QR CODE INGRANDITO AD ALTO CONTRASTO -->
       <div class="bg-black/95 border-2 border-festive-yellow rounded-2xl p-2.5 shadow-[0_0_25px_rgba(255,215,0,0.45)] flex items-center gap-2.5">
         <div class="bg-white p-1.5 rounded-xl flex-shrink-0">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=1&data=https://mariozenga43-png.github.io/immacolata-capuana/#ricordi" alt="QR Code Foto Live" class="w-24 h-24 object-contain block">
@@ -271,7 +298,6 @@ html, body {
         </div>
       </div>
 
-      <!-- LOGO & INFO EVENTO -->
       <div class="bg-black/85 border-2 border-festive-yellow/50 rounded-2xl px-3 py-2.5 shadow-lg flex items-center gap-2.5">
         <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain flex-shrink-0">
         <div class="text-left">
@@ -286,7 +312,6 @@ html, body {
     <!-- MODALITÀ 1: BENVENUTO + SLIDESHOW FOTO LIVE -->
     <div id="ledwall-container" class="w-full h-full flex items-center justify-center px-5 pt-28 pb-6 z-20">
       
-      <!-- SCHERMATA DI BENVENUTO -->
       <div id="welcome-screen" class="glass-welcome rounded-[2rem] px-6 py-7 text-center w-full max-w-[95%] mx-auto flex flex-col items-center justify-center shadow-2xl relative neon-animation">
         
         <div class="absolute -top-3.5 bg-festive-red text-white text-[11px] font-bold uppercase tracking-widest px-4 py-1 rounded-full border-2 border-festive-yellow shadow-lg">
@@ -311,7 +336,6 @@ html, body {
         </div>
       </div>
 
-      <!-- SLIDESHOW FOTO CITTADINI -->
       <div id="photo-slideshow" class="hidden w-full h-full flex items-center justify-center">
         <img id="active-photo" src="" alt="Selfie Live" class="max-w-full max-h-full object-contain rounded-2xl border-4 border-festive-yellow/80 shadow-[0_0_40px_rgba(255,215,0,0.45)] fade-transition">
       </div>
@@ -324,27 +348,31 @@ html, body {
     <div id="show-pino" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
       
       <!-- Doppio livello immagine per dissolvenza incrociata fluida senza scatti -->
-      <img id="pino-photo-a" src="pino00001.jpg" alt="Pino Daniele" class="pino-layer opacity-100">
-      <img id="pino-photo-b" src="pino00002.jpg" alt="Pino Daniele" class="pino-layer opacity-0">
+      <img id="pino-photo-a" src="pino00001.jpg" alt="Pino Daniele" class="pino-layer opacity-100" style="object-position: center 25%;">
+      <img id="pino-photo-b" src="" alt="Pino Daniele" class="pino-layer opacity-0" style="object-position: center 25%;">
       
-      <!-- Luci moderne volumetriche blu & oro in sovrapposizione -->
-      <div class="absolute inset-0 pino-modern-lights pointer-events-none"></div>
+      <!-- Fasci di luce da concerto moderni (Blu + Oro) -->
+      <div class="pino-beam-blue"></div>
+      <div class="pino-beam-gold"></div>
       
-      <!-- Sfumatura scura e vignettatura per far risaltare la frase -->
-      <div class="absolute inset-0 pino-vignette-heavy pointer-events-none"></div>
+      <!-- Particelle dorate fluttuanti dal palco -->
+      <div id="pino-sparks-container" class="absolute inset-0 pointer-events-none"></div>
+
+      <!-- Sfumatura scura e cornice luminosa moderna -->
+      <div class="absolute inset-0 pino-vignette-modern pointer-events-none"></div>
 
       <!-- Tag in alto discreto -->
-      <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/75 border border-festive-yellow/50 px-4 py-1 rounded-full backdrop-blur-md pointer-events-none z-10">
-        <span class="font-title text-festive-yellow tracking-[0.25em] text-base uppercase">Tribute Live • Pino Daniele</span>
+      <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/75 border border-festive-yellow/60 px-5 py-1 rounded-full backdrop-blur-md pointer-events-none z-10 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+        <span class="font-title text-festive-yellow tracking-[0.28em] text-base uppercase">Tribute Live • Pino Daniele</span>
       </div>
 
       <!-- FRASE ICONICA IN SOVRAIMPRESSIONE -->
       <div id="pino-quote-box" class="absolute bottom-7 left-6 right-6 text-center pointer-events-none z-10 quote-animate">
-        <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mx-auto mb-3"></div>
-        <p id="pino-quote-text" class="font-quote text-white text-2xl md:text-3xl font-bold leading-snug tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)]">
+        <div class="w-20 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mx-auto mb-3"></div>
+        <p id="pino-quote-text" class="font-quote text-white text-2xl md:text-3xl font-bold leading-snug tracking-wide drop-shadow-[0_4px_14px_rgba(0,0,0,1)]">
           “Napule è mille culure, Napule è mille paure...”
         </p>
-        <span id="pino-quote-song" class="inline-block mt-2 font-title text-festive-yellow text-glow-gold tracking-[0.22em] text-lg uppercase">
+        <span id="pino-quote-song" class="inline-block mt-2 font-title text-festive-yellow text-glow-gold tracking-[0.24em] text-lg uppercase">
           — Napule è (1977)
         </span>
       </div>
@@ -367,22 +395,18 @@ html, body {
   <!-- BARRA LATERALE DESTRA SPONSOR (1 FISSO INTERO + 3 ROTANTI)-->
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-l-2 border-festive-yellow/60">
-    <!-- 1. FISSO IN ALTO A DESTRA (RIEMPIMENTO INTERO) -->
     <div class="sponsor-slot sponsor-slot-fixed !p-0 !bg-[#003b1f]">
       <img src="sponsor-fisso-dx.png" alt="Main Sponsor Destra" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
       <span class="hidden font-title text-white text-xl tracking-wider text-center leading-tight">MAIN SPONSOR DX</span>
     </div>
-    <!-- 2. ROTANTE DESTRA A -->
     <div class="sponsor-slot">
       <img id="rot-dx-1" src="sponsor-dx-1.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
       <span id="fallback-dx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 1</span>
     </div>
-    <!-- 3. ROTANTE DESTRA B -->
     <div class="sponsor-slot">
       <img id="rot-dx-2" src="sponsor-dx-2.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
       <span id="fallback-dx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 2</span>
     </div>
-    <!-- 4. ROTANTE DESTRA C -->
     <div class="sponsor-slot">
       <img id="rot-dx-3" src="sponsor-dx-3.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
       <span id="fallback-dx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 3</span>
@@ -469,30 +493,41 @@ ruotaSponsorLaterali();
 setInterval(ruotaSponsorLaterali, 5000);
 
 // =========================================================================
-// 15 SLIDE PINO DANIELE (pino00001.jpg -> pino00015.jpg + FRASI SIMBOLICHE)
+// 15 SLIDE PINO DANIELE CON INQUADRATURA PERSONALIZZATA (posY) PER OGNI FOTO
 // =========================================================================
 const slidesPinoDaniele = [
-  { img: 'pino00001.jpg', frase: '“Napule è mille culure, Napule è mille paure...”', brano: 'Napule è (1977)' },
-  { img: 'pino00002.jpg', frase: '“Je so’ pazzo, je so’ pazzo, e chi dice ca è overo...”', brano: 'Je so’ pazzo (1979)' },
-  { img: 'pino00003.jpg', frase: '“Quanno chiove, pure l’aria se fa doce...”', brano: 'Quanno chiove (1980)' },
-  { img: 'pino00004.jpg', frase: '“Alleria, alleria, famme ridere nu poco...”', brano: 'Alleria (1980)' },
-  { img: 'pino00005.jpg', frase: '“A me me piace ’o blues, e tutt’e juorne aggi’a cantà...”', brano: 'A me me piace ’o blues (1980)' },
-  { img: 'pino00006.jpg', frase: '“Terra mia, terra mia, comm’è bello a la guardà...”', brano: 'Terra mia (1977)' },
-  { img: 'pino00007.jpg', frase: '“Yes I know my way, aggia passà stu mare...”', brano: 'Yes I Know My Way (1981)' },
-  { img: 'pino00008.jpg', frase: '“Anna verrà, e sarà un giorno pieno di sole...”', brano: 'Anna verrà (1989)' },
-  { img: 'pino00009.jpg', frase: '“Quando, quando saremo insieme, non ci sarà più niente da dire...”', brano: 'Quando (1991)' },
-  { img: 'pino00010.jpg', frase: '“Dubbi non ho, sei tu la mia strada...”', brano: 'Dubbi non ho (1997)' },
-  { img: 'pino00011.jpg', frase: '“Chi tene ’o mare, s’accorge ca tutto cagna...”', brano: 'Chi tene ’o mare (1979)' },
-  { img: 'pino00012.jpg', frase: '“Ogni scarrafone è bello ’a mamma soja...”', brano: '’O scarrafone (1991)' },
-  { img: 'pino00013.jpg', frase: '“Resta cu’ mme, nun me lassà...”', brano: 'Resta cu’ mme (1995)' },
-  { img: 'pino00014.jpg', frase: '“Musica musica, è tutta ’a vita mia...”', brano: 'Musica musica (1980)' },
-  { img: 'pino00015.jpg', frase: '“La musica è l’unico modo per restare eterni.”', brano: 'Pino Daniele • Forever' }
+  { img: 'pino00001.jpg', posY: '20%', frase: '“Napule è mille culure, Napule è mille paure...”', brano: 'Napule è (1977)' },
+  { img: 'pino00002.jpg', posY: '20%', frase: '“Je so’ pazzo, je so’ pazzo, e chi dice ca è overo...”', brano: 'Je so’ pazzo (1979)' },
+  { img: 'pino00003.jpg', posY: '20%', frase: '“Quanno chiove, pure l’aria se fa doce...”', brano: 'Quanno chiove (1980)' },
+  { img: 'pino00004.jpg', posY: '22%', frase: '“Alleria, alleria, famme ridere nu poco...”', brano: 'Alleria (1980)' },
+  { img: 'pino00005.jpg', posY: '25%', frase: '“A me me piace ’o blues, e tutt’e juorne aggi’a cantà...”', brano: 'A me me piace ’o blues (1980)' },
+  // Foto con riflettori alti e Pino nella metà inferiore -> sposta inquadratura in basso (82%)
+  { img: 'pino00006.jpg', posY: '82%', frase: '“Terra mia, terra mia, comm’è bello a la guardà...”', brano: 'Terra mia (1977)' },
+  { img: 'pino00007.jpg', posY: '25%', frase: '“Yes I know my way, aggia passà stu mare...”', brano: 'Yes I Know My Way (1981)' },
+  { img: 'pino00008.jpg', posY: '25%', frase: '“Anna verrà, e sarà un giorno pieno di sole...”', brano: 'Anna verrà (1989)' },
+  { img: 'pino00009.jpg', posY: '25%', frase: '“Quando, quando saremo insieme, non ci sarà più niente da dire...”', brano: 'Quando (1991)' },
+  { img: 'pino00010.jpg', posY: '25%', frase: '“Dubbi non ho, sei tu la mia strada...”', brano: 'Dubbi non ho (1997)' },
+  { img: 'pino00011.jpg', posY: '25%', frase: '“Chi tene ’o mare, s’accorge ca tutto cagna...”', brano: 'Chi tene ’o mare (1979)' },
+  // Foto seduto con chitarra -> ancora in alto (6%) per mostrare il viso
+  { img: 'pino00012.jpg', posY: '6%',  frase: '“Ogni scarrafone è bello ’a mamma soja...”', brano: '’O scarrafone (1991)' },
+  // Primo piano riccioli con finestre dietro -> sposta al centro-basso (68%)
+  { img: 'pino00013.jpg', posY: '68%', frase: '“Resta cu’ mme, nun me lassà...”', brano: 'Resta cu’ mme (1995)' },
+  { img: 'pino00014.jpg', posY: '25%', frase: '“Musica musica, è tutta ’a vita mia...”', brano: 'Musica musica (1980)' },
+  { img: 'pino00015.jpg', posY: '25%', frase: '“La musica è l’unico modo per restare eterni.”', brano: 'Pino Daniele • Forever' }
 ];
 
-// Precaricamento silenzioso in background delle 15 immagini
-slidesPinoDaniele.forEach(s => {
-  const preload = new Image();
-  preload.src = s.img;
+// Verifica automaticamente quali delle 15 immagini esistono realmente ed elimina duplicati
+let slideValidePino = [];
+const controlloImmaginiPino = Promise.all(
+  slidesPinoDaniele.map(slide => new Promise(resolve => {
+    const testImg = new Image();
+    testImg.onload = () => resolve(slide);
+    testImg.onerror = () => resolve(null);
+    testImg.src = slide.img;
+  }))
+).then(risultati => {
+  slideValidePino = risultati.filter(item => item !== null);
+  if (slideValidePino.length === 0) slideValidePino = [slidesPinoDaniele[0]];
 });
 
 let pinoIndex = 0;
@@ -559,7 +594,9 @@ function applicaModalita(mod) {
 }
 
 function passaASlidePino(index) {
-    const slide = slidesPinoDaniele[index];
+    const lista = slideValidePino.length > 0 ? slideValidePino : slidesPinoDaniele;
+    const slide = lista[index % lista.length];
+
     const imgAttiva = document.getElementById('pino-photo-' + livelloAttivo);
     const prossimoLivello = (livelloAttivo === 'a') ? 'b' : 'a';
     const imgProssima = document.getElementById('pino-photo-' + prossimoLivello);
@@ -568,39 +605,33 @@ function passaASlidePino(index) {
     const quoteText = document.getElementById('pino-quote-text');
     const quoteSong = document.getElementById('pino-quote-song');
 
-    // Carica la nuova foto sul livello nascosto prima di fare la dissolvenza
-    const loader = new Image();
-    loader.onload = function() {
-        imgProssima.src = slide.img;
+    // Imposta l'inquadratura verticale specifica per questa foto
+    imgProssima.style.objectPosition = 'center ' + (slide.posY || '25%');
+    imgProssima.src = slide.img;
 
-        // Prepara animazione Ken Burns pulita sul nuovo livello
-        imgProssima.classList.remove('pino-ken-burns');
-        void imgProssima.offsetWidth;
-        imgProssima.classList.add('pino-ken-burns');
+    // Riavvia zoom Ken Burns sul livello che sta entrando
+    imgProssima.classList.remove('pino-ken-burns');
+    void imgProssima.offsetWidth;
+    imgProssima.classList.add('pino-ken-burns');
 
-        // Dissolvenza incrociata morbida (zero flash)
-        imgProssima.style.opacity = '1';
-        imgAttiva.style.opacity = '0';
+    // Dissolvenza incrociata morbida
+    imgProssima.style.opacity = '1';
+    imgAttiva.style.opacity = '0';
 
-        // Aggiorna la citazione sincronizzata
-        quoteBox.classList.remove('quote-animate');
-        void quoteBox.offsetWidth;
-        quoteText.textContent = slide.frase;
-        quoteSong.textContent = '— ' + slide.brano;
-        quoteBox.classList.add('quote-animate');
+    // Aggiorna la citazione sincronizzata
+    quoteBox.classList.remove('quote-animate');
+    void quoteBox.offsetWidth;
+    quoteText.textContent = slide.frase;
+    quoteSong.textContent = '— ' + slide.brano;
+    quoteBox.classList.add('quote-animate');
 
-        livelloAttivo = prossimoLivello;
-    };
-    loader.onerror = function() {
-        imgProssima.src = 'pino00001.jpg';
-        imgProssima.style.opacity = '1';
-        imgAttiva.style.opacity = '0';
-        livelloAttivo = prossimoLivello;
-    };
-    loader.src = slide.img;
+    livelloAttivo = prossimoLivello;
 }
 
-function avviaSlideshowPino() {
+async function avviaSlideshowPino() {
+    await controlloImmaginiPino;
+    const lista = slideValidePino.length > 0 ? slideValidePino : slidesPinoDaniele;
+
     pinoIndex = 0;
     livelloAttivo = 'a';
 
@@ -609,20 +640,23 @@ function avviaSlideshowPino() {
     const quoteText = document.getElementById('pino-quote-text');
     const quoteSong = document.getElementById('pino-quote-song');
 
-    imgA.src = slidesPinoDaniele[0].img;
+    imgA.style.objectPosition = 'center ' + (lista[0].posY || '25%');
+    imgA.src = lista[0].img;
     imgA.style.opacity = '1';
     imgB.style.opacity = '0';
     imgA.classList.remove('pino-ken-burns');
     void imgA.offsetWidth;
     imgA.classList.add('pino-ken-burns');
 
-    quoteText.textContent = slidesPinoDaniele[0].frase;
-    quoteSong.textContent = '— ' + slidesPinoDaniele[0].brano;
+    quoteText.textContent = lista[0].frase;
+    quoteSong.textContent = '— ' + lista[0].brano;
 
-    pinoInterval = setInterval(() => {
-        pinoIndex = (pinoIndex + 1) % slidesPinoDaniele.length;
-        passaASlidePino(pinoIndex);
-    }, 7500);
+    if (lista.length > 1) {
+        pinoInterval = setInterval(() => {
+            pinoIndex = (pinoIndex + 1) % lista.length;
+            passaASlidePino(pinoIndex);
+        }, 7500);
+    }
 }
 
 // =========================================================================
@@ -714,7 +748,7 @@ fetchPhotosForLedwall();
 setInterval(controllaRegia, 3000);
 setInterval(fetchPhotosForLedwall, 5000);
 
-// NEVE ANIMATA DENTRO L'AREA VIDEO CENTRALE
+// NEVE ANIMATA + PARTICELLE DORATE CONCERTO
 window.addEventListener('load', () => {
     const centerArea = document.getElementById('center-video-area');
     const snowCount = 25; 
@@ -737,6 +771,22 @@ window.addEventListener('load', () => {
         fragment.appendChild(snowflake);
     }
     centerArea.appendChild(fragment);
+
+    // Particelle luminose palco per il visual di Pino Daniele
+    const sparksContainer = document.getElementById('pino-sparks-container');
+    const sparksFragment = document.createDocumentFragment();
+    for (let i = 0; i < 18; i++) {
+        const spark = document.createElement('div');
+        spark.classList.add('pino-spark');
+        const size = (Math.random() * 6 + 3) + 'px';
+        spark.style.width = size;
+        spark.style.height = size;
+        spark.style.left = (Math.random() * 94 + 3) + '%';
+        spark.style.animationDuration = (Math.random() * 7 + 5) + 's';
+        spark.style.animationDelay = (Math.random() * 6) + 's';
+        sparksFragment.appendChild(spark);
+    }
+    sparksContainer.appendChild(sparksFragment);
 });
 </script>
 </body>
