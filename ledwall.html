@@ -30,8 +30,8 @@ tailwind.config = {
 }
 </script>
 
-<!-- Google Fonts (Bebas Neue & Quicksand) & FontAwesome -->
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+<!-- Google Fonts (Bebas Neue, Cinzel & Quicksand) & FontAwesome -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@700;900&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
@@ -111,7 +111,7 @@ html, body {
 }
 
 .text-glow-gold {
-  text-shadow: 0 0 18px rgba(255, 215, 0, 0.8), 0 0 36px rgba(255, 215, 0, 0.4);
+  text-shadow: 0 0 18px rgba(255, 215, 0, 0.85), 0 0 36px rgba(255, 215, 0, 0.45);
 }
 
 .text-glow-red {
@@ -152,6 +152,62 @@ html, body {
 
 .fade-transition {
   transition: opacity 0.8s ease-in-out;
+}
+
+/* ========================================================================= */
+/* VISUAL CONCERTO PINO DANIELE: B&N CONTRASTATO + LUCI MODERN + CITAZIONI   */
+/* ========================================================================= */
+@keyframes stageBeamSweep {
+  0% { transform: rotate(-12deg) scale(1.05); opacity: 0.55; }
+  50% { transform: rotate(12deg) scale(1.22); opacity: 0.85; }
+  100% { transform: rotate(-12deg) scale(1.05); opacity: 0.55; }
+}
+
+@keyframes kenBurnsModern {
+  0% { transform: scale(1.02) translate(0%, 0%); }
+  100% { transform: scale(1.16) translate(-1.8%, -1.2%); }
+}
+
+@keyframes quoteReveal {
+  0% { opacity: 0; transform: translateY(16px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.pino-bw-filter {
+  filter: grayscale(100%) contrast(1.28) brightness(0.92);
+  transition: opacity 1.1s ease-in-out;
+}
+
+.pino-ken-burns {
+  animation: kenBurnsModern 7.5s ease-out forwards;
+}
+
+.pino-modern-lights {
+  background:
+    radial-gradient(ellipse at 25% 15%, rgba(0, 119, 255, 0.48) 0%, transparent 58%),
+    radial-gradient(ellipse at 78% 82%, rgba(255, 200, 0, 0.42) 0%, transparent 58%),
+    radial-gradient(circle at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.88) 100%);
+  mix-blend-mode: screen;
+  animation: stageBeamSweep 10s ease-in-out infinite;
+}
+
+.pino-vignette-heavy {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.1) 35%,
+    rgba(0, 0, 0, 0.25) 60%,
+    rgba(0, 0, 0, 0.94) 100%
+  );
+  box-shadow: inset 0 0 80px 25px rgba(0, 0, 0, 0.95);
+}
+
+.quote-animate {
+  animation: quoteReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.font-quote {
+  font-family: 'Cinzel', serif;
 }
 </style>
 </head>
@@ -253,9 +309,36 @@ html, body {
 
     </div>
 
-    <!-- MODALITÀ 2: SLIDESHOW TRIBUTE BAND PINO DANIELE (Area 2x2m) -->
-    <div id="show-pino" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
-      <img id="pino-photo" src="pino1.jpg" alt="Tribute Band Pino Daniele" class="w-full h-full object-contain fade-transition">
+    <!-- ========================================================= -->
+    <!-- MODALITÀ 2: VISUAL MODERNO B&N + FRASI PINO DANIELE       -->
+    <!-- ========================================================= -->
+    <div id="show-pino" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
+      
+      <!-- Immagine B&N ad alto contrasto con movimento Ken Burns -->
+      <img id="pino-photo" src="pino00001.jpg" alt="Pino Daniele" class="w-full h-full object-cover pino-bw-filter pino-ken-burns">
+      
+      <!-- Luci moderne volumetriche blu & oro in sovrapposizione -->
+      <div class="absolute inset-0 pino-modern-lights pointer-events-none"></div>
+      
+      <!-- Sfumatura scura e vignettatura per far risaltare la frase -->
+      <div class="absolute inset-0 pino-vignette-heavy pointer-events-none"></div>
+
+      <!-- Tag in alto discreto -->
+      <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 border border-festive-yellow/50 px-4 py-1 rounded-full backdrop-blur-md pointer-events-none">
+        <span class="font-title text-festive-yellow tracking-[0.25em] text-base uppercase">Tribute Live • Pino Daniele</span>
+      </div>
+
+      <!-- FRASE ICONICA IN SOVRAIMPRESSIONE -->
+      <div id="pino-quote-box" class="absolute bottom-7 left-6 right-6 text-center pointer-events-none quote-animate">
+        <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mx-auto mb-3"></div>
+        <p id="pino-quote-text" class="font-quote text-white text-2xl md:text-3xl font-bold leading-snug tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)]">
+          “Napule è mille culure, Napule è mille paure...”
+        </p>
+        <span id="pino-quote-song" class="inline-block mt-2 font-title text-festive-yellow text-glow-gold tracking-[0.22em] text-lg uppercase">
+          — Napule è (1977)
+        </span>
+      </div>
+
     </div>
 
     <!-- MODALITÀ 3: LOCANDINA FISSA BIAGIO IZZO (Area 2x2m) -->
@@ -308,7 +391,7 @@ const { createClient } = supabase;
 const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =========================================================================
-// CONFIGURAZIONE ELENCO SPONSOR A ROTAZIONE (Puoi aggiungerne quanti ne vuoi)
+// CONFIGURAZIONE ELENCO SPONSOR A ROTAZIONE
 // =========================================================================
 const sponsorSinistra = [
   'sponsor-sx-1.png',
@@ -372,14 +455,30 @@ function ruotaSponsorLaterali() {
   }
 }
 
-// Primo caricamento immediato + rotazione ogni 5 secondi
 ruotaSponsorLaterali();
 setInterval(ruotaSponsorLaterali, 5000);
 
 // =========================================================================
-// GESTIONE SPETTACOLI (PINO DANIELE, BIAGIO IZZO, DDM) E REGIA REMOTA
+// 15 SLIDE PINO DANIELE (pino00001.jpg -> pino00015.jpg + FRASI SIMBOLICHE)
 // =========================================================================
-const fotoPinoDaniele = ['pino1.jpg', 'pino2.jpg', 'pino3.jpg', 'pino4.jpg'];
+const slidesPinoDaniele = [
+  { img: 'pino00001.jpg', frase: '“Napule è mille culure, Napule è mille paure...”', brano: 'Napule è (1977)' },
+  { img: 'pino00002.jpg', frase: '“Je so’ pazzo, je so’ pazzo, e chi dice ca è overo...”', brano: 'Je so’ pazzo (1979)' },
+  { img: 'pino00003.jpg', frase: '“Quanno chiove, pure l’aria se fa doce...”', brano: 'Quanno chiove (1980)' },
+  { img: 'pino00004.jpg', frase: '“Alleria, alleria, famme ridere nu poco...”', brano: 'Alleria (1980)' },
+  { img: 'pino00005.jpg', frase: '“A me me piace ’o blues, e tutt’e juorne aggi’a cantà...”', brano: 'A me me piace ’o blues (1980)' },
+  { img: 'pino00006.jpg', frase: '“Terra mia, terra mia, comm’è bello a la guardà...”', brano: 'Terra mia (1977)' },
+  { img: 'pino00007.jpg', frase: '“Yes I know my way, aggia passà stu mare...”', brano: 'Yes I Know My Way (1981)' },
+  { img: 'pino00008.jpg', frase: '“Anna verrà, e sarà un giorno pieno di sole...”', brano: 'Anna verrà (1989)' },
+  { img: 'pino00009.jpg', frase: '“Quando, quando saremo insieme, non ci sarà più niente da dire...”', brano: 'Quando (1991)' },
+  { img: 'pino00010.jpg', frase: '“Dubbi non ho, sei tu la mia strada...”', brano: 'Dubbi non ho (1997)' },
+  { img: 'pino00011.jpg', frase: '“Chi tene ’o mare, s’accorge ca tutto cagna...”', brano: 'Chi tene ’o mare (1979)' },
+  { img: 'pino00012.jpg', frase: '“Ogni scarrafone è bello ’a mamma soja...”', brano: '’O scarrafone (1991)' },
+  { img: 'pino00013.jpg', frase: '“Resta cu’ mme, nun me lassà...”', brano: 'Resta cu’ mme (1995)' },
+  { img: 'pino00014.jpg', frase: '“Musica musica, è tutta ’a vita mia...”', brano: 'Musica musica (1980)' },
+  { img: 'pino00015.jpg', frase: '“La musica è l’unico modo per restare eterni.”', brano: 'Pino Daniele • Forever' }
+];
+
 let pinoIndex = 0;
 let pinoInterval = null;
 
@@ -442,22 +541,44 @@ function applicaModalita(mod) {
     }
 }
 
-function avviaSlideshowPino() {
+function mostraSlidePino(index) {
     const pinoImg = document.getElementById('pino-photo');
-    pinoIndex = 0;
-    pinoImg.src = fotoPinoDaniele[pinoIndex];
-    pinoImg.style.opacity = '1';
+    const quoteBox = document.getElementById('pino-quote-box');
+    const quoteText = document.getElementById('pino-quote-text');
+    const quoteSong = document.getElementById('pino-quote-song');
+    const slide = slidesPinoDaniele[index];
 
-    if (fotoPinoDaniele.length > 1) {
-        pinoInterval = setInterval(() => {
-            pinoIndex = (pinoIndex + 1) % fotoPinoDaniele.length;
-            pinoImg.style.opacity = '0';
-            setTimeout(() => {
-                pinoImg.src = fotoPinoDaniele[pinoIndex];
-                pinoImg.style.opacity = '1';
-            }, 400);
-        }, 6000);
-    }
+    pinoImg.style.opacity = '0';
+    quoteBox.style.opacity = '0';
+
+    setTimeout(() => {
+        pinoImg.onerror = function() {
+            this.onerror = null;
+            this.src = 'pino00001.jpg';
+        };
+        pinoImg.src = slide.img;
+        quoteText.textContent = slide.frase;
+        quoteSong.textContent = '— ' + slide.brano;
+
+        pinoImg.classList.remove('pino-ken-burns');
+        quoteBox.classList.remove('quote-animate');
+        void pinoImg.offsetWidth;
+        pinoImg.classList.add('pino-ken-burns');
+        quoteBox.classList.add('quote-animate');
+
+        pinoImg.style.opacity = '1';
+        quoteBox.style.opacity = '1';
+    }, 950);
+}
+
+function avviaSlideshowPino() {
+    pinoIndex = 0;
+    mostraSlidePino(pinoIndex);
+
+    pinoInterval = setInterval(() => {
+        pinoIndex = (pinoIndex + 1) % slidesPinoDaniele.length;
+        mostraSlidePino(pinoIndex);
+    }, 7000);
 }
 
 // =========================================================================
