@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ledwall 3x2m Sponsor Fissi + Rotazione | Immacolata Capuana 2026</title>
+<title>Ledwall 3x2m Sponsor Uniformi | Immacolata Capuana 2026</title>
 
 <!-- Preconnect & Preload -->
 <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
@@ -66,35 +66,53 @@ html, body {
   width: 16.6667%;
   height: 100%;
   background: linear-gradient(180deg, #1a0d0c 0%, #0d0505 100%);
-  padding: 1.2%;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1.5%;
+  gap: 8px;
   z-index: 45;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
-/* Slot standard (3 riquadri rotanti in basso) */
+/* TUTTI I RIQUADRI SPONSOR HANNO DIMENSIONE IDENTICA AL MILLIMETRO */
 .sponsor-slot {
-  flex: 1;
+  flex: 1 1 0%;
+  height: 0;
+  min-height: 0;
   width: 100%;
   background-color: #ffffff;
   border-radius: 0.75rem;
-  border: 2px solid rgba(255, 215, 0, 0.65);
+  border: 2.5px solid rgba(255, 215, 0, 0.75);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8%;
+  padding: 8px;
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 }
 
-/* Slot Main Sponsor Fisso in alto (bordo oro evidenziato) */
+/* Slot Main Sponsor Fisso in alto (stessa identica dimensione, bordo oro) */
 .sponsor-slot-fixed {
-  border: 3px solid #FFD700;
+  border: 2.5px solid #FFD700;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.35);
+}
+
+.sponsor-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sponsor-slot-full {
+  padding: 0 !important;
+}
+
+.sponsor-slot-full img {
+  object-fit: cover !important;
 }
 
 .sponsor-img-fade {
@@ -199,7 +217,6 @@ html, body {
   animation: kenBurnsModern 8.5s ease-out forwards;
 }
 
-/* Fasci di luce concerto moderni (Blu Napoli + Oro Caldo) */
 .pino-beam-blue {
   position: absolute;
   top: -25%;
@@ -258,23 +275,27 @@ html, body {
 <div id="ledwall-stage">
 
   <!-- ========================================================= -->
-  <!-- BARRA LATERALE SINISTRA SPONSOR (1 FISSO + 3 A ROTAZIONE) -->
+  <!-- BARRA LATERALE SINISTRA SPONSOR (4 RIQUADRI IDENTICI)     -->
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-r-2 border-festive-yellow/60">
+    <!-- 1. FISSO IN ALTO A SINISTRA (Cosmetall) -->
     <div class="sponsor-slot sponsor-slot-fixed">
-      <img src="sponsor-fisso-sx.png" alt="Main Sponsor Sinistra" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+      <img src="sponsor-fisso-sx.png" alt="Main Sponsor Sinistra" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
       <span class="hidden font-title text-zinc-900 text-xl tracking-wider text-center leading-tight">MAIN SPONSOR SX</span>
     </div>
+    <!-- 2. ROTANTE SINISTRA A (es. Cosedo S.r.l. -> sponsor-sx-1.png) -->
     <div class="sponsor-slot">
-      <img id="rot-sx-1" src="sponsor-sx-1.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <img id="rot-sx-1" src="sponsor-sx-1.png" alt="Sponsor Sinistra" class="sponsor-img-fade">
       <span id="fallback-sx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 1</span>
     </div>
+    <!-- 3. ROTANTE SINISTRA B -->
     <div class="sponsor-slot">
-      <img id="rot-sx-2" src="sponsor-sx-2.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <img id="rot-sx-2" src="sponsor-sx-2.png" alt="Sponsor Sinistra" class="sponsor-img-fade">
       <span id="fallback-sx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 2</span>
     </div>
+    <!-- 4. ROTANTE SINISTRA C -->
     <div class="sponsor-slot">
-      <img id="rot-sx-3" src="sponsor-sx-3.png" alt="Sponsor Sinistra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <img id="rot-sx-3" src="sponsor-sx-3.png" alt="Sponsor Sinistra" class="sponsor-img-fade">
       <span id="fallback-sx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 3</span>
     </div>
   </aside>
@@ -347,26 +368,20 @@ html, body {
     <!-- ========================================================= -->
     <div id="show-pino" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
       
-      <!-- Doppio livello immagine per dissolvenza incrociata fluida senza scatti -->
       <img id="pino-photo-a" src="pino00001.jpg" alt="Pino Daniele" class="pino-layer opacity-100" style="object-position: center 25%;">
       <img id="pino-photo-b" src="" alt="Pino Daniele" class="pino-layer opacity-0" style="object-position: center 25%;">
       
-      <!-- Fasci di luce da concerto moderni (Blu + Oro) -->
       <div class="pino-beam-blue"></div>
       <div class="pino-beam-gold"></div>
       
-      <!-- Particelle dorate fluttuanti dal palco -->
       <div id="pino-sparks-container" class="absolute inset-0 pointer-events-none"></div>
 
-      <!-- Sfumatura scura e cornice luminosa moderna -->
       <div class="absolute inset-0 pino-vignette-modern pointer-events-none"></div>
 
-      <!-- Tag in alto discreto -->
       <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/75 border border-festive-yellow/60 px-5 py-1 rounded-full backdrop-blur-md pointer-events-none z-10 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
         <span class="font-title text-festive-yellow tracking-[0.28em] text-base uppercase">Tribute Live • Pino Daniele</span>
       </div>
 
-      <!-- FRASE ICONICA IN SOVRAIMPRESSIONE -->
       <div id="pino-quote-box" class="absolute bottom-7 left-6 right-6 text-center pointer-events-none z-10 quote-animate">
         <div class="w-20 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mx-auto mb-3"></div>
         <p id="pino-quote-text" class="font-quote text-white text-2xl md:text-3xl font-bold leading-snug tracking-wide drop-shadow-[0_4px_14px_rgba(0,0,0,1)]">
@@ -392,23 +407,27 @@ html, body {
   </main>
 
   <!-- ========================================================= -->
-  <!-- BARRA LATERALE DESTRA SPONSOR (1 FISSO INTERO + 3 ROTANTI)-->
+  <!-- BARRA LATERALE DESTRA SPONSOR (4 RIQUADRI IDENTICI)       -->
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-l-2 border-festive-yellow/60">
-    <div class="sponsor-slot sponsor-slot-fixed !p-0 !bg-[#003b1f]">
-      <img src="sponsor-fisso-dx.png" alt="Main Sponsor Destra" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+    <!-- 1. FISSO IN ALTO A DESTRA (McDonald's - stessa dimensione esatta) -->
+    <div class="sponsor-slot sponsor-slot-fixed sponsor-slot-full !bg-[#003b1f]">
+      <img src="sponsor-fisso-dx.png" alt="Main Sponsor Destra" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
       <span class="hidden font-title text-white text-xl tracking-wider text-center leading-tight">MAIN SPONSOR DX</span>
     </div>
+    <!-- 2. ROTANTE DESTRA A -->
     <div class="sponsor-slot">
-      <img id="rot-dx-1" src="sponsor-dx-1.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <img id="rot-dx-1" src="sponsor-dx-1.png" alt="Sponsor Destra" class="sponsor-img-fade">
       <span id="fallback-dx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 1</span>
     </div>
+    <!-- 3. ROTANTE DESTRA B -->
     <div class="sponsor-slot">
-      <img id="rot-dx-2" src="sponsor-dx-2.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <img id="rot-dx-2" src="sponsor-dx-2.png" alt="Sponsor Destra" class="sponsor-img-fade">
       <span id="fallback-dx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 2</span>
     </div>
+    <!-- 4. ROTANTE DESTRA C -->
     <div class="sponsor-slot">
-      <img id="rot-dx-3" src="sponsor-dx-3.png" alt="Sponsor Destra" class="max-w-full max-h-full object-contain sponsor-img-fade">
+      <img id="rot-dx-3" src="sponsor-dx-3.png" alt="Sponsor Destra" class="sponsor-img-fade">
       <span id="fallback-dx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 3</span>
     </div>
   </aside>
@@ -501,22 +520,18 @@ const slidesPinoDaniele = [
   { img: 'pino00003.jpg', posY: '20%', frase: '“Quanno chiove, pure l’aria se fa doce...”', brano: 'Quanno chiove (1980)' },
   { img: 'pino00004.jpg', posY: '22%', frase: '“Alleria, alleria, famme ridere nu poco...”', brano: 'Alleria (1980)' },
   { img: 'pino00005.jpg', posY: '25%', frase: '“A me me piace ’o blues, e tutt’e juorne aggi’a cantà...”', brano: 'A me me piace ’o blues (1980)' },
-  // Foto con riflettori alti e Pino nella metà inferiore -> sposta inquadratura in basso (82%)
   { img: 'pino00006.jpg', posY: '82%', frase: '“Terra mia, terra mia, comm’è bello a la guardà...”', brano: 'Terra mia (1977)' },
   { img: 'pino00007.jpg', posY: '25%', frase: '“Yes I know my way, aggia passà stu mare...”', brano: 'Yes I Know My Way (1981)' },
   { img: 'pino00008.jpg', posY: '25%', frase: '“Anna verrà, e sarà un giorno pieno di sole...”', brano: 'Anna verrà (1989)' },
   { img: 'pino00009.jpg', posY: '25%', frase: '“Quando, quando saremo insieme, non ci sarà più niente da dire...”', brano: 'Quando (1991)' },
   { img: 'pino00010.jpg', posY: '25%', frase: '“Dubbi non ho, sei tu la mia strada...”', brano: 'Dubbi non ho (1997)' },
   { img: 'pino00011.jpg', posY: '25%', frase: '“Chi tene ’o mare, s’accorge ca tutto cagna...”', brano: 'Chi tene ’o mare (1979)' },
-  // Foto seduto con chitarra -> ancora in alto (6%) per mostrare il viso
   { img: 'pino00012.jpg', posY: '6%',  frase: '“Ogni scarrafone è bello ’a mamma soja...”', brano: '’O scarrafone (1991)' },
-  // Primo piano riccioli con finestre dietro -> sposta al centro-basso (68%)
   { img: 'pino00013.jpg', posY: '68%', frase: '“Resta cu’ mme, nun me lassà...”', brano: 'Resta cu’ mme (1995)' },
   { img: 'pino00014.jpg', posY: '25%', frase: '“Musica musica, è tutta ’a vita mia...”', brano: 'Musica musica (1980)' },
   { img: 'pino00015.jpg', posY: '25%', frase: '“La musica è l’unico modo per restare eterni.”', brano: 'Pino Daniele • Forever' }
 ];
 
-// Verifica automaticamente quali delle 15 immagini esistono realmente ed elimina duplicati
 let slideValidePino = [];
 const controlloImmaginiPino = Promise.all(
   slidesPinoDaniele.map(slide => new Promise(resolve => {
@@ -605,20 +620,16 @@ function passaASlidePino(index) {
     const quoteText = document.getElementById('pino-quote-text');
     const quoteSong = document.getElementById('pino-quote-song');
 
-    // Imposta l'inquadratura verticale specifica per questa foto
     imgProssima.style.objectPosition = 'center ' + (slide.posY || '25%');
     imgProssima.src = slide.img;
 
-    // Riavvia zoom Ken Burns sul livello che sta entrando
     imgProssima.classList.remove('pino-ken-burns');
     void imgProssima.offsetWidth;
     imgProssima.classList.add('pino-ken-burns');
 
-    // Dissolvenza incrociata morbida
     imgProssima.style.opacity = '1';
     imgAttiva.style.opacity = '0';
 
-    // Aggiorna la citazione sincronizzata
     quoteBox.classList.remove('quote-animate');
     void quoteBox.offsetWidth;
     quoteText.textContent = slide.frase;
@@ -772,7 +783,6 @@ window.addEventListener('load', () => {
     }
     centerArea.appendChild(fragment);
 
-    // Particelle luminose palco per il visual di Pino Daniele
     const sparksContainer = document.getElementById('pino-sparks-container');
     const sparksFragment = document.createDocumentFragment();
     for (let i = 0; i < 18; i++) {
