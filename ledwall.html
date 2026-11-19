@@ -127,7 +127,7 @@ html, body {
 }
 
 .text-glow-gold {
-  text-shadow: 0 0 18px rgba(255, 215, 0, 0.85), 0 0 36px rgba(255, 215, 0, 0.45);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.9), 0 0 42px rgba(255, 215, 0, 0.5);
 }
 
 .text-glow-red {
@@ -330,7 +330,7 @@ html, body {
     <!-- ========================================================= -->
     <!-- MODALITÀ 1: SCHERMATA PRINCIPALE DI GALA (DEFAULT)        -->
     <!-- ========================================================= -->
-    <div id="show-principale" class="absolute inset-0 z-30 gala-backdrop flex flex-col items-center justify-between px-6 pt-7 pb-12 text-center overflow-hidden">
+    <div id="show-principale" class="absolute inset-0 z-30 gala-backdrop flex flex-col items-center justify-between px-6 pt-6 pb-10 text-center overflow-hidden">
       
       <!-- Fasci di luce scenografici caldi sullo sfondo -->
       <div class="pino-beam-gold opacity-70"></div>
@@ -350,15 +350,15 @@ html, body {
       <div class="relative z-10 w-full flex flex-col items-center justify-center my-auto gala-float">
         
         <!-- Stemma Tondo Grande con Aura Luminosa -->
-        <div class="relative w-52 h-52 md:w-56 md:h-56 mb-3 flex items-center justify-center">
+        <div class="relative w-48 h-48 md:w-52 md:h-52 mb-2 flex items-center justify-center">
           <div class="absolute inset-0 rounded-full border-2 border-dashed border-festive-yellow/75 gala-aura-ring"></div>
-          <div class="w-48 h-48 md:w-52 md:h-52 rounded-full border-4 border-festive-yellow p-3 bg-black/80 shadow-[0_0_55px_rgba(255,215,0,0.85)] flex items-center justify-center">
+          <div class="w-44 h-44 md:w-48 md:h-48 rounded-full border-4 border-festive-yellow p-2.5 bg-black/80 shadow-[0_0_55px_rgba(255,215,0,0.85)] flex items-center justify-center">
             <img src="Logo immacolata tondo 2.png" alt="Stemma Immacolata Capuana" class="w-full h-full object-contain">
           </div>
         </div>
 
-        <!-- Logo Grande Immacolata Capuana SVG HD (senza sottotitolo via) -->
-        <div class="w-full max-w-[780px] mx-auto px-2 drop-shadow-[0_14px_28px_rgba(0,0,0,0.98)]">
+        <!-- Logo Grande Immacolata Capuana SVG HD -->
+        <div class="w-full max-w-[760px] mx-auto px-2 drop-shadow-[0_14px_28px_rgba(0,0,0,0.98)]">
           <svg viewBox="0 0 900 235" class="w-full h-auto block" role="img" aria-label="Immacolata Capuana">
             <text x="450" y="102" text-anchor="middle" font-family="'Fredoka', sans-serif" font-weight="700" font-size="112" fill="#141414" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="-1">IMMACOLATA</text>
             <text x="450" y="212" text-anchor="middle" font-family="'Fredoka', sans-serif" font-weight="700" font-size="114" fill="#e61919" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="0">CAPUANA</text>
@@ -367,13 +367,13 @@ html, body {
 
       </div>
 
-      <!-- Fascia Inferiore Rialzata: "BENVENUTI" + "Tradizione • Musica • Spettacolo" -->
-      <div class="relative z-10 mb-6 flex flex-col items-center">
-        <div class="w-44 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mb-2.5"></div>
-        <p class="font-title text-5xl md:text-6xl text-festive-yellow text-glow-gold tracking-[0.24em] uppercase leading-none">
+      <!-- Fascia Inferiore Rialzata con "BENVENUTI" Extra-Large -->
+      <div class="relative z-10 mb-5 flex flex-col items-center">
+        <div class="w-52 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mb-2"></div>
+        <p class="font-title text-7xl md:text-8xl text-festive-yellow text-glow-gold tracking-[0.22em] uppercase leading-none">
           BENVENUTI
         </p>
-        <span class="text-white/95 text-sm md:text-base font-bold tracking-[0.24em] uppercase mt-2">
+        <span class="text-white/95 text-sm md:text-base font-bold tracking-[0.24em] uppercase mt-1.5">
           Tradizione • Musica • Spettacolo
         </span>
       </div>
