@@ -487,5 +487,33 @@
         }
     }
 </script>
+    <script>
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const hash = window.location.hash.toLowerCase();
+
+  if (params.get('pag') === 'photolive' || hash.includes('photo')) {
+    const elementiMenu = document.querySelectorAll('a, button, [role="tab"]');
+    for (const el of elementiMenu) {
+      if (el.textContent && el.textContent.toLowerCase().includes('photo live')) {
+        el.click();
+        break;
+      }
+    }
+
+    setTimeout(() => {
+      const target =
+        document.getElementById('photo-live') ||
+        document.getElementById('photolive') ||
+        document.getElementById('ricordi') ||
+        document.querySelector('[id*="photo"], [id*="selfie"]');
+
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 250);
+  }
+});
+</script>
 </body>
 </html>
