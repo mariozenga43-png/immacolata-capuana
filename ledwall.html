@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ledwall 3x2m HD Vettoriale | Immacolata Capuana 2026</title>
+<title>Ledwall 3x2m QR Centrale + Logo SVG HD | Immacolata Capuana 2026</title>
 
 <!-- Preconnect & Preload -->
 <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
@@ -124,46 +124,6 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: radial-gradient(ellipse at center, #3b1311 0%, #1a0d0c 60%, #090303 100%);
-}
-
-/* STILE LOGO VETTORIALE HD IMMACOLATA CAPUANA (ZERO SGRANATURA) */
-.logo-immacolata-badge {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  line-height: 0.88;
-  user-select: none;
-  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.95));
-}
-
-.logo-immacolata-top {
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 700;
-  color: #141414;
-  letter-spacing: -0.02em;
-  -webkit-text-stroke: 4px #ffffff;
-  paint-order: stroke fill;
-}
-
-.logo-immacolata-mid {
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 700;
-  color: #e61919;
-  letter-spacing: -0.01em;
-  -webkit-text-stroke: 4px #ffffff;
-  paint-order: stroke fill;
-  margin-top: 1px;
-}
-
-.logo-immacolata-sub {
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 700;
-  color: #141414;
-  letter-spacing: 0.03em;
-  -webkit-text-stroke: 2.5px #ffffff;
-  paint-order: stroke fill;
-  margin-top: 2px;
 }
 
 .text-glow-gold {
@@ -343,54 +303,47 @@ html, body {
   <!-- ========================================================= -->
   <main id="center-video-area">
 
-    <!-- LOGO VETTORIALE HD IMMACOLATA CAPUANA SEMPRE PRESENTE SU TUTTE E 4 LE PAGINE -->
-    <div id="global-event-logo" class="absolute top-3 right-3.5 z-[60] pointer-events-none">
-      <div class="logo-immacolata-badge">
-        <span class="logo-immacolata-top text-lg md:text-xl">IMMACOLATA</span>
-        <span class="logo-immacolata-mid text-lg md:text-xl">CAPUANA</span>
-        <span class="logo-immacolata-sub text-[8.5px] md:text-[9.5px]">‘NGOPP ’O PONT - VIA CONTE LANDONE</span>
-      </div>
-    </div>
-
-    <!-- FASCIA SUPERIORE MODALITÀ LIVE (QR CODE) -->
-    <div id="top-bar-live" class="absolute top-3 left-3 z-40 flex items-start pointer-events-none">
-      <div class="bg-black/95 border-2 border-festive-yellow rounded-2xl p-2.5 shadow-[0_0_25px_rgba(255,215,0,0.45)] flex items-center gap-2.5">
-        <div class="bg-white p-1.5 rounded-xl flex-shrink-0">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=1&data=https://mariozenga43-png.github.io/immacolata-capuana/#ricordi" alt="QR Code Foto Live" class="w-24 h-24 object-contain block">
+    <!-- QR CODE GRANDE AL CENTRO IN ALTO (MODALITÀ LIVE) -->
+    <div id="top-bar-live" class="absolute top-3 left-0 right-0 z-40 flex justify-center pointer-events-none px-4">
+      <div class="bg-black/95 border-2 border-festive-yellow rounded-2xl px-4 py-2.5 shadow-[0_0_30px_rgba(255,215,0,0.5)] flex items-center gap-4">
+        <div class="bg-white p-1.5 rounded-xl flex-shrink-0 shadow-md">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=1&data=https://mariozenga43-png.github.io/immacolata-capuana/#ricordi" alt="QR Code Foto Live" class="w-28 h-28 object-contain block">
         </div>
-        <div class="text-left pr-1 max-w-[140px]">
-          <span class="block font-title tracking-wide text-festive-yellow text-xl text-glow-gold uppercase leading-none">Inquadra & Scatta!</span>
-          <span class="block text-white text-[11px] font-bold leading-tight mt-1">Selfie in diretta</span>
-          <span class="block text-white bg-festive-red text-[10px] font-bold uppercase tracking-wider mt-1 px-1.5 py-0.5 rounded text-center">Sul Ledwall</span>
+        <div class="text-left pr-1">
+          <span class="block font-title tracking-wide text-festive-yellow text-3xl text-glow-gold uppercase leading-none">Inquadra & Scatta!</span>
+          <span class="block text-white text-sm font-bold leading-tight mt-1">Selfie in diretta</span>
+          <span class="inline-block text-white bg-festive-red text-xs font-bold uppercase tracking-wider mt-1.5 px-2.5 py-0.5 rounded shadow">Sul Ledwall</span>
         </div>
       </div>
     </div>
 
     <!-- MODALITÀ 1: BENVENUTO + SLIDESHOW FOTO LIVE -->
-    <div id="ledwall-container" class="w-full h-full flex items-center justify-center px-5 pt-28 pb-6 z-20">
+    <div id="ledwall-container" class="w-full h-full flex items-center justify-center px-5 pt-36 pb-5 z-20">
       
-      <div id="welcome-screen" class="glass-welcome rounded-[2rem] px-6 py-7 text-center w-full max-w-[95%] mx-auto flex flex-col items-center justify-center shadow-2xl relative neon-animation">
+      <div id="welcome-screen" class="glass-welcome rounded-[2rem] px-6 py-5 text-center w-full max-w-[95%] mx-auto flex flex-col items-center justify-center shadow-2xl relative neon-animation">
         
-        <!-- Logo Vettoriale HD al posto di "LIVE • PONTE ROMANO" -->
-        <div class="mb-2.5">
-          <div class="logo-immacolata-badge">
-            <span class="logo-immacolata-top text-2xl">IMMACOLATA</span>
-            <span class="logo-immacolata-mid text-2xl">CAPUANA</span>
-            <span class="logo-immacolata-sub text-[10px]">‘NGOPP ’O PONT - VIA CONTE LANDONE</span>
-          </div>
+        <!-- LOGO IMMACOLATA CAPUANA GRANDE E ULTRA-NITIDO (SVG VETTORIALE PURO) -->
+        <div class="w-full max-w-[440px] mx-auto mb-2 drop-shadow-[0_6px_14px_rgba(0,0,0,0.95)]">
+          <svg viewBox="0 0 900 315" class="w-full h-auto block" role="img" aria-label="Immacolata Capuana - 'Ngopp 'O Pont - Via Conte Landone">
+            <!-- Riga 1: IMMACOLATA (Nero con contorno bianco spesso) -->
+            <text x="450" y="102" text-anchor="middle" font-family="'Fredoka', sans-serif" font-weight="700" font-size="112" fill="#141414" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="-1">IMMACOLATA</text>
+            <!-- Riga 2: CAPUANA (Rosso vivo con contorno bianco spesso) -->
+            <text x="450" y="212" text-anchor="middle" font-family="'Fredoka', sans-serif" font-weight="700" font-size="114" fill="#e61919" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="0">CAPUANA</text>
+            <!-- Riga 3: 'NGOPP 'O PONT - VIA CONTE LANDONE (Nero con contorno bianco nitido) -->
+            <text x="450" y="282" text-anchor="middle" font-family="'Fredoka', sans-serif" font-weight="700" font-size="40" fill="#141414" stroke="#ffffff" stroke-width="12" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="1.5">‘NGOPP ’O PONT - VIA CONTE LANDONE</text>
+          </svg>
         </div>
         
-        <div class="w-24 h-24 rounded-full border-4 border-festive-yellow p-2 bg-black/70 shadow-[0_0_35px_rgba(255,215,0,0.6)] mb-3 flex items-center justify-center">
+        <div class="w-20 h-20 rounded-full border-4 border-festive-yellow p-1.5 bg-black/70 shadow-[0_0_35px_rgba(255,215,0,0.6)] mb-2 flex items-center justify-center">
           <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="w-full h-full object-contain">
         </div>
 
-        <h1 class="font-title text-6xl tracking-wider leading-none mb-2">
-          <span class="text-festive-yellow text-glow-gold block">BENVENUTI</span>
-          <span class="text-festive-red text-glow-red block mt-0.5">IMMACOLATA CAPUANA</span>
+        <h1 class="font-title text-5xl tracking-wider leading-none mb-2">
+          <span class="text-festive-yellow text-glow-gold">BENVENUTI ALLA FESTA</span>
         </h1>
         
         <p class="text-white text-sm font-bold max-w-md mx-auto mb-3 leading-snug">
-          Inquadra il QR code in alto a sinistra con lo smartphone, scatta un selfie e guardalo apparire <span class="text-festive-yellow uppercase">in tempo reale</span> sul maxischermo!
+          Inquadra il QR code qui sopra con lo smartphone, scatta un selfie e guardalo apparire <span class="text-festive-yellow uppercase">in tempo reale</span> sul maxischermo!
         </p>
 
         <div class="inline-flex items-center gap-2 bg-festive-red/40 border-2 border-festive-red text-festive-yellow px-4 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase">
@@ -419,8 +372,8 @@ html, body {
 
       <div class="absolute inset-0 pino-vignette-modern pointer-events-none"></div>
 
-      <div class="absolute top-4 left-4 bg-black/75 border border-festive-yellow/60 px-4 py-1 rounded-full backdrop-blur-md pointer-events-none z-10 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
-        <span class="font-title text-festive-yellow tracking-[0.22em] text-base uppercase">Tribute Live • Pino Daniele</span>
+      <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/75 border border-festive-yellow/60 px-5 py-1 rounded-full backdrop-blur-md pointer-events-none z-10 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+        <span class="font-title text-festive-yellow tracking-[0.28em] text-base uppercase">Tribute Live • Pino Daniele</span>
       </div>
 
       <div id="pino-quote-box" class="absolute bottom-7 left-6 right-6 text-center pointer-events-none z-10 quote-animate">
