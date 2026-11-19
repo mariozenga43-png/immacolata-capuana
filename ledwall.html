@@ -113,10 +113,6 @@ html, body {
   padding: 18px !important;
 }
 
-.sponsor-img-fade {
-  transition: opacity 0.45s ease-in-out;
-}
-
 /* AREA VIDEO CENTRALE: 2,00m x 2,00m (66.6667% -> Quadrato 1:1) */
 #center-video-area {
   position: relative;
@@ -307,17 +303,17 @@ html, body {
     </div>
     <!-- 2. ROTANTE SINISTRA A -->
     <div class="sponsor-slot">
-      <img id="rot-sx-1" src="sponsor-sx-1.png" alt="Sponsor Sinistra" class="sponsor-img-fade">
+      <img id="rot-sx-1" src="sponsor-sx-1.png" alt="Sponsor Sinistra">
       <span id="fallback-sx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 1</span>
     </div>
     <!-- 3. ROTANTE SINISTRA B -->
     <div class="sponsor-slot">
-      <img id="rot-sx-2" src="sponsor-sx-2.png" alt="Sponsor Sinistra" class="sponsor-img-fade">
+      <img id="rot-sx-2" src="sponsor-sx-2.png" alt="Sponsor Sinistra">
       <span id="fallback-sx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 2</span>
     </div>
     <!-- 4. ROTANTE SINISTRA C -->
     <div class="sponsor-slot">
-      <img id="rot-sx-3" src="sponsor-sx-3.png" alt="Sponsor Sinistra" class="sponsor-img-fade">
+      <img id="rot-sx-3" src="sponsor-sx-3.png" alt="Sponsor Sinistra">
       <span id="fallback-sx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 3</span>
     </div>
   </aside>
@@ -486,17 +482,17 @@ html, body {
     </div>
     <!-- 2. ROTANTE DESTRA A -->
     <div class="sponsor-slot">
-      <img id="rot-dx-1" src="sponsor-dx-1.png" alt="Sponsor Destra" class="sponsor-img-fade">
+      <img id="rot-dx-1" src="sponsor-dx-1.png" alt="Sponsor Destra">
       <span id="fallback-dx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 1</span>
     </div>
     <!-- 3. ROTANTE DESTRA B -->
     <div class="sponsor-slot">
-      <img id="rot-dx-2" src="sponsor-dx-2.png" alt="Sponsor Destra" class="sponsor-img-fade">
+      <img id="rot-dx-2" src="sponsor-dx-2.png" alt="Sponsor Destra">
       <span id="fallback-dx-2" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 2</span>
     </div>
     <!-- 4. ROTANTE DESTRA C -->
     <div class="sponsor-slot">
-      <img id="rot-dx-3" src="sponsor-dx-3.png" alt="Sponsor Destra" class="sponsor-img-fade">
+      <img id="rot-dx-3" src="sponsor-dx-3.png" alt="Sponsor Destra">
       <span id="fallback-dx-3" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR DX 3</span>
     </div>
   </aside>
@@ -513,68 +509,85 @@ const { createClient } = supabase;
 const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =========================================================================
-// CONFIGURAZIONE ELENCO SPONSOR A ROTAZIONE
+// CONFIGURAZIONE ELENCO SPONSOR A ROTAZIONE (SCAMBIO ZERO-RITARDO)
 // =========================================================================
 const sponsorSinistra = [
-  'sponsor-sx-1.png',
-  'sponsor-sx-2.png',
-  'sponsor-sx-3.png',
-  'sponsor-sx-4.png',
-  'sponsor-sx-5.png',
-  'sponsor-sx-6.png'
+  { src: 'sponsor-sx-1.png', label: 'SPONSOR SX 1', pronto: null },
+  { src: 'sponsor-sx-2.png', label: 'SPONSOR SX 2', pronto: null },
+  { src: 'sponsor-sx-3.png', label: 'SPONSOR SX 3', pronto: null },
+  { src: 'sponsor-sx-4.png', label: 'SPONSOR SX 4', pronto: null },
+  { src: 'sponsor-sx-5.png', label: 'SPONSOR SX 5', pronto: null },
+  { src: 'sponsor-sx-6.png', label: 'SPONSOR SX 6', pronto: null }
 ];
 
 const sponsorDestra = [
-  'sponsor-dx-1.png',
-  'sponsor-dx-2.png',
-  'sponsor-dx-3.png',
-  'sponsor-dx-4.png',
-  'sponsor-dx-5.png',
-  'sponsor-dx-6.png'
+  { src: 'sponsor-dx-1.png', label: 'SPONSOR DX 1', pronto: null },
+  { src: 'sponsor-dx-2.png', label: 'SPONSOR DX 2', pronto: null },
+  { src: 'sponsor-dx-3.png', label: 'SPONSOR DX 3', pronto: null },
+  { src: 'sponsor-dx-4.png', label: 'SPONSOR DX 4', pronto: null },
+  { src: 'sponsor-dx-5.png', label: 'SPONSOR DX 5', pronto: null },
+  { src: 'sponsor-dx-6.png', label: 'SPONSOR DX 6', pronto: null }
 ];
+
+// Precarica subito tutti gli sponsor in memoria così sappiamo in anticipo chi ha il logo e chi usa la scritta
+[...sponsorSinistra, ...sponsorDestra].forEach(item => {
+  const preImg = new Image();
+  preImg.onload = () => { item.pronto = true; };
+  preImg.onerror = () => { item.pronto = false; };
+  preImg.src = item.src;
+});
 
 let indiceSx = 0;
 let indiceDx = 0;
 
-function impostaImmagineSponsor(imgId, fallbackId, fileSrc, labelFallback) {
+function impostaImmagineSponsor(imgId, fallbackId, item) {
   const img = document.getElementById(imgId);
   const fallback = document.getElementById(fallbackId);
   if (!img || !fallback) return;
 
-  img.style.opacity = '0';
-  setTimeout(() => {
-    img.onerror = function() {
-      img.style.display = 'none';
-      fallback.textContent = labelFallback;
-      fallback.classList.remove('hidden');
-    };
-    img.onload = function() {
-      fallback.classList.add('hidden');
-      img.style.display = 'block';
-      img.style.opacity = '1';
-    };
-    img.src = fileSrc;
-  }, 450);
+  // Se sappiamo già che il file non esiste (404), mostra ISTANTANEAMENTE la scritta senza attesa
+  if (item.pronto === false) {
+    img.style.display = 'none';
+    fallback.textContent = item.label;
+    fallback.classList.remove('hidden');
+    return;
+  }
+
+  // Se l'immagine è già precaricata in cache, scambia all'istante (0 ms di ritardo)
+  if (item.pronto === true) {
+    fallback.classList.add('hidden');
+    img.src = item.src;
+    img.style.display = 'block';
+    return;
+  }
+
+  // Solo nei primissimi millisecondi all'apertura pagina, se il check iniziale è ancora in corso
+  img.onerror = function() {
+    item.pronto = false;
+    img.style.display = 'none';
+    fallback.textContent = item.label;
+    fallback.classList.remove('hidden');
+  };
+  img.onload = function() {
+    item.pronto = true;
+    fallback.classList.add('hidden');
+    img.style.display = 'block';
+  };
+  img.src = item.src;
 }
 
 function ruotaSponsorLaterali() {
-  if (sponsorSinistra.length > 0) {
-    for (let i = 0; i < 3; i++) {
-      const idx = (indiceSx + i) % sponsorSinistra.length;
-      const nomeFile = sponsorSinistra[idx];
-      impostaImmagineSponsor(`rot-sx-${i + 1}`, `fallback-sx-${i + 1}`, nomeFile, `SPONSOR SX ${idx + 1}`);
-    }
-    indiceSx = (indiceSx + 3) % sponsorSinistra.length;
+  for (let i = 0; i < 3; i++) {
+    const idx = (indiceSx + i) % sponsorSinistra.length;
+    impostaImmagineSponsor(`rot-sx-${i + 1}`, `fallback-sx-${i + 1}`, sponsorSinistra[idx]);
   }
+  indiceSx = (indiceSx + 3) % sponsorSinistra.length;
 
-  if (sponsorDestra.length > 0) {
-    for (let i = 0; i < 3; i++) {
-      const idx = (indiceDx + i) % sponsorDestra.length;
-      const nomeFile = sponsorDestra[idx];
-      impostaImmagineSponsor(`rot-dx-${i + 1}`, `fallback-dx-${i + 1}`, nomeFile, `SPONSOR DX ${idx + 1}`);
-    }
-    indiceDx = (indiceDx + 3) % sponsorDestra.length;
+  for (let i = 0; i < 3; i++) {
+    const idx = (indiceDx + i) % sponsorDestra.length;
+    impostaImmagineSponsor(`rot-dx-${i + 1}`, `fallback-dx-${i + 1}`, sponsorDestra[idx]);
   }
+  indiceDx = (indiceDx + 3) % sponsorDestra.length;
 }
 
 ruotaSponsorLaterali();
