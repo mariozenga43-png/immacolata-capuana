@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ledwall 3x2m Sponsor Uniformi | Immacolata Capuana 2026</title>
+<title>Ledwall 3x2m Sponsor Uniformi + Logo | Immacolata Capuana 2026</title>
 
 <!-- Preconnect & Preload -->
 <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
 <link rel="preconnect" href="https://crmobnweejiepmsbteme.supabase.co" crossorigin>
+<link rel="preload" href="Logo Immacolata Capuana.png" as="image">
 <link rel="preload" href="Logo immacolata tondo 2.png" as="image">
 
 <!-- Tailwind CSS -->
@@ -76,12 +77,11 @@ html, body {
   box-sizing: border-box;
 }
 
-/* TUTTI I RIQUADRI SPONSOR HANNO DIMENSIONE IDENTICA AL MILLIMETRO */
+/* TUTTE LE 8 CASELLE SPONSOR HANNO IDENTICA LARGHEZZA E ALTEZZA AL MILLIMETRO */
 .sponsor-slot {
-  flex: 1 1 0%;
-  height: 0;
-  min-height: 0;
+  flex: none;
   width: 100%;
+  height: calc((100% - 24px) / 4);
   background-color: #ffffff;
   border-radius: 0.75rem;
   border: 2.5px solid rgba(255, 215, 0, 0.75);
@@ -89,30 +89,22 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 10px;
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
 }
 
-/* Slot Main Sponsor Fisso in alto (stessa identica dimensione, bordo oro) */
+/* Slot Main Sponsor Fisso in alto (stessa dimensione esatta, bordo oro evidenziato) */
 .sponsor-slot-fixed {
   border: 2.5px solid #FFD700;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.35);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
 }
 
 .sponsor-slot img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-.sponsor-slot-full {
-  padding: 0 !important;
-}
-
-.sponsor-slot-full img {
-  object-fit: cover !important;
 }
 
 .sponsor-img-fade {
@@ -244,7 +236,7 @@ html, body {
 .pino-vignette-modern {
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.50) 0%,
+    rgba(0, 0, 0, 0.55) 0%,
     rgba(0, 0, 0, 0.0) 30%,
     rgba(0, 0, 0, 0.15) 62%,
     rgba(0, 0, 0, 0.94) 100%
@@ -278,12 +270,12 @@ html, body {
   <!-- BARRA LATERALE SINISTRA SPONSOR (4 RIQUADRI IDENTICI)     -->
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-r-2 border-festive-yellow/60">
-    <!-- 1. FISSO IN ALTO A SINISTRA (Cosmetall) -->
+    <!-- 1. MAIN SPONSOR SINISTRA (Cosmetall - dimensione identica al destro) -->
     <div class="sponsor-slot sponsor-slot-fixed">
       <img src="sponsor-fisso-sx.png" alt="Main Sponsor Sinistra" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
       <span class="hidden font-title text-zinc-900 text-xl tracking-wider text-center leading-tight">MAIN SPONSOR SX</span>
     </div>
-    <!-- 2. ROTANTE SINISTRA A (es. Cosedo S.r.l. -> sponsor-sx-1.png) -->
+    <!-- 2. ROTANTE SINISTRA A -->
     <div class="sponsor-slot">
       <img id="rot-sx-1" src="sponsor-sx-1.png" alt="Sponsor Sinistra" class="sponsor-img-fade">
       <span id="fallback-sx-1" class="hidden font-title text-zinc-800 text-xl tracking-wider text-center">SPONSOR SX 1</span>
@@ -305,9 +297,13 @@ html, body {
   <!-- ========================================================= -->
   <main id="center-video-area">
 
-    <!-- FASCIA SUPERIORE MODALITÀ LIVE (QR + BADGE EVENTO) -->
-    <div id="top-bar-live" class="absolute top-3 left-3 right-3 z-40 flex items-start justify-between gap-2 pointer-events-none">
-      
+    <!-- LOGO IMMACOLATA CAPUANA SEMPRE PRESENTE SU TUTTE E 4 LE PAGINE -->
+    <div id="global-event-logo" class="absolute top-2.5 right-3 z-[60] pointer-events-none">
+      <img src="Logo Immacolata Capuana.png" alt="Immacolata Capuana - 'Ngopp 'O Pont - Via Conte Landone" class="h-14 md:h-16 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)]">
+    </div>
+
+    <!-- FASCIA SUPERIORE MODALITÀ LIVE (QR CODE) -->
+    <div id="top-bar-live" class="absolute top-3 left-3 z-40 flex items-start pointer-events-none">
       <div class="bg-black/95 border-2 border-festive-yellow rounded-2xl p-2.5 shadow-[0_0_25px_rgba(255,215,0,0.45)] flex items-center gap-2.5">
         <div class="bg-white p-1.5 rounded-xl flex-shrink-0">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=1&data=https://mariozenga43-png.github.io/immacolata-capuana/#ricordi" alt="QR Code Foto Live" class="w-24 h-24 object-contain block">
@@ -318,16 +314,6 @@ html, body {
           <span class="block text-white bg-festive-red text-[10px] font-bold uppercase tracking-wider mt-1 px-1.5 py-0.5 rounded text-center">Sul Ledwall</span>
         </div>
       </div>
-
-      <div class="bg-black/85 border-2 border-festive-yellow/50 rounded-2xl px-3 py-2.5 shadow-lg flex items-center gap-2.5">
-        <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain flex-shrink-0">
-        <div class="text-left">
-          <span class="block font-title tracking-wider text-festive-yellow text-lg leading-none">IMMACOLATA CAPUANA</span>
-          <span class="block text-white text-[10px] font-bold uppercase tracking-wider mt-0.5">Ponte Romano • Capua</span>
-          <span class="block text-festive-red text-[10px] font-bold uppercase tracking-widest">5 - 8 Dicembre 2026</span>
-        </div>
-      </div>
-
     </div>
 
     <!-- MODALITÀ 1: BENVENUTO + SLIDESHOW FOTO LIVE -->
@@ -335,11 +321,12 @@ html, body {
       
       <div id="welcome-screen" class="glass-welcome rounded-[2rem] px-6 py-7 text-center w-full max-w-[95%] mx-auto flex flex-col items-center justify-center shadow-2xl relative neon-animation">
         
-        <div class="absolute -top-3.5 bg-festive-red text-white text-[11px] font-bold uppercase tracking-widest px-4 py-1 rounded-full border-2 border-festive-yellow shadow-lg">
-          <i class="fa-solid fa-star mr-1 text-festive-yellow"></i> Live • Ponte Romano <i class="fa-solid fa-star ml-1 text-festive-yellow"></i>
+        <!-- Logo Immacolata Capuana al posto di "Live • Ponte Romano" -->
+        <div class="mb-2">
+          <img src="Logo Immacolata Capuana.png" alt="Immacolata Capuana" class="h-14 w-auto object-contain mx-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
         </div>
         
-        <div class="w-24 h-24 rounded-full border-4 border-festive-yellow p-2 bg-black/70 shadow-[0_0_35px_rgba(255,215,0,0.6)] mt-2 mb-3 flex items-center justify-center">
+        <div class="w-24 h-24 rounded-full border-4 border-festive-yellow p-2 bg-black/70 shadow-[0_0_35px_rgba(255,215,0,0.6)] mb-3 flex items-center justify-center">
           <img src="Logo immacolata tondo 2.png" alt="Logo Immacolata Capuana" class="w-full h-full object-contain">
         </div>
 
@@ -378,8 +365,9 @@ html, body {
 
       <div class="absolute inset-0 pino-vignette-modern pointer-events-none"></div>
 
-      <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/75 border border-festive-yellow/60 px-5 py-1 rounded-full backdrop-blur-md pointer-events-none z-10 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
-        <span class="font-title text-festive-yellow tracking-[0.28em] text-base uppercase">Tribute Live • Pino Daniele</span>
+      <!-- Tag in alto a sinistra -->
+      <div class="absolute top-4 left-4 bg-black/75 border border-festive-yellow/60 px-4 py-1 rounded-full backdrop-blur-md pointer-events-none z-10 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+        <span class="font-title text-festive-yellow tracking-[0.22em] text-base uppercase">Tribute Live • Pino Daniele</span>
       </div>
 
       <div id="pino-quote-box" class="absolute bottom-7 left-6 right-6 text-center pointer-events-none z-10 quote-animate">
@@ -410,8 +398,8 @@ html, body {
   <!-- BARRA LATERALE DESTRA SPONSOR (4 RIQUADRI IDENTICI)       -->
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-l-2 border-festive-yellow/60">
-    <!-- 1. FISSO IN ALTO A DESTRA (McDonald's - stessa dimensione esatta) -->
-    <div class="sponsor-slot sponsor-slot-fixed sponsor-slot-full !bg-[#003b1f]">
+    <!-- 1. MAIN SPONSOR DESTRA (McDonald's - stessa dimensione e scala di Cosmetall) -->
+    <div class="sponsor-slot sponsor-slot-fixed !bg-[#003b1f]">
       <img src="sponsor-fisso-dx.png" alt="Main Sponsor Destra" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
       <span class="hidden font-title text-white text-xl tracking-wider text-center leading-tight">MAIN SPONSOR DX</span>
     </div>
