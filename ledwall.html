@@ -377,7 +377,7 @@ html, body {
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODALITÀ 2: PHOTO LIVE (QR EXTRA-LARGE + SELFIE IN DIRETTA) -->
+    <!-- MODALITÀ 2: PHOTO LIVE (QR EXTRA-LARGE + SELFIE APPROVATI)-->
     <!-- ========================================================= -->
     <div id="top-bar-live" class="hidden absolute top-3 left-0 right-0 z-40 flex justify-center pointer-events-none px-4">
       <div class="bg-black/95 border-[3px] border-festive-yellow rounded-2xl px-5 py-3 shadow-[0_0_35px_rgba(255,215,0,0.6)] flex items-center gap-5">
@@ -529,7 +529,6 @@ const sponsorDestra = [
   { src: 'sponsor-dx-6.png', label: 'SPONSOR DX 6', pronto: null }
 ];
 
-// Precarica subito tutti gli sponsor in memoria così sappiamo in anticipo chi ha il logo e chi usa la scritta
 [...sponsorSinistra, ...sponsorDestra].forEach(item => {
   const preImg = new Image();
   preImg.onload = () => { item.pronto = true; };
@@ -545,7 +544,6 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
   const fallback = document.getElementById(fallbackId);
   if (!img || !fallback) return;
 
-  // Se sappiamo già che il file non esiste (404), mostra ISTANTANEAMENTE la scritta senza attesa
   if (item.pronto === false) {
     img.style.display = 'none';
     fallback.textContent = item.label;
@@ -553,7 +551,6 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
     return;
   }
 
-  // Se l'immagine è già precaricata in cache, scambia all'istante (0 ms di ritardo)
   if (item.pronto === true) {
     fallback.classList.add('hidden');
     img.src = item.src;
@@ -561,7 +558,6 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
     return;
   }
 
-  // Solo nei primissimi millisecondi all'apertura pagina, se il check iniziale è ancora in corso
   img.onerror = function() {
     item.pronto = false;
     img.style.display = 'none';
@@ -754,44 +750,33 @@ async function avviaSlideshowPino() {
 }
 
 // =========================================================================
-// GESTIONE SELFIE DEI CITTADINI
+// GESTIONE SELFIE APPROVATI DALLA REGIA (MODERAZIONE PREVENTIVA)
 // =========================================================================
 async function fetchPhotosForLedwall() {
     if (modalitaCorrente !== 'live') return;
 
     try {
-        const { data, error } = await _supabase.storage
-            .from('foto-evento')
-            .list('', {
-                limit: 50,
-                sortBy: { column: 'created_at', order: 'desc' }
-            });
+        const { data, error } = await _supabase
+            .from('foto_approvate')
+            .select('public_url')
+            .eq('stato', 'approvata')
+            .order('created_at', { ascending: false })
+            .limit(50);
 
         if (error) throw error;
 
         if (data && data.length > 0) {
-            const validFiles = data.filter(file => file.name && file.name !== '.emptyFolderPlaceholder');
-            
-            if (validFiles.length > 0) {
-                const newPhotos = validFiles.map(file => {
-                    const { data: { publicUrl } } = _supabase.storage
-                        .from('foto-evento')
-                        .getPublicUrl(file.name);
-                    return publicUrl;
-                });
-
-                if (newPhotos.length !== photoList.length || newPhotos[0] !== photoList[0]) {
-                    photoList = newPhotos;
-                    showPhotoScreen();
-                }
-            } else {
-                showWelcomeScreen();
+            const newPhotos = data.map(item => item.public_url);
+            if (JSON.stringify(newPhotos) !== JSON.stringify(photoList)) {
+                photoList = newPhotos;
+                showPhotoScreen();
             }
         } else {
+            photoList = [];
             showWelcomeScreen();
         }
     } catch (err) {
-        console.error('Errore nel recupero foto:', err);
+        console.error('Errore nel recupero foto approvate:', err);
     }
 }
 
@@ -825,7 +810,7 @@ function showPhotoScreen() {
 
         if (photoList.length > 1 && !slideshowInterval) {
             slideshowInterval = setInterval(() => {
-                if (modalitaCorrente !== 'live') return;
+                if (modalitaCorrente !== 'live' || photoList.length <= 1) return;
                 currentIndex = (currentIndex + 1) % photoList.length;
                 activePhoto.style.opacity = '0';
                 setTimeout(() => {
@@ -839,7 +824,7 @@ function showPhotoScreen() {
 
 controllaRegia();
 setInterval(controllaRegia, 3000);
-setInterval(fetchPhotosForLedwall, 5000);
+setInterval(fetchPhotosForLedwall, 4000);
 
 // NEVE ANIMATA + PARTICELLE DORATE CONCERTO
 window.addEventListener('load', () => {
