@@ -377,7 +377,7 @@ html, body {
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODALITÀ 2: PHOTO LIVE (QR EXTRA-LARGE + SELFIE APPROVATI)-->
+    <!-- MODALITÀ 2: PHOTO LIVE (QR EXTRA-LARGE + SOLO APPROVATE)  -->
     <!-- ========================================================= -->
     <div id="top-bar-live" class="hidden absolute top-3 left-0 right-0 z-40 flex justify-center pointer-events-none px-4">
       <div class="bg-black/95 border-[3px] border-festive-yellow rounded-2xl px-5 py-3 shadow-[0_0_35px_rgba(255,215,0,0.6)] flex items-center gap-5">
@@ -750,7 +750,7 @@ async function avviaSlideshowPino() {
 }
 
 // =========================================================================
-// GESTIONE SELFIE APPROVATI DALLA REGIA (MODERAZIONE PREVENTIVA)
+// LEGGE ESCLUSIVAMENTE LE FOTO PRESENTI IN "foto_approvate" (MAI LO STORAGE)
 // =========================================================================
 async function fetchPhotosForLedwall() {
     if (modalitaCorrente !== 'live') return;
@@ -769,10 +769,12 @@ async function fetchPhotosForLedwall() {
             const newPhotos = data.map(item => item.public_url);
             if (JSON.stringify(newPhotos) !== JSON.stringify(photoList)) {
                 photoList = newPhotos;
+                currentIndex = 0;
                 showPhotoScreen();
             }
         } else {
             photoList = [];
+            currentIndex = 0;
             showWelcomeScreen();
         }
     } catch (err) {
@@ -785,6 +787,8 @@ function showWelcomeScreen() {
         clearInterval(slideshowInterval);
         slideshowInterval = null;
     }
+    const activePhoto = document.getElementById('active-photo');
+    if (activePhoto) activePhoto.src = '';
     document.getElementById('welcome-screen').classList.remove('hidden');
     document.getElementById('photo-slideshow').classList.add('hidden');
 }
@@ -794,31 +798,35 @@ function showPhotoScreen() {
     const photoSlideshow = document.getElementById('photo-slideshow');
     const activePhoto = document.getElementById('active-photo');
 
-    if (!welcomeScreen.classList.contains('hidden')) {
-        welcomeScreen.classList.add('hidden');
-        photoSlideshow.classList.remove('hidden');
+    if (photoList.length === 0) {
+        showWelcomeScreen();
+        return;
     }
 
-    if (photoList.length > 0) {
-        if (currentIndex >= photoList.length) currentIndex = 0;
-        
-        activePhoto.style.opacity = '0';
-        setTimeout(() => {
-            activePhoto.src = photoList[currentIndex];
-            activePhoto.style.opacity = '1';
-        }, 300);
+    welcomeScreen.classList.add('hidden');
+    photoSlideshow.classList.remove('hidden');
 
-        if (photoList.length > 1 && !slideshowInterval) {
-            slideshowInterval = setInterval(() => {
-                if (modalitaCorrente !== 'live' || photoList.length <= 1) return;
-                currentIndex = (currentIndex + 1) % photoList.length;
-                activePhoto.style.opacity = '0';
-                setTimeout(() => {
-                    activePhoto.src = photoList[currentIndex];
-                    activePhoto.style.opacity = '1';
-                }, 300);
-            }, 8000);
-        }
+    if (currentIndex >= photoList.length) currentIndex = 0;
+    
+    activePhoto.style.opacity = '0';
+    setTimeout(() => {
+        activePhoto.src = photoList[currentIndex];
+        activePhoto.style.opacity = '1';
+    }, 200);
+
+    if (photoList.length > 1 && !slideshowInterval) {
+        slideshowInterval = setInterval(() => {
+            if (modalitaCorrente !== 'live' || photoList.length <= 1) return;
+            currentIndex = (currentIndex + 1) % photoList.length;
+            activePhoto.style.opacity = '0';
+            setTimeout(() => {
+                activePhoto.src = photoList[currentIndex];
+                activePhoto.style.opacity = '1';
+            }, 200);
+        }, 8000);
+    } else if (photoList.length <= 1 && slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
     }
 }
 
