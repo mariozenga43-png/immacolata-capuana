@@ -333,24 +333,17 @@ html, body {
     <!-- ========================================================= -->
     <div id="show-principale" class="absolute inset-0 z-30 gala-backdrop flex flex-col items-center justify-between px-6 pt-6 pb-10 text-center overflow-hidden">
       
-      <!-- Fasci di luce scenografici caldi sullo sfondo -->
       <div class="pino-beam-gold opacity-70"></div>
       <div class="absolute inset-0 shadow-[inset_0_0_90px_rgba(0,0,0,0.88)] pointer-events-none"></div>
-
-      <!-- Cornice interna dorata elegante -->
       <div class="absolute inset-4 rounded-[2rem] border-2 border-festive-yellow/45 pointer-events-none"></div>
 
-      <!-- Intestazione in alto: Luogo e Date -->
       <div class="relative z-10 inline-flex items-center gap-3 bg-black/70 border-2 border-festive-yellow/80 px-6 py-1.5 rounded-full shadow-[0_0_25px_rgba(255,215,0,0.35)]">
         <span class="text-festive-yellow text-xs">★</span>
         <span class="font-title text-festive-yellow tracking-[0.26em] text-xl md:text-2xl uppercase">Capua • 5 – 8 Dicembre 2026</span>
         <span class="text-festive-yellow text-xs">★</span>
       </div>
 
-      <!-- Blocco Centrale Perfettamente Centrato e Massimizzato: Stemma Tondo + Logo Grande Vettoriale HD -->
       <div class="relative z-10 w-full flex flex-col items-center justify-center my-auto gala-float">
-        
-        <!-- Stemma Tondo Grande con Aura Luminosa -->
         <div class="relative w-48 h-48 md:w-52 md:h-52 mb-2 flex items-center justify-center">
           <div class="absolute inset-0 rounded-full border-2 border-dashed border-festive-yellow/75 gala-aura-ring"></div>
           <div class="w-44 h-44 md:w-48 md:h-48 rounded-full border-4 border-festive-yellow p-2.5 bg-black/80 shadow-[0_0_55px_rgba(255,215,0,0.85)] flex items-center justify-center">
@@ -358,17 +351,14 @@ html, body {
           </div>
         </div>
 
-        <!-- Logo Grande Immacolata Capuana SVG HD -->
         <div class="w-full max-w-[760px] mx-auto px-2 drop-shadow-[0_14px_28px_rgba(0,0,0,0.98)]">
           <svg viewBox="0 0 900 235" class="w-full h-auto block" role="img" aria-label="Immacolata Capuana">
             <text x="450" y="102" text-anchor="middle" font-family="'Fredoka', sans-serif" font-weight="700" font-size="112" fill="#141414" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="-1">IMMACOLATA</text>
             <text x="450" y="212" text-anchor="middle" font-family="'Fredoka', sans-serif" font-weight="700" font-size="114" fill="#e61919" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="0">CAPUANA</text>
           </svg>
         </div>
-
       </div>
 
-      <!-- Fascia Inferiore Rialzata con "BENVENUTI" Extra-Large -->
       <div class="relative z-10 mb-5 flex flex-col items-center">
         <div class="w-52 h-0.5 bg-gradient-to-r from-transparent via-festive-yellow to-transparent mb-2"></div>
         <p class="font-title text-7xl md:text-8xl text-festive-yellow text-glow-gold tracking-[0.22em] uppercase leading-none">
@@ -471,6 +461,27 @@ html, body {
     <!-- MODALITÀ 5: LOCANDINA FISSA DDM (Area 2x2m) -->
     <div id="show-ddm" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
       <img src="locandina-ddm.jpg" alt="Live Show DJ Set DDM" class="w-full h-full object-contain">
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODALITÀ 6: VIDEO SPOILER VILLAGGIO DI BABBO NATALE       -->
+    <!-- ========================================================= -->
+    <div id="show-babbo-video" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
+      <video id="babbo-spoiler-player" src="spoiler-babbo-natale.mp4" class="w-full h-full object-contain" playsinline loop preload="metadata"></video>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODALITÀ 7: QR CODE GIGANTE 2x2M INSTAGRAM VILLAGGIO      -->
+    <!-- ========================================================= -->
+    <div id="show-babbo-qr" class="hidden absolute inset-0 z-50 bg-white flex items-center justify-center p-4">
+      <img src="qr-babbo-natale.png" alt="QR Code Instagram Villaggio di Babbo Natale" class="w-full h-full object-contain block">
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODALITÀ 8: LOCANDINA VILLAGGIO DI BABBO NATALE (2x2m)    -->
+    <!-- ========================================================= -->
+    <div id="show-babbo-locandina" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
+      <img src="locandina-babbo-natale.jpg" alt="Locandina Villaggio di Babbo Natale" class="w-full h-full object-contain">
     </div>
 
   </main>
@@ -668,10 +679,20 @@ function applicaModalita(mod) {
     const showPino = document.getElementById('show-pino');
     const showIzzo = document.getElementById('show-izzo');
     const showDdm = document.getElementById('show-ddm');
+    const showBabboVideo = document.getElementById('show-babbo-video');
+    const showBabboQr = document.getElementById('show-babbo-qr');
+    const showBabboLocandina = document.getElementById('show-babbo-locandina');
+    const videoPlayer = document.getElementById('babbo-spoiler-player');
 
     if (pinoInterval) {
         clearInterval(pinoInterval);
         pinoInterval = null;
+    }
+
+    // Ferma e azzera sempre il video spoiler quando si cambia schermata
+    if (videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
     }
 
     showPrincipale.classList.add('hidden');
@@ -680,6 +701,9 @@ function applicaModalita(mod) {
     showPino.classList.add('hidden');
     showIzzo.classList.add('hidden');
     showDdm.classList.add('hidden');
+    showBabboVideo.classList.add('hidden');
+    showBabboQr.classList.add('hidden');
+    showBabboLocandina.classList.add('hidden');
 
     if (mod === 'live') {
         topBarLive.classList.remove('hidden');
@@ -692,6 +716,19 @@ function applicaModalita(mod) {
         showIzzo.classList.remove('hidden');
     } else if (mod === 'ddm') {
         showDdm.classList.remove('hidden');
+    } else if (mod === 'babbo_video') {
+        showBabboVideo.classList.remove('hidden');
+        if (videoPlayer) {
+            videoPlayer.muted = false;
+            videoPlayer.volume = 1.0;
+            videoPlayer.play().catch(err => {
+                console.warn('Autoplay audio bloccato dal browser, riprovo:', err);
+            });
+        }
+    } else if (mod === 'babbo_qr') {
+        showBabboQr.classList.remove('hidden');
+    } else if (mod === 'babbo_locandina') {
+        showBabboLocandina.classList.remove('hidden');
     } else {
         showPrincipale.classList.remove('hidden');
     }
