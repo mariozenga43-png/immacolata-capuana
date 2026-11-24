@@ -46,6 +46,20 @@
         🎧 Live Show DJ Set DDM
       </button>
     </div>
+
+    <!-- SOTTOSEZIONE VILLAGGIO DI BABBO NATALE -->
+    <h3 class="font-title text-lg tracking-wider text-red-400 mt-5 mb-2.5">Villaggio di Babbo Natale</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+      <button onclick="cambiaModalita('babbo_video')" id="btn-babbo_video" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
+        🎬 Video Spoiler (Audio)
+      </button>
+      <button onclick="cambiaModalita('babbo_qr')" id="btn-babbo_qr" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
+        📲 QR Instagram 2×2m
+      </button>
+      <button onclick="cambiaModalita('babbo_locandina')" id="btn-babbo_locandina" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
+        🎅 Locandina Villaggio
+      </button>
+    </div>
   </section>
 
   <!-- SEZIONE 2: MODERAZIONE FOTO IN ARRIVO -->
@@ -110,7 +124,6 @@ async function caricaTutteLeFoto() {
 
   const daApprovare = files.filter(f => !nomiApprovati.has(f.name));
 
-  // Render Da Approvare
   const boxPending = document.getElementById('lista-da-approvare');
   if (daApprovare.length === 0) {
     boxPending.innerHTML = '<p class="text-sm text-zinc-400 col-span-2">Nessuna nuova foto in attesa di moderazione.</p>';
@@ -133,7 +146,6 @@ async function caricaTutteLeFoto() {
     }).join('');
   }
 
-  // Render Già Approvate
   const boxApproved = document.getElementById('lista-approvate');
   if (approvate.length === 0) {
     boxApproved.innerHTML = '<p class="text-sm text-zinc-400 col-span-2">Nessuna foto ancora approvata.</p>';
