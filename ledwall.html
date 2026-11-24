@@ -107,9 +107,9 @@ html, body {
   object-fit: contain;
 }
 
-/* Adattamento specifico logo MORDIMI senza strisce bianche laterali */
+/* Adattamento specifico logo MORDIMI centrato senza tagli ai lati */
 .sponsor-slot img[src*="sponsor-sx-2.png"] {
-  transform: scale(1.22);
+  transform: scale(1.06);
 }
 
 /* Casella McDonald's: sfondo verde uniforme senza stacchi + M vettoriale HD */
@@ -551,7 +551,7 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
 
   const slot = img.parentElement;
   if (slot) {
-    slot.style.padding = (item.src === 'sponsor-sx-2.png') ? '2px' : '12px';
+    slot.style.padding = (item.src === 'sponsor-sx-2.png') ? '6px' : '12px';
   }
 
   if (item.pronto === false) {
