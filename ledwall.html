@@ -112,14 +112,14 @@ html, body {
   transform: scale(1.06);
 }
 
-/* Adattamento specifico logo PREMIAFINANCE per riempire il riquadro */
+/* Adattamento specifico logo PREMIAFINANCE centrato verticalmente e orizzontalmente */
 .sponsor-slot img[src*="sponsor-sx-3.png"] {
-  transform: scale(1.22);
+  transform: translateY(-10%) scale(1.18);
 }
 
-/* Adattamento specifico logo ALU SISTEM per riempire il riquadro */
+/* Adattamento specifico logo ALU SISTEM contenuto interamente nel riquadro */
 .sponsor-slot img[src*="sponsor-sx-4.png"] {
-  transform: scale(1.30);
+  transform: scale(1.14);
 }
 
 /* Adattamento specifico logo MEC per dare respiro alla C a destra */
@@ -585,9 +585,9 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
     if (item.src === 'sponsor-sx-2.png') {
       slot.style.padding = '6px';
     } else if (item.src === 'sponsor-sx-3.png') {
-      slot.style.padding = '3px';
-    } else if (item.src === 'sponsor-sx-4.png') {
       slot.style.padding = '4px';
+    } else if (item.src === 'sponsor-sx-4.png') {
+      slot.style.padding = '8px';
     } else if (item.src === 'sponsor-dx-2.png') {
       slot.style.padding = '14px';
     } else if (item.src === 'sponsor-dx-5.png') {
