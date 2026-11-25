@@ -117,6 +117,16 @@ html, body {
   transform: scale(1.22);
 }
 
+/* Adattamento specifico logo ALU SISTEM per riempire il riquadro */
+.sponsor-slot img[src*="sponsor-sx-4.png"] {
+  transform: scale(1.30);
+}
+
+/* Adattamento specifico logo MEC per dare respiro alla C a destra */
+.sponsor-slot img[src*="sponsor-dx-2.png"] {
+  transform: scale(0.92);
+}
+
 /* Adattamento specifico logo SALZILLO calibrato al millimetro senza tagli */
 .sponsor-slot img[src*="sponsor-dx-5.png"] {
   transform: scale(1.16);
@@ -576,6 +586,10 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
       slot.style.padding = '6px';
     } else if (item.src === 'sponsor-sx-3.png') {
       slot.style.padding = '3px';
+    } else if (item.src === 'sponsor-sx-4.png') {
+      slot.style.padding = '4px';
+    } else if (item.src === 'sponsor-dx-2.png') {
+      slot.style.padding = '14px';
     } else if (item.src === 'sponsor-dx-5.png') {
       slot.style.padding = '4px';
     } else {
