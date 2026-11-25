@@ -112,6 +112,11 @@ html, body {
   transform: scale(1.06);
 }
 
+/* Adattamento specifico logo PREMIAFINANCE per riempire il riquadro */
+.sponsor-slot img[src*="sponsor-sx-3.png"] {
+  transform: scale(1.22);
+}
+
 /* Adattamento specifico logo SALZILLO calibrato al millimetro senza tagli */
 .sponsor-slot img[src*="sponsor-dx-5.png"] {
   transform: scale(1.16);
@@ -569,6 +574,8 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
   if (slot) {
     if (item.src === 'sponsor-sx-2.png') {
       slot.style.padding = '6px';
+    } else if (item.src === 'sponsor-sx-3.png') {
+      slot.style.padding = '3px';
     } else if (item.src === 'sponsor-dx-5.png') {
       slot.style.padding = '4px';
     } else {
