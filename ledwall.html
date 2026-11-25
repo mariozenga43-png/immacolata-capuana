@@ -112,6 +112,11 @@ html, body {
   transform: scale(1.06);
 }
 
+/* Adattamento specifico logo SALZILLO per riempire il riquadro */
+.sponsor-slot img[src*="sponsor-dx-5.png"] {
+  transform: scale(1.38);
+}
+
 /* Casella McDonald's: sfondo verde uniforme senza stacchi + M vettoriale HD */
 .sponsor-slot-mcd {
   background-color: #003b1f !important;
@@ -562,7 +567,13 @@ function impostaImmagineSponsor(imgId, fallbackId, item) {
 
   const slot = img.parentElement;
   if (slot) {
-    slot.style.padding = (item.src === 'sponsor-sx-2.png') ? '6px' : '12px';
+    if (item.src === 'sponsor-sx-2.png') {
+      slot.style.padding = '6px';
+    } else if (item.src === 'sponsor-dx-5.png') {
+      slot.style.padding = '2px';
+    } else {
+      slot.style.padding = '12px';
+    }
   }
 
   if (item.pronto === false) {
