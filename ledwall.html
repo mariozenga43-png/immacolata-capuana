@@ -486,7 +486,7 @@ html, body {
     <!-- MODALITÀ 6: VIDEO SPOILER VILLAGGIO DI BABBO NATALE       -->
     <!-- ========================================================= -->
     <div id="show-babbo-video" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
-      <video id="babbo-spoiler-player" src="spoiler-babbo-natale.mp4" class="w-full h-full object-contain" playsinline loop preload="metadata"></video>
+      <video id="babbo-spoiler-player" src="spoiler-babbo-natale.mp4" class="w-full h-full object-contain" playsinline loop preload="auto"></video>
     </div>
 
     <!-- ========================================================= -->
@@ -500,17 +500,18 @@ html, body {
     <!-- MODALITÀ 8: LOCANDINA VILLAGGIO DI BABBO NATALE (2x2m)    -->
     <!-- ========================================================= -->
     <div id="show-babbo-locandina" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
-      <!-- Sfondo ambientale sfocato con gli stessi colori della locandina (elimina le bande nere) -->
       <img src="locandina-babbo-natale.jpg" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover scale-110 blur-xl brightness-50 pointer-events-none">
-      <!-- Locandina nitida in proporzioni originali 100% senza deformazioni -->
       <img src="locandina-babbo-natale.jpg" alt="Locandina Villaggio di Babbo Natale" class="relative z-10 h-full w-auto max-w-full object-contain shadow-[0_0_45px_rgba(0,0,0,0.95)] border-x-2 border-festive-yellow/60 block">
     </div>
 
     <!-- ========================================================= -->
     <!-- MODALITÀ 9: VIDEO SPOT MAIN SPONSOR BCC TERRA DI LAVORO   -->
     <!-- ========================================================= -->
-    <div id="show-bcc-video" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
-      <video id="bcc-spot-player" src="spot-bcc.mp4" class="w-full h-full object-contain" playsinline loop preload="metadata"></video>
+    <div id="show-bcc-video" class="hidden absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
+      <!-- Sfondo video ambientale sincronizzato (elimina le bande nere sopra e sotto) -->
+      <video id="bcc-spot-bg" src="spot-bcc.mp4" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-95 pointer-events-none" muted playsinline loop preload="auto"></video>
+      <!-- Spot principale nitido in proporzioni originali 100% -->
+      <video id="bcc-spot-player" src="spot-bcc.mp4" class="relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
     </div>
 
   </main>
@@ -693,6 +694,59 @@ let photoList = [];
 let currentIndex = 0;
 let slideshowInterval = null;
 
+function avviaVideoConAudio(player, bgPlayer) {
+    if (!player) return;
+    player.currentTime = 0;
+    player.muted = false;
+    player.volume = 1.0;
+
+    if (bgPlayer) {
+        bgPlayer.currentTime = 0;
+        bgPlayer.muted = true;
+        bgPlayer.play().catch(() => {});
+    }
+
+    const playPromise = player.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            player.muted = true;
+            player.play().catch(err => console.error('Errore riproduzione video:', err));
+        });
+    }
+}
+
+// Mantiene sincronizzato lo sfondo ambientale del video BCC
+const bccMainPlayer = document.getElementById('bcc-spot-player');
+const bccBgPlayer = document.getElementById('bcc-spot-bg');
+if (bccMainPlayer && bccBgPlayer) {
+    bccMainPlayer.addEventListener('play', () => {
+        bccBgPlayer.currentTime = bccMainPlayer.currentTime;
+        bccBgPlayer.play().catch(() => {});
+    });
+    bccMainPlayer.addEventListener('pause', () => {
+        bccBgPlayer.pause();
+    });
+    bccMainPlayer.addEventListener('timeupdate', () => {
+        if (Math.abs(bccBgPlayer.currentTime - bccMainPlayer.currentTime) > 0.2) {
+            bccBgPlayer.currentTime = bccMainPlayer.currentTime;
+        }
+    });
+}
+
+// Sblocca l'audio al primo clic in qualsiasi punto dello schermo
+document.addEventListener('click', () => {
+    ['babbo-spoiler-player', 'bcc-spot-player'].forEach(id => {
+        const v = document.getElementById(id);
+        if (v) {
+            v.muted = false;
+            v.volume = 1.0;
+            if (!v.parentElement.classList.contains('hidden') && v.paused) {
+                v.play().catch(() => {});
+            }
+        }
+    });
+});
+
 async function controllaRegia() {
     try {
         const { data, error } = await _supabase
@@ -725,6 +779,7 @@ function applicaModalita(mod) {
     const showBccVideo = document.getElementById('show-bcc-video');
     const videoPlayer = document.getElementById('babbo-spoiler-player');
     const bccVideoPlayer = document.getElementById('bcc-spot-player');
+    const bccVideoBg = document.getElementById('bcc-spot-bg');
 
     if (pinoInterval) {
         clearInterval(pinoInterval);
@@ -739,6 +794,10 @@ function applicaModalita(mod) {
     if (bccVideoPlayer) {
         bccVideoPlayer.pause();
         bccVideoPlayer.currentTime = 0;
+    }
+    if (bccVideoBg) {
+        bccVideoBg.pause();
+        bccVideoBg.currentTime = 0;
     }
 
     showPrincipale.classList.add('hidden');
@@ -765,26 +824,14 @@ function applicaModalita(mod) {
         showDdm.classList.remove('hidden');
     } else if (mod === 'babbo_video') {
         showBabboVideo.classList.remove('hidden');
-        if (videoPlayer) {
-            videoPlayer.muted = false;
-            videoPlayer.volume = 1.0;
-            videoPlayer.play().catch(err => {
-                console.warn('Autoplay audio bloccato dal browser, riprovo:', err);
-            });
-        }
+        avviaVideoConAudio(videoPlayer, null);
     } else if (mod === 'babbo_qr') {
         showBabboQr.classList.remove('hidden');
     } else if (mod === 'babbo_locandina') {
         showBabboLocandina.classList.remove('hidden');
     } else if (mod === 'bcc_video') {
         showBccVideo.classList.remove('hidden');
-        if (bccVideoPlayer) {
-            bccVideoPlayer.muted = false;
-            bccVideoPlayer.volume = 1.0;
-            bccVideoPlayer.play().catch(err => {
-                console.warn('Autoplay audio bloccato dal browser, riprovo:', err);
-            });
-        }
+        avviaVideoConAudio(bccVideoPlayer, bccVideoBg);
     } else {
         showPrincipale.classList.remove('hidden');
     }
