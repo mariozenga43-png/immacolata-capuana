@@ -511,13 +511,13 @@ html, body {
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODALITÀ 9: 3 VIDEO SPOT MAIN SPONSOR BCC TERRA DI LAVORO -->
+    <!-- MODALITÀ 9: 3 VIDEO SPOT MAIN SPONSOR BCC (SENZA AUDIO)   -->
     <!-- ========================================================= -->
     <div id="show-bcc-video" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
       <canvas id="bcc-ambient-canvas" width="24" height="24" class="gpu-layer absolute inset-0 w-full h-full object-cover scale-125 blur-xl opacity-95 pointer-events-none"></canvas>
-      <video id="bcc-player-1" src="spot-bcc-1.mp4" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='spot-bcc.mp4';}" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" playsinline webkit-playsinline loop preload="auto"></video>
-      <video id="bcc-player-2" src="spot-bcc-2.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" playsinline webkit-playsinline loop preload="auto"></video>
-      <video id="bcc-player-3" src="spot-bcc-3.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" playsinline webkit-playsinline loop preload="auto"></video>
+      <video id="bcc-player-1" src="spot-bcc-1.mp4" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='spot-bcc.mp4';}" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
+      <video id="bcc-player-2" src="spot-bcc-2.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
+      <video id="bcc-player-3" src="spot-bcc-3.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
     </div>
 
   </main>
@@ -702,13 +702,13 @@ let currentIndex = 0;
 let slideshowInterval = null;
 
 // =========================================================================
-// AUDIO SEMPRE ATTIVO & SFONDO AMBIENTALE LEGGERO A 60FPS
+// GESTIONE AUDIO VILLAGGIO, VIDEO BCC MUTI & SFONDO AMBIENTALE LEGGERO
 // =========================================================================
 let activeBccVideo = null;
 let ambientTimer = null;
-const videoIds = ['babbo-spoiler-player', 'bcc-player-1', 'bcc-player-2', 'bcc-player-3'];
+const bccVideoIds = ['bcc-player-1', 'bcc-player-2', 'bcc-player-3'];
 
-function inizializzaAudioSilenzioso() {
+function inizializzaVideoEAudio() {
     try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         if (AudioCtx) {
@@ -717,15 +717,33 @@ function inizializzaAudioSilenzioso() {
         }
     } catch (e) {}
 
-    videoIds.forEach(id => {
+    // Video spoiler Villaggio di Babbo Natale (con audio attivo)
+    const babboVideo = document.getElementById('babbo-spoiler-player');
+    if (babboVideo) {
+        babboVideo.muted = false;
+        babboVideo.volume = 1.0;
+        if (babboVideo.dataset.attivo === '1') {
+            if (babboVideo.paused) babboVideo.play().catch(() => {});
+        } else {
+            const p = babboVideo.play();
+            if (p !== undefined) {
+                p.then(() => {
+                    if (babboVideo.dataset.attivo !== '1') {
+                        babboVideo.pause();
+                        try { babboVideo.currentTime = 0; } catch (e) {}
+                    }
+                }).catch(() => {});
+            }
+        }
+    }
+
+    // I 3 video spot BCC restano sempre rigorosamente senza audio
+    bccVideoIds.forEach(id => {
         const v = document.getElementById(id);
         if (!v) return;
-        v.muted = false;
-        v.volume = 1.0;
-
-        if (v.dataset.attivo === '1') {
-            if (v.paused) v.play().catch(() => {});
-        } else {
+        v.muted = true;
+        v.volume = 0;
+        if (v.dataset.attivo !== '1') {
             const p = v.play();
             if (p !== undefined) {
                 p.then(() => {
@@ -739,9 +757,8 @@ function inizializzaAudioSilenzioso() {
     });
 }
 
-// Attiva e mantiene sbloccato l'audio senza alcuna scritta visibile
 ['pointerdown', 'click', 'keydown', 'touchstart'].forEach(evt => {
-    document.addEventListener(evt, inizializzaAudioSilenzioso, { passive: true });
+    document.addEventListener(evt, inizializzaVideoEAudio, { passive: true });
 });
 
 function avviaSfondoAmbientale(videoEl) {
@@ -769,12 +786,23 @@ function fermaSfondoAmbientale() {
     }
 }
 
-function avviaVideoConAudio(player) {
+function avviaVideo(player, conAudio = true) {
     if (!player) return;
     player.dataset.attivo = '1';
+    try { player.currentTime = 0; } catch (e) {}
+
+    if (!conAudio) {
+        player.muted = true;
+        player.volume = 0;
+        const p = player.play();
+        if (p !== undefined) {
+            p.catch(err => console.error('Errore riproduzione video BCC:', err));
+        }
+        return;
+    }
+
     player.muted = false;
     player.volume = 1.0;
-    try { player.currentTime = 0; } catch (e) {}
 
     const playPromise = player.play();
     if (playPromise !== undefined) {
@@ -782,7 +810,6 @@ function avviaVideoConAudio(player) {
             player.muted = false;
             player.volume = 1.0;
         }).catch(() => {
-            // Fallback di sicurezza se il browser richiede prima un'interazione
             player.muted = true;
             player.play().then(() => {
                 setTimeout(() => {
@@ -856,6 +883,8 @@ function applicaModalita(mod) {
     bccPlayers.forEach(p => {
         if (p) {
             p.dataset.attivo = '0';
+            p.muted = true;
+            p.volume = 0;
             p.pause();
             p.classList.add('opacity-0', 'pointer-events-none');
             p.classList.remove('opacity-100');
@@ -887,7 +916,7 @@ function applicaModalita(mod) {
         showDdm.classList.remove('hidden');
     } else if (mod === 'babbo_video') {
         showBabboVideo.classList.remove('opacity-0', 'pointer-events-none');
-        avviaVideoConAudio(videoPlayer);
+        avviaVideo(videoPlayer, true);
     } else if (mod === 'babbo_qr') {
         showBabboQr.classList.remove('hidden');
     } else if (mod === 'babbo_locandina') {
@@ -903,7 +932,7 @@ function applicaModalita(mod) {
             targetPlayer.classList.remove('opacity-0', 'pointer-events-none');
             targetPlayer.classList.add('opacity-100');
             avviaSfondoAmbientale(targetPlayer);
-            avviaVideoConAudio(targetPlayer);
+            avviaVideo(targetPlayer, false);
         }
     } else {
         showPrincipale.classList.remove('hidden');
@@ -1063,14 +1092,14 @@ _supabase
   })
   .subscribe();
 
-inizializzaAudioSilenzioso();
+inizializzaVideoEAudio();
 controllaRegia();
 setInterval(controllaRegia, 800);
 setInterval(fetchPhotosForLedwall, 4000);
 
 // NEVE ANIMATA + PARTICELLE DORATE CONCERTO
 window.addEventListener('load', () => {
-    inizializzaAudioSilenzioso();
+    inizializzaVideoEAudio();
     const centerArea = document.getElementById('center-video-area');
     const snowCount = 25; 
     const fragment = document.createDocumentFragment();
