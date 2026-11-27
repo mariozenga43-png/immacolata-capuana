@@ -3,238 +3,306 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Regia Ledwall | Immacolata Capuana 2026</title>
+
+<link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+<link rel="preconnect" href="https://crmobnweejiepmsbteme.supabase.co" crossorigin>
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'festive-dark': '#160908',
+        'festive-panel': '#24110f',
+        'festive-yellow': '#FFD700',
+        'festive-red': '#E63946',
+      },
+      fontFamily: {
+        'title': ['"Bebas Neue"', 'sans-serif'],
+        'body': ['"Quicksand"', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
   body {
-    background: radial-gradient(circle at top, #2c0b0a 0%, #0d0404 100%);
+    background-color: #160908;
     color: #ffffff;
     font-family: 'Quicksand', sans-serif;
-    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
   }
-  .font-title { font-family: 'Bebas Neue', sans-serif; }
-  .btn-regia {
-    transition: all 0.15s ease;
-    border: 2px solid rgba(255, 215, 0, 0.35);
+
+  .regia-btn {
+    transition: transform 0.12s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   }
-  .btn-regia:active {
+
+  .regia-btn:active {
     transform: scale(0.97);
   }
-  .btn-attivo {
-    border-color: #22c55e !important;
-    box-shadow: 0 0 22px rgba(34, 197, 94, 0.65) !important;
-    background: linear-gradient(135deg, #14532d 0%, #052e16 100%) !important;
+
+  .regia-btn-active {
+    border-color: #FFD700 !important;
+    background: linear-gradient(135deg, rgba(230, 57, 70, 0.38) 0%, rgba(255, 215, 0, 0.22) 100%) !important;
+    box-shadow: 0 0 22px rgba(255, 215, 0, 0.45), inset 0 0 12px rgba(255, 215, 0, 0.2);
+  }
+
+  .regia-btn-active .badge-on-air {
+    display: inline-flex !important;
   }
 </style>
 </head>
-<body class="pb-12">
+<body class="min-h-screen pb-14">
 
-  <!-- HEADER -->
-  <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b-2 border-yellow-500/50 px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain rounded-full border border-yellow-400">
-      <div>
-        <h1 class="font-title text-2xl tracking-wider text-yellow-400 leading-none">REGIA LEDWALL 3x2M</h1>
-        <p class="text-xs text-zinc-300 font-bold">Immacolata Capuana 2026</p>
+  <!-- BARRA FISSA IN ALTO CON STATO ATTIVO SUL LEDWALL -->
+  <header class="sticky top-0 z-50 bg-[#120706]/95 backdrop-blur-md border-b-2 border-festive-yellow/40 px-4 py-3 shadow-xl">
+    <div class="max-w-xl mx-auto flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-9 h-9 object-contain flex-shrink-0">
+        <div class="min-w-0">
+          <span class="block font-title text-xl tracking-wider text-festive-yellow leading-none">REGIA LEDWALL</span>
+          <span id="stato-ledwall-label" class="block text-xs text-emerald-400 font-bold truncate mt-0.5">
+            In onda: Gala Principale
+          </span>
+        </div>
       </div>
-    </div>
-    <div id="stato-connessione" class="flex items-center gap-1.5 bg-zinc-900 border border-yellow-500/40 px-3 py-1 rounded-full text-xs font-bold text-yellow-400">
-      <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
-      <span id="label-mod-attiva">Caricamento...</span>
+      <span id="feedback-comando" class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex-shrink-0">
+        Connesso
+      </span>
     </div>
   </header>
 
-  <main class="max-w-xl mx-auto px-4 pt-5 space-y-6">
+  <main class="max-w-xl mx-auto px-4 pt-4 space-y-6">
 
-    <!-- SEZIONE 1: SCHERMATE PRINCIPALI -->
-    <section>
-      <h2 class="font-title text-xl tracking-widest text-yellow-400 uppercase mb-2.5 flex items-center gap-2">
-        <i class="fa-solid fa-tv"></i> Schermate Principali
-      </h2>
-      <div class="grid grid-cols-1 gap-3">
-        <button id="btn-principale" onclick="impostaModalita('principale')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-red-600/20 border border-red-500 flex items-center justify-center text-yellow-400 text-xl">
-              <i class="fa-solid fa-star"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Schermata Principale di Gala</span>
-              <span class="block text-xs text-zinc-400">Logo Immacolata Capuana & Benvenuti</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-
-        <button id="btn-live" onclick="impostaModalita('live')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-yellow-500/20 border border-yellow-400 flex items-center justify-center text-yellow-400 text-xl">
-              <i class="fa-solid fa-camera-retro"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Photo Live + QR Code Selfie</span>
-              <span class="block text-xs text-zinc-400">Proietta i selfie approvati dal pubblico</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-
-        <button id="btn-pino" onclick="impostaModalita('pino')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-blue-500/20 border border-blue-400 flex items-center justify-center text-blue-300 text-xl">
-              <i class="fa-solid fa-guitar"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Tribute Live • Pino Daniele</span>
-              <span class="block text-xs text-zinc-400">Slideshow B&N con frasi e luci palco</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- SEZIONE 2: MAIN SPONSOR BCC TERRA DI LAVORO (3 SPOT VIDEO) -->
-    <section>
-      <h2 class="font-title text-xl tracking-widest text-emerald-400 uppercase mb-2.5 flex items-center gap-2">
-        <i class="fa-solid fa-building-columns"></i> Main Sponsor BCC (3 Spot Audio)
-      </h2>
-      <div class="grid grid-cols-1 gap-3">
-        <button id="btn-bcc_video_1" onclick="impostaModalita('bcc_video_1')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 text-xl">
-              <i class="fa-solid fa-play"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Spot Video BCC 1 (Audio)</span>
-              <span class="block text-xs text-zinc-400">Tocca per avviare o riavviare da capo</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-
-        <button id="btn-bcc_video_2" onclick="impostaModalita('bcc_video_2')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 text-xl">
-              <i class="fa-solid fa-play"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Spot Video BCC 2 (Audio)</span>
-              <span class="block text-xs text-zinc-400">Tocca per avviare o riavviare da capo</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-
-        <button id="btn-bcc_video_3" onclick="impostaModalita('bcc_video_3')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 text-xl">
-              <i class="fa-solid fa-play"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Spot Video BCC 3 (Audio)</span>
-              <span class="block text-xs text-zinc-400">Tocca per avviare o riavviare da capo</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- SEZIONE 3: VILLAGGIO DI BABBO NATALE -->
-    <section>
-      <h2 class="font-title text-xl tracking-widest text-red-400 uppercase mb-2.5 flex items-center gap-2">
-        <i class="fa-solid fa-sleigh"></i> Villaggio di Babbo Natale
-      </h2>
-      <div class="grid grid-cols-1 gap-3">
-        <button id="btn-babbo_video" onclick="impostaModalita('babbo_video')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-red-500/20 border border-red-400 flex items-center justify-center text-red-300 text-xl">
-              <i class="fa-solid fa-film"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Video Spoiler Villaggio (Audio)</span>
-              <span class="block text-xs text-zinc-400">Tocca per avviare o riavviare da capo</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-
-        <button id="btn-babbo_locandina" onclick="impostaModalita('babbo_locandina')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl">
-              <i class="fa-solid fa-image"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Locandina Villaggio di Babbo Natale</span>
-              <span class="block text-xs text-zinc-400">Grafica HD con sfondo sfocato</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-
-        <button id="btn-babbo_qr" onclick="impostaModalita('babbo_qr')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-white/15 border border-white/50 flex items-center justify-center text-white text-xl">
-              <i class="fa-solid fa-qrcode"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">QR Code Gigante 2x2m Instagram</span>
-              <span class="block text-xs text-zinc-400">Pagina ufficiale Villaggio di Babbo Natale</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- SEZIONE 4: LOCANDINE SPETTACOLI -->
-    <section>
-      <h2 class="font-title text-xl tracking-widest text-yellow-400 uppercase mb-2.5 flex items-center gap-2">
-        <i class="fa-solid fa-masks-theater"></i> Locandine Spettacoli
-      </h2>
-      <div class="grid grid-cols-1 gap-3">
-        <button id="btn-izzo" onclick="impostaModalita('izzo')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 text-xl">
-              <i class="fa-solid fa-ticket"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Locandina Biagio Izzo</span>
-              <span class="block text-xs text-zinc-400">File: locandina-izzo.jpg</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-
-        <button id="btn-ddm" onclick="impostaModalita('ddm')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-pink-500/20 border border-pink-400 flex items-center justify-center text-pink-300 text-xl">
-              <i class="fa-solid fa-compact-disc"></i>
-            </div>
-            <div>
-              <span class="block font-bold text-base text-white">Locandina Live Show DJ Set DDM</span>
-              <span class="block text-xs text-zinc-400">File: locandina-ddm.jpg</span>
-            </div>
-          </div>
-          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- SEZIONE 5: MODERAZIONE SELFIE PHOTO LIVE -->
-    <section class="pt-2 border-t border-yellow-500/30">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-title text-xl tracking-widest text-yellow-400 uppercase flex items-center gap-2">
-          <i class="fa-solid fa-shield-halved"></i> Moderazione Selfie Live
+    <!-- ========================================================= -->
+    <!-- 1. SOPRA A TUTTO: GALA, PHOTO LIVE, PINO, IZZO, DDM       -->
+    <!-- ========================================================= -->
+    <section aria-label="Controlli Principali e Spettacoli">
+      <div class="flex items-center justify-between mb-2.5">
+        <h2 class="font-title text-lg tracking-widest text-festive-yellow uppercase flex items-center gap-2">
+          <i class="fa-solid fa-star text-festive-red text-sm"></i> Regia Principale & Spettacoli
         </h2>
-        <button onclick="caricaFotoModerazione()" class="text-xs bg-zinc-800 border border-yellow-500/40 text-yellow-400 px-3 py-1 rounded-lg font-bold">
-          <i class="fa-solid fa-rotate-right mr-1"></i> Aggiorna
+      </div>
+
+      <div class="grid grid-cols-1 gap-2.5">
+        <!-- Gala Principale -->
+        <button type="button" data-mod="principale" onclick="inviaComando('principale')" class="regia-btn w-full text-left bg-festive-panel border-2 border-white/15 rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3 shadow-md">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-festive-yellow/15 border border-festive-yellow/40 flex items-center justify-center text-festive-yellow flex-shrink-0">
+              <i class="fa-solid fa-crown text-lg"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="block font-bold text-base text-white leading-tight">Gala Principale</span>
+              <span class="block text-xs text-gray-300 mt-0.5">Schermata Benvenuti Immacolata Capuana</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full flex-shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span> In onda
+          </span>
+        </button>
+
+        <!-- Photo Live + QR Code -->
+        <button type="button" data-mod="live" onclick="inviaComando('live')" class="regia-btn w-full text-left bg-festive-panel border-2 border-white/15 rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3 shadow-md">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-festive-red/20 border border-festive-red/50 flex items-center justify-center text-festive-red flex-shrink-0">
+              <i class="fa-solid fa-camera-retro text-lg"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="block font-bold text-base text-white leading-tight">Photo Live + QR Code</span>
+              <span class="block text-xs text-gray-300 mt-0.5">Selfie in diretta sul maxischermo</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full flex-shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span> In onda
+          </span>
+        </button>
+
+        <!-- Tribute Live Pino Daniele -->
+        <button type="button" data-mod="pino" onclick="inviaComando('pino')" class="regia-btn w-full text-left bg-festive-panel border-2 border-white/15 rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3 shadow-md">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-300 flex-shrink-0">
+              <i class="fa-solid fa-guitar text-lg"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="block font-bold text-base text-white leading-tight">Tribute Live • Pino Daniele</span>
+              <span class="block text-xs text-gray-300 mt-0.5">Visual concerto B&N e frasi storiche</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full flex-shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span> In onda
+          </span>
+        </button>
+
+        <!-- Locandina Biagio Izzo -->
+        <button type="button" data-mod="izzo" onclick="inviaComando('izzo')" class="regia-btn w-full text-left bg-festive-panel border-2 border-white/15 rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3 shadow-md">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 flex-shrink-0">
+              <i class="fa-solid fa-masks-theater text-lg"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="block font-bold text-base text-white leading-tight">Locandina Biagio Izzo</span>
+              <span class="block text-xs text-gray-300 mt-0.5">Spettacolo Cabaret & Live Show</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full flex-shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span> In onda
+          </span>
+        </button>
+
+        <!-- Locandina Live Show DJ Set DDM -->
+        <button type="button" data-mod="ddm" onclick="inviaComando('ddm')" class="regia-btn w-full text-left bg-festive-panel border-2 border-white/15 rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3 shadow-md">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 flex-shrink-0">
+              <i class="fa-solid fa-compact-disc text-lg"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="block font-bold text-base text-white leading-tight">Locandina Live Show DJ Set DDM</span>
+              <span class="block text-xs text-gray-300 mt-0.5">Grafica ufficiale serata DDM</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full flex-shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span> In onda
+          </span>
         </button>
       </div>
-      <div id="lista-foto-moderazione" class="grid grid-cols-2 gap-3">
-        <p class="col-span-2 text-center text-xs text-zinc-400 py-4">Caricamento selfie in corso...</p>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 2. VILLAGGIO DI BABBO NATALE (3 PULSANTI)                 -->
+    <!-- ========================================================= -->
+    <section aria-label="Villaggio di Babbo Natale">
+      <div class="flex items-center justify-between mb-2.5">
+        <h2 class="font-title text-lg tracking-widest text-festive-yellow uppercase flex items-center gap-2">
+          <i class="fa-solid fa-sleigh text-festive-red text-sm"></i> Villaggio di Babbo Natale
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <!-- Video Villaggio -->
+        <button type="button" data-mod="babbo_video" onclick="inviaComando('babbo_video')" class="regia-btn text-left bg-festive-panel border-2 border-white/15 rounded-2xl p-3.5 flex sm:flex-col items-center sm:items-start justify-between gap-2.5 shadow-md">
+          <div class="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2">
+            <div class="w-10 h-10 rounded-xl bg-red-500/20 border border-red-400/40 flex items-center justify-center text-red-300 flex-shrink-0">
+              <i class="fa-solid fa-film text-base"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-sm text-white leading-tight">Video Villaggio</span>
+              <span class="block text-[11px] text-gray-300 mt-0.5">Spoiler con audio</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+            In onda
+          </span>
+        </button>
+
+        <!-- Locandina Villaggio -->
+        <button type="button" data-mod="babbo_locandina" onclick="inviaComando('babbo_locandina')" class="regia-btn text-left bg-festive-panel border-2 border-white/15 rounded-2xl p-3.5 flex sm:flex-col items-center sm:items-start justify-between gap-2.5 shadow-md">
+          <div class="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 flex-shrink-0">
+              <i class="fa-solid fa-image text-base"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-sm text-white leading-tight">Locandina Villaggio</span>
+              <span class="block text-[11px] text-gray-300 mt-0.5">Locandina 2x2m</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+            In onda
+          </span>
+        </button>
+
+        <!-- QR Code Villaggio -->
+        <button type="button" data-mod="babbo_qr" onclick="inviaComando('babbo_qr')" class="regia-btn text-left bg-festive-panel border-2 border-white/15 rounded-2xl p-3.5 flex sm:flex-col items-center sm:items-start justify-between gap-2.5 shadow-md">
+          <div class="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2">
+            <div class="w-10 h-10 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center text-white flex-shrink-0">
+              <i class="fa-solid fa-qrcode text-base"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-sm text-white leading-tight">QR Code Villaggio</span>
+              <span class="block text-[11px] text-gray-300 mt-0.5">Instagram gigante</span>
+            </div>
+          </div>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+            In onda
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 3. VIDEO SPOT BCC (3 BOTTONI - SENZA AUDIO)               -->
+    <!-- ========================================================= -->
+    <section aria-label="Video Main Sponsor BCC">
+      <div class="flex items-center justify-between mb-2.5">
+        <h2 class="font-title text-lg tracking-widest text-festive-yellow uppercase flex items-center gap-2">
+          <i class="fa-solid fa-building-columns text-emerald-400 text-sm"></i> Spot Video BCC (Muti)
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2.5">
+        <!-- Spot BCC 1 -->
+        <button type="button" data-mod="bcc_video_1" onclick="inviaComando('bcc_video_1')" class="regia-btn text-center bg-festive-panel border-2 border-white/15 rounded-2xl py-3.5 px-2 flex flex-col items-center justify-center gap-1.5 shadow-md">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300">
+            <i class="fa-solid fa-play text-base"></i>
+          </div>
+          <span class="font-bold text-sm text-white leading-tight">Spot BCC 1</span>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+            In onda
+          </span>
+        </button>
+
+        <!-- Spot BCC 2 -->
+        <button type="button" data-mod="bcc_video_2" onclick="inviaComando('bcc_video_2')" class="regia-btn text-center bg-festive-panel border-2 border-white/15 rounded-2xl py-3.5 px-2 flex flex-col items-center justify-center gap-1.5 shadow-md">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300">
+            <i class="fa-solid fa-play text-base"></i>
+          </div>
+          <span class="font-bold text-sm text-white leading-tight">Spot BCC 2</span>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+            In onda
+          </span>
+        </button>
+
+        <!-- Spot BCC 3 -->
+        <button type="button" data-mod="bcc_video_3" onclick="inviaComando('bcc_video_3')" class="regia-btn text-center bg-festive-panel border-2 border-white/15 rounded-2xl py-3.5 px-2 flex flex-col items-center justify-center gap-1.5 shadow-md">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300">
+            <i class="fa-solid fa-play text-base"></i>
+          </div>
+          <span class="font-bold text-sm text-white leading-tight">Spot BCC 3</span>
+          <span class="badge-on-air hidden items-center gap-1 bg-festive-yellow text-black text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+            In onda
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 4. IN FONDO: MODERAZIONE SELFIE LIVE                      -->
+    <!-- ========================================================= -->
+    <section aria-label="Moderazione Selfie Live" class="pt-2 border-t border-white/15">
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <div>
+          <h2 class="font-title text-xl tracking-widest text-festive-yellow uppercase flex items-center gap-2">
+            <i class="fa-solid fa-shield-check text-festive-red text-base"></i> Moderazione Selfie Live
+          </h2>
+          <p id="contatore-selfie" class="text-xs text-gray-300 font-semibold mt-0.5">
+            Caricamento selfie...
+          </p>
+        </div>
+
+        <button type="button" onclick="caricaSelfieModerazione(true)" class="bg-white/10 hover:bg-white/20 active:scale-95 text-festive-yellow border border-festive-yellow/40 rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-rotate-right"></i> Aggiorna
+        </button>
+      </div>
+
+      <div id="griglia-moderazione" class="grid grid-cols-2 gap-3">
+        <div class="col-span-2 bg-festive-panel/70 border border-white/10 rounded-2xl p-6 text-center text-gray-300 text-sm">
+          Nessun selfie presente al momento.
+        </div>
       </div>
     </section>
 
@@ -248,48 +316,78 @@ const SUPABASE_ANON_KEY = 'sb_publishable_0h_Hv7yY6XMyI6-nQusLfw_EGv4I1TO';
 const { createClient } = supabase;
 const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-let comandoAttualeRaw = '';
-
-const nomiModalita = {
-  'principale': 'Gala Principale',
-  'live': 'Photo Live',
-  'pino': 'Pino Daniele',
-  'bcc_video_1': 'Spot BCC 1',
-  'bcc_video_2': 'Spot BCC 2',
-  'bcc_video_3': 'Spot BCC 3',
-  'bcc_video': 'Spot BCC 1',
-  'babbo_video': 'Video Villaggio',
-  'babbo_locandina': 'Locandina Villaggio',
-  'babbo_qr': 'QR Villaggio',
-  'izzo': 'Biagio Izzo',
-  'ddm': 'DJ Set DDM'
+const NOMI_MODALITA = {
+  principale: 'Gala Principale',
+  live: 'Photo Live + QR Code',
+  pino: 'Tribute Live • Pino Daniele',
+  izzo: 'Locandina Biagio Izzo',
+  ddm: 'Locandina DJ Set DDM',
+  babbo_video: 'Video Villaggio Babbo Natale',
+  babbo_locandina: 'Locandina Villaggio Babbo Natale',
+  babbo_qr: 'QR Code Villaggio Babbo Natale',
+  bcc_video_1: 'Spot Video BCC 1',
+  bcc_video_2: 'Spot Video BCC 2',
+  bcc_video_3: 'Spot Video BCC 3',
+  bcc_video: 'Spot Video BCC 1'
 };
 
-function aggiornaEvidenziazioneTasti(rawMod) {
-  comandoAttualeRaw = rawMod;
-  const baseMod = rawMod.split('|')[0];
+function aggiornaStatoPulsanti(rawMod) {
+  if (!rawMod) return;
+  let mod = rawMod.split('|')[0];
+  if (mod === 'bcc_video') mod = 'bcc_video_1';
 
-  document.querySelectorAll('.btn-regia').forEach(btn => {
-    btn.classList.remove('btn-attivo');
-    const badge = btn.querySelector('.badge-live');
-    if (badge) badge.classList.add('hidden');
+  document.querySelectorAll('[data-mod]').forEach(btn => {
+    if (btn.dataset.mod === mod) {
+      btn.classList.add('regia-btn-active');
+    } else {
+      btn.classList.remove('regia-btn-active');
+    }
   });
 
-  const modNormalizzata = (baseMod === 'bcc_video') ? 'bcc_video_1' : baseMod;
-  const attivo = document.getElementById('btn-' + modNormalizzata);
-  if (attivo) {
-    attivo.classList.add('btn-attivo');
-    const badge = attivo.querySelector('.badge-live');
-    if (badge) badge.classList.remove('hidden');
-  }
-
-  const label = document.getElementById('label-mod-attiva');
+  const label = document.getElementById('stato-ledwall-label');
   if (label) {
-    label.textContent = 'ON AIR: ' + (nomiModalita[modNormalizzata] || modNormalizzata);
+    label.textContent = 'In onda: ' + (NOMI_MODALITA[mod] || mod);
   }
 }
 
-async function leggiStatoAttuale() {
+async function inviaComando(modalita) {
+  aggiornaStatoPulsanti(modalita);
+  const feedback = document.getElementById('feedback-comando');
+  if (feedback) {
+    feedback.textContent = 'Invio...';
+    feedback.className = 'text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex-shrink-0';
+  }
+
+  const valoreComando = `${modalita}|${Date.now()}`;
+
+  try {
+    const { data, error } = await _supabase
+      .from('regia_ledwall')
+      .update({ modalita: valoreComando })
+      .eq('id', 1)
+      .select();
+
+    if (error || !data || data.length === 0) {
+      const { error: upsertError } = await _supabase
+        .from('regia_ledwall')
+        .upsert({ id: 1, modalita: valoreComando });
+      if (upsertError) throw upsertError;
+    }
+
+    if (feedback) {
+      feedback.textContent = 'Inviato';
+      feedback.className = 'text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex-shrink-0';
+    }
+  } catch (err) {
+    console.error('Errore invio comando regia:', err);
+    if (feedback) {
+      feedback.textContent = 'Errore rete';
+      feedback.className = 'text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-500/20 text-red-300 border border-red-500/40 flex-shrink-0';
+    }
+  }
+}
+
+async function caricaModalitaAttuale() {
   try {
     const { data, error } = await _supabase
       .from('regia_ledwall')
@@ -297,108 +395,213 @@ async function leggiStatoAttuale() {
       .eq('id', 1)
       .single();
 
-    if (error) throw error;
-    if (data && data.modalita) {
-      aggiornaEvidenziazioneTasti(data.modalita);
+    if (!error && data && data.modalita) {
+      aggiornaStatoPulsanti(data.modalita);
     }
-  } catch (err) {
-    console.error('Errore lettura stato regia:', err);
+  } catch (e) {
+    console.error(e);
   }
 }
 
-async function impostaModalita(nuovaModalita) {
-  const baseAttuale = comandoAttualeRaw ? comandoAttualeRaw.split('|')[0] : '';
-  const payload = (baseAttuale === nuovaModalita)
-    ? nuovaModalita + '|' + Date.now()
-    : nuovaModalita;
+// =========================================================================
+// MODERAZIONE SELFIE LIVE (IN FONDO ALLA PAGINA)
+// =========================================================================
+let ultimaFirmaLista = '';
 
-  aggiornaEvidenziazioneTasti(payload);
+async function caricaSelfieModerazione(forzaRender = false) {
   try {
-    const { error } = await _supabase
-      .from('regia_ledwall')
-      .update({ modalita: payload })
-      .eq('id', 1);
+    const [resApprovate, resStorage] = await Promise.all([
+      _supabase
+        .from('foto_approvate')
+        .select('id, public_url, stato, created_at')
+        .order('created_at', { ascending: false }),
+      _supabase.storage
+        .from('foto-evento')
+        .list('', { limit: 120, sortBy: { column: 'created_at', order: 'desc' } })
+    ]);
 
-    if (error) throw error;
-  } catch (err) {
-    alert('Errore cambio schermata: ' + err.message);
-  }
-}
+    const approvateRows = resApprovate.data || [];
+    const storageFiles = (resStorage.data || []).filter(f => f && f.name && !f.name.startsWith('.'));
 
-async function caricaFotoModerazione() {
-  const container = document.getElementById('lista-foto-moderazione');
-  try {
-    const { data, error } = await _supabase
-      .from('foto_approvate')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(30);
+    const mappaApprovate = new Map();
+    approvateRows.forEach(row => {
+      if (row.stato === 'approvata' && row.public_url) {
+        mappaApprovate.set(row.public_url, row);
+      }
+    });
 
-    if (error) throw error;
+    const elencoFinale = [];
+    const urlVisti = new Set();
 
-    if (!data || data.length === 0) {
-      container.innerHTML = '<p class="col-span-2 text-center text-xs text-zinc-400 py-4">Nessun selfie ricevuto finora.</p>';
+    storageFiles.forEach(file => {
+      const { data: { publicUrl } } = _supabase.storage
+        .from('foto-evento')
+        .getPublicUrl(file.name);
+
+      urlVisti.add(publicUrl);
+      elencoFinale.push({
+        fileName: file.name,
+        publicUrl: publicUrl,
+        approvata: mappaApprovate.has(publicUrl),
+        createdAt: file.created_at || ''
+      });
+    });
+
+    approvateRows.forEach(row => {
+      if (row.stato === 'approvata' && row.public_url && !urlVisti.has(row.public_url)) {
+        const parti = row.public_url.split('/');
+        const nomeRicavato = decodeURIComponent(parti[parti.length - 1] || '');
+        elencoFinale.push({
+          fileName: nomeRicavato,
+          publicUrl: row.public_url,
+          approvata: true,
+          createdAt: row.created_at || ''
+        });
+      }
+    });
+
+    // Prima quelle in attesa di approvazione, poi quelle già approvate
+    elencoFinale.sort((a, b) => {
+      if (a.approvata !== b.approvata) return a.approvata ? 1 : -1;
+      return (b.createdAt || '').localeCompare(a.createdAt || '');
+    });
+
+    const inAttesaCount = elencoFinale.filter(i => !i.approvata).length;
+    const approvateCount = elencoFinale.filter(i => i.approvata).length;
+
+    const contatore = document.getElementById('contatore-selfie');
+    if (contatore) {
+      contatore.textContent = `In attesa: ${inAttesaCount} • Approvate in onda: ${approvateCount}`;
+    }
+
+    const firmaCorrente = JSON.stringify(elencoFinale.map(i => `${i.fileName}:${i.approvata ? 1 : 0}`));
+    if (!forzaRender && firmaCorrente === ultimaFirmaLista) return;
+    ultimaFirmaLista = firmaCorrente;
+
+    const griglia = document.getElementById('griglia-moderazione');
+    if (!griglia) return;
+
+    if (elencoFinale.length === 0) {
+      griglia.innerHTML = `
+        <div class="col-span-2 bg-festive-panel/70 border border-white/10 rounded-2xl p-6 text-center text-gray-300 text-sm">
+          Nessun selfie ricevuto finora.
+        </div>
+      `;
       return;
     }
 
-    container.innerHTML = data.map(foto => {
-      const approvata = foto.stato === 'approvata';
+    griglia.innerHTML = elencoFinale.map(item => {
+      const safeUrl = encodeURIComponent(item.publicUrl);
+      const safeFile = encodeURIComponent(item.fileName || '');
+
       return `
-        <div class="bg-zinc-900 border ${approvata ? 'border-green-500/60' : 'border-yellow-500/50'} rounded-xl overflow-hidden flex flex-col">
+        <div class="bg-festive-panel border-2 ${item.approvata ? 'border-emerald-500/60' : 'border-festive-yellow/70'} rounded-2xl overflow-hidden flex flex-col shadow-lg">
           <div class="relative aspect-square bg-black">
-            <img src="${foto.public_url}" alt="Selfie" class="w-full h-full object-cover">
-            <span class="absolute top-1.5 right-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${approvata ? 'bg-green-500 text-black' : 'bg-yellow-400 text-black'}">
-              ${approvata ? 'In Onda' : 'In Attesa'}
+            <img src="${item.publicUrl}" alt="Selfie" class="w-full h-full object-cover" loading="lazy">
+            <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider ${item.approvata ? 'bg-emerald-600 text-white' : 'bg-festive-yellow text-black'} shadow">
+              ${item.approvata ? 'Approvata' : 'In attesa'}
             </span>
           </div>
-          <div class="p-2 flex gap-1.5">
-            ${!approvata ? `
-              <button onclick="approvaFoto(${foto.id})" class="flex-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-1.5 rounded-lg">
+
+          <div class="p-2 grid ${item.approvata ? 'grid-cols-1' : 'grid-cols-2'} gap-1.5 bg-black/40">
+            ${item.approvata ? '' : `
+              <button type="button" onclick="approvaSelfie('${safeUrl}', this)" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs py-2.5 px-2 rounded-xl flex items-center justify-center gap-1">
                 <i class="fa-solid fa-check"></i> Approva
               </button>
-            ` : ''}
-            <button onclick="eliminaFoto(${foto.id})" class="flex-1 bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold py-1.5 rounded-lg">
-              <i class="fa-solid fa-trash"></i> Elimina
+            `}
+            <button type="button" onclick="eliminaSelfie('${safeFile}', '${safeUrl}', this)" class="bg-festive-red hover:bg-red-600 active:scale-95 text-white font-bold text-xs py-2.5 px-2 rounded-xl flex items-center justify-center gap-1">
+              <i class="fa-solid fa-trash"></i> ${item.approvata ? 'Rimuovi' : 'Scarta'}
             </button>
           </div>
         </div>
       `;
     }).join('');
   } catch (err) {
-    console.error('Errore caricamento foto:', err);
+    console.error('Errore caricamento selfie moderazione:', err);
   }
 }
 
-async function approvaFoto(id) {
+async function approvaSelfie(encodedUrl, btn) {
+  const publicUrl = decodeURIComponent(encodedUrl);
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '...';
+  }
+
   try {
-    const { error } = await _supabase
+    const { data: esistente } = await _supabase
       .from('foto_approvate')
-      .update({ stato: 'approvata' })
-      .eq('id', id);
-    if (error) throw error;
-    caricaFotoModerazione();
+      .select('id')
+      .eq('public_url', publicUrl)
+      .limit(1);
+
+    if (esistente && esistente.length > 0) {
+      await _supabase
+        .from('foto_approvate')
+        .update({ stato: 'approvata' })
+        .eq('public_url', publicUrl);
+    } else {
+      await _supabase
+        .from('foto_approvate')
+        .insert([{ public_url: publicUrl, stato: 'approvata' }]);
+    }
+
+    await caricaSelfieModerazione(true);
   } catch (err) {
-    alert('Errore approvazione: ' + err.message);
+    console.error('Errore approvazione selfie:', err);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Approva';
+    }
   }
 }
 
-async function eliminaFoto(id) {
+async function eliminaSelfie(encodedFile, encodedUrl, btn) {
+  const fileName = decodeURIComponent(encodedFile);
+  const publicUrl = decodeURIComponent(encodedUrl);
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '...';
+  }
+
   try {
-    const { error } = await _supabase
+    await _supabase
       .from('foto_approvate')
       .delete()
-      .eq('id', id);
-    if (error) throw error;
-    caricaFotoModerazione();
+      .eq('public_url', publicUrl);
+
+    if (fileName) {
+      await _supabase.storage
+        .from('foto-evento')
+        .remove([fileName]);
+    }
+
+    await caricaSelfieModerazione(true);
   } catch (err) {
-    alert('Errore eliminazione: ' + err.message);
+    console.error('Errore eliminazione selfie:', err);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-trash"></i> Scarta';
+    }
   }
 }
 
-leggiStatoAttuale();
-caricaFotoModerazione();
-setInterval(leggiStatoAttuale, 2500);
-setInterval(caricaFotoModerazione, 6000);
+// Sincronizzazione Realtime per stato regia e selfie approvati
+_supabase
+  .channel('regia-admin-sync')
+  .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'regia_ledwall', filter: 'id=eq.1' }, (payload) => {
+    if (payload.new && payload.new.modalita) {
+      aggiornaStatoPulsanti(payload.new.modalita);
+    }
+  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'foto_approvate' }, () => {
+    caricaSelfieModerazione(false);
+  })
+  .subscribe();
+
+caricaModalitaAttuale();
+caricaSelfieModerazione(true);
+setInterval(() => caricaSelfieModerazione(false), 4000);
 </script>
 </body>
 </html>
