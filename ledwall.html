@@ -149,7 +149,6 @@ html, body {
 .gpu-layer {
   transform: translateZ(0);
   backface-visibility: hidden;
-  will-change: opacity;
 }
 
 .text-glow-gold {
@@ -491,7 +490,7 @@ html, body {
     <!-- ========================================================= -->
     <!-- MODALITÀ 6: VIDEO SPOILER VILLAGGIO DI BABBO NATALE       -->
     <!-- ========================================================= -->
-    <div id="show-babbo-video" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-50 bg-black flex items-center justify-center">
+    <div id="show-babbo-video" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
       <video id="babbo-spoiler-player" src="spoiler-babbo-natale.mp4" class="gpu-layer w-full h-full object-contain" playsinline webkit-playsinline loop preload="auto"></video>
     </div>
 
@@ -513,11 +512,11 @@ html, body {
     <!-- ========================================================= -->
     <!-- MODALITÀ 9: 3 VIDEO SPOT MAIN SPONSOR BCC (SENZA AUDIO)   -->
     <!-- ========================================================= -->
-    <div id="show-bcc-video" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
+    <div id="show-bcc-video" class="hidden absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
       <canvas id="bcc-ambient-canvas" width="24" height="24" class="gpu-layer absolute inset-0 w-full h-full object-cover scale-125 blur-xl opacity-95 pointer-events-none"></canvas>
-      <video id="bcc-player-1" src="spot-bcc-1.mp4" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='spot-bcc.mp4';this.load();precaricaPrimoFrameBcc(this);}" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
-      <video id="bcc-player-2" src="spot-bcc-2.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
-      <video id="bcc-player-3" src="spot-bcc-3.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
+      <video id="bcc-player-1" src="spot-bcc-1.mp4" class="hidden gpu-layer relative z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
+      <video id="bcc-player-2" src="spot-bcc-2.mp4" class="hidden gpu-layer relative z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
+      <video id="bcc-player-3" src="spot-bcc-3.mp4" class="hidden gpu-layer relative z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
     </div>
 
   </main>
@@ -702,76 +701,34 @@ let currentIndex = 0;
 let slideshowInterval = null;
 
 // =========================================================================
-// PRE-DECODIFICA GPU PRIMO FOTOGRAMMA (AVVIO 0ms SU SAFARI)
+// GESTIONE VIDEO ZERO-CLICK DA REGIA REMOTA
 // =========================================================================
 let activeBccVideo = null;
 let ambientTimer = null;
+let videoAttivoCorrente = null;
+let audioAttivoCorrente = false;
 const bccVideoIds = ['bcc-player-1', 'bcc-player-2', 'bcc-player-3'];
 
-function precaricaPrimoFrameBcc(v) {
-    if (!v || v.dataset.attivo === '1' || v.dataset.prewarmed === '1') return;
-    v.muted = true;
-    v.volume = 0;
-    const p = v.play();
-    if (p !== undefined) {
-        p.then(() => {
-            v.dataset.prewarmed = '1';
-            setTimeout(() => {
-                if (v.dataset.attivo !== '1') {
-                    v.pause();
-                    try { v.currentTime = 0.01; } catch (e) {}
-                }
-            }, 120);
-        }).catch(() => {});
-    }
-}
-
-function inizializzaVideoEAudio() {
+// Verifica subito se esiste spot-bcc-1.mp4 o spot-bcc.mp4 senza attendere 404 al play
+(async function verificaSorgenteBcc1() {
+    const bcc1 = document.getElementById('bcc-player-1');
+    if (!bcc1) return;
+    bcc1.onerror = function() {
+        if (!bcc1.dataset.fb) {
+            bcc1.dataset.fb = '1';
+            bcc1.src = 'spot-bcc.mp4';
+            bcc1.load();
+        }
+    };
     try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-            const ctx = new AudioCtx();
-            if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+        const res = await fetch('spot-bcc-1.mp4', { method: 'HEAD' });
+        if (!res.ok && !bcc1.dataset.fb) {
+            bcc1.dataset.fb = '1';
+            bcc1.src = 'spot-bcc.mp4';
+            bcc1.load();
         }
     } catch (e) {}
-
-    // Video spoiler Villaggio di Babbo Natale (con audio attivo)
-    const babboVideo = document.getElementById('babbo-spoiler-player');
-    if (babboVideo) {
-        babboVideo.muted = false;
-        babboVideo.volume = 1.0;
-        if (babboVideo.dataset.attivo === '1') {
-            if (babboVideo.paused) babboVideo.play().catch(() => {});
-        } else {
-            const p = babboVideo.play();
-            if (p !== undefined) {
-                p.then(() => {
-                    if (babboVideo.dataset.attivo !== '1') {
-                        babboVideo.pause();
-                        try { babboVideo.currentTime = 0.01; } catch (e) {}
-                    }
-                }).catch(() => {});
-            }
-        }
-    }
-
-    // Pre-decodifica immediata dei 3 spot BCC muti
-    bccVideoIds.forEach(id => {
-        const v = document.getElementById(id);
-        if (!v) return;
-        v.muted = true;
-        v.volume = 0;
-        if (v.dataset.attivo === '1') {
-            if (v.paused) v.play().catch(() => {});
-        } else {
-            precaricaPrimoFrameBcc(v);
-        }
-    });
-}
-
-['pointerdown', 'click', 'keydown', 'touchstart'].forEach(evt => {
-    document.addEventListener(evt, inizializzaVideoEAudio, { passive: true });
-});
+})();
 
 function avviaSfondoAmbientale(videoEl) {
     activeBccVideo = videoEl;
@@ -798,46 +755,81 @@ function fermaSfondoAmbientale() {
     }
 }
 
-function avviaVideo(player, conAudio = true) {
-    if (!player) return;
-    player.dataset.attivo = '1';
-
-    // Evita di resettare il decoder se il primo frame è già pronto in GPU
-    if (player.currentTime > 0.25) {
-        try { player.currentTime = 0; } catch (e) {}
-    }
+function eseguiPlayImmediato(player, conAudio) {
+    if (!player || player.dataset.attivo !== '1') return;
 
     if (!conAudio) {
         player.muted = true;
         player.volume = 0;
         const p = player.play();
-        if (p !== undefined) {
-            p.catch(err => console.error('Errore riproduzione video BCC:', err));
-        }
+        if (p !== undefined) p.catch(() => {});
         return;
     }
 
     player.muted = false;
     player.volume = 1.0;
-
-    const playPromise = player.play();
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
+    const p = player.play();
+    if (p !== undefined) {
+        p.then(() => {
             player.muted = false;
             player.volume = 1.0;
         }).catch(() => {
             player.muted = true;
             player.play().then(() => {
                 setTimeout(() => {
-                    try {
+                    if (player.dataset.attivo === '1') {
                         player.muted = false;
                         player.volume = 1.0;
-                    } catch (e) {}
-                }, 100);
-            }).catch(err => console.error('Errore riproduzione video:', err));
+                    }
+                }, 80);
+            }).catch(() => {});
         });
     }
 }
+
+function avviaVideo(player, conAudio = true) {
+    if (!player) return;
+    videoAttivoCorrente = player;
+    audioAttivoCorrente = conAudio;
+    player.dataset.attivo = '1';
+
+    try { player.currentTime = 0; } catch (e) {}
+    if (player.readyState === 0) {
+        try { player.load(); } catch (e) {}
+    }
+
+    // 1. Tentativo sincrono immediato
+    eseguiPlayImmediato(player, conAudio);
+
+    // 2. Tentativo al frame grafico successivo (dopo il ricalcolo layout di Safari)
+    requestAnimationFrame(() => {
+        eseguiPlayImmediato(player, conAudio);
+    });
+
+    // 3. Riprova automatica appena Safari carica il primo fotogramma
+    const onPronto = () => {
+        if (player.dataset.attivo === '1' && player.paused) {
+            eseguiPlayImmediato(player, conAudio);
+        }
+    };
+    player.addEventListener('loadeddata', onPronto, { once: true });
+    player.addEventListener('canplay', onPronto, { once: true });
+}
+
+// Watchdog continuo: se un video attivo è in pausa, lo avvia subito senza bisogno di clic
+setInterval(() => {
+    if (videoAttivoCorrente && videoAttivoCorrente.dataset.attivo === '1' && videoAttivoCorrente.paused) {
+        eseguiPlayImmediato(videoAttivoCorrente, audioAttivoCorrente);
+    }
+}, 250);
+
+['pointerdown', 'click', 'keydown', 'touchstart'].forEach(evt => {
+    document.addEventListener(evt, () => {
+        if (videoAttivoCorrente && videoAttivoCorrente.dataset.attivo === '1') {
+            eseguiPlayImmediato(videoAttivoCorrente, audioAttivoCorrente);
+        }
+    }, { passive: true });
+});
 
 function gestisciComandoRegia(rawMod) {
     if (!rawMod || rawMod === ultimoComandoRicevuto) return;
@@ -890,11 +882,12 @@ function applicaModalita(mod) {
     }
 
     fermaSfondoAmbientale();
+    videoAttivoCorrente = null;
 
     if (videoPlayer) {
         videoPlayer.dataset.attivo = '0';
         videoPlayer.pause();
-        try { videoPlayer.currentTime = 0.01; } catch (e) {}
+        try { videoPlayer.currentTime = 0; } catch (e) {}
     }
     bccPlayers.forEach(p => {
         if (p) {
@@ -902,9 +895,8 @@ function applicaModalita(mod) {
             p.muted = true;
             p.volume = 0;
             p.pause();
-            p.classList.add('opacity-0', 'pointer-events-none');
-            p.classList.remove('opacity-100');
-            try { p.currentTime = 0.01; } catch (e) {}
+            p.classList.add('hidden');
+            try { p.currentTime = 0; } catch (e) {}
         }
     });
 
@@ -914,10 +906,10 @@ function applicaModalita(mod) {
     showPino.classList.add('hidden');
     showIzzo.classList.add('hidden');
     showDdm.classList.add('hidden');
-    showBabboVideo.classList.add('opacity-0', 'pointer-events-none');
+    showBabboVideo.classList.add('hidden');
     showBabboQr.classList.add('hidden');
     showBabboLocandina.classList.add('hidden');
-    showBccVideo.classList.add('opacity-0', 'pointer-events-none');
+    showBccVideo.classList.add('hidden');
 
     if (mod === 'live') {
         topBarLive.classList.remove('hidden');
@@ -931,7 +923,8 @@ function applicaModalita(mod) {
     } else if (mod === 'ddm') {
         showDdm.classList.remove('hidden');
     } else if (mod === 'babbo_video') {
-        showBabboVideo.classList.remove('opacity-0', 'pointer-events-none');
+        showBabboVideo.classList.remove('hidden');
+        void showBabboVideo.offsetWidth;
         avviaVideo(videoPlayer, true);
     } else if (mod === 'babbo_qr') {
         showBabboQr.classList.remove('hidden');
@@ -943,10 +936,10 @@ function applicaModalita(mod) {
         if (mod === 'bcc_video_3') idx = 2;
 
         const targetPlayer = bccPlayers[idx];
-        showBccVideo.classList.remove('opacity-0', 'pointer-events-none');
+        showBccVideo.classList.remove('hidden');
         if (targetPlayer) {
-            targetPlayer.classList.remove('opacity-0', 'pointer-events-none');
-            targetPlayer.classList.add('opacity-100');
+            targetPlayer.classList.remove('hidden');
+            void showBccVideo.offsetWidth;
             avviaSfondoAmbientale(targetPlayer);
             avviaVideo(targetPlayer, false);
         }
@@ -1108,14 +1101,12 @@ _supabase
   })
   .subscribe();
 
-inizializzaVideoEAudio();
 controllaRegia();
 setInterval(controllaRegia, 800);
 setInterval(fetchPhotosForLedwall, 4000);
 
 // NEVE ANIMATA + PARTICELLE DORATE CONCERTO
 window.addEventListener('load', () => {
-    inizializzaVideoEAudio();
     const centerArea = document.getElementById('center-video-area');
     const snowCount = 25; 
     const fragment = document.createDocumentFragment();
