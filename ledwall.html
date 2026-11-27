@@ -506,12 +506,13 @@ html, body {
 
     <!-- ========================================================= -->
     <!-- MODALITÀ 9: 3 VIDEO SPOT MAIN SPONSOR BCC TERRA DI LAVORO -->
+    <!-- (3 player dedicati precaricati + canvas ambientale fluido) -->
     <!-- ========================================================= -->
     <div id="show-bcc-video" class="hidden absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
-      <!-- Sfondo video ambientale sincronizzato (elimina le bande nere sopra e sotto) -->
-      <video id="bcc-spot-bg" src="spot-bcc-1.mp4" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-95 pointer-events-none" muted playsinline loop preload="metadata"></video>
-      <!-- Spot principale nitido in proporzioni originali 100% -->
-      <video id="bcc-spot-player" src="spot-bcc-1.mp4" class="relative z-10 w-full h-full object-contain" playsinline loop preload="metadata"></video>
+      <canvas id="bcc-ambient-canvas" width="64" height="64" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-95 pointer-events-none"></canvas>
+      <video id="bcc-player-1" src="spot-bcc-1.mp4" class="hidden relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
+      <video id="bcc-player-2" src="spot-bcc-2.mp4" class="hidden relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
+      <video id="bcc-player-3" src="spot-bcc-3.mp4" class="hidden relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
     </div>
 
   </main>
@@ -694,17 +695,42 @@ let photoList = [];
 let currentIndex = 0;
 let slideshowInterval = null;
 
-function avviaVideoConAudio(player, bgPlayer) {
+// =========================================================================
+// GESTIONE FLUIDA VIDEO & SFONDO AMBIENTALE CANVAS (ZERO SCATTI)
+// =========================================================================
+let activeBccVideo = null;
+let ambientTimer = null;
+
+function avviaSfondoAmbientale(videoEl) {
+    activeBccVideo = videoEl;
+    const canvas = document.getElementById('bcc-ambient-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (ambientTimer) clearInterval(ambientTimer);
+    ambientTimer = setInterval(() => {
+        if (!activeBccVideo || activeBccVideo.paused || activeBccVideo.readyState < 2) return;
+        try {
+            ctx.drawImage(activeBccVideo, 0, 0, canvas.width, canvas.height);
+        } catch (e) {}
+    }, 80);
+}
+
+function fermaSfondoAmbientale() {
+    activeBccVideo = null;
+    if (ambientTimer) {
+        clearInterval(ambientTimer);
+        ambientTimer = null;
+    }
+}
+
+function avviaVideoConAudio(player) {
     if (!player) return;
     try { player.currentTime = 0; } catch (e) {}
     player.muted = false;
     player.volume = 1.0;
-
-    if (bgPlayer) {
-        try { bgPlayer.currentTime = 0; } catch (e) {}
-        bgPlayer.muted = true;
-        bgPlayer.play().catch(() => {});
-    }
 
     const playPromise = player.play();
     if (playPromise !== undefined) {
@@ -715,36 +741,26 @@ function avviaVideoConAudio(player, bgPlayer) {
     }
 }
 
-// Mantiene sincronizzato lo sfondo ambientale dei video BCC
-const bccMainPlayer = document.getElementById('bcc-spot-player');
-const bccBgPlayer = document.getElementById('bcc-spot-bg');
-if (bccMainPlayer && bccBgPlayer) {
-    bccMainPlayer.addEventListener('play', () => {
-        try { bccBgPlayer.currentTime = bccMainPlayer.currentTime; } catch (e) {}
-        bccBgPlayer.play().catch(() => {});
-    });
-    bccMainPlayer.addEventListener('pause', () => {
-        bccBgPlayer.pause();
-    });
-    bccMainPlayer.addEventListener('timeupdate', () => {
-        if (Math.abs(bccBgPlayer.currentTime - bccMainPlayer.currentTime) > 0.2) {
-            try { bccBgPlayer.currentTime = bccMainPlayer.currentTime; } catch (e) {}
-        }
-    });
-}
-
-// Sblocca l'audio al primo clic in qualsiasi punto dello schermo
+// Sblocca tutti e 4 i player video al primo clic sullo schermo così ogni cambio successivo è istantaneo e con audio
+let audioSbloccato = false;
 document.addEventListener('click', () => {
-    ['babbo-spoiler-player', 'bcc-spot-player'].forEach(id => {
+    const ids = ['babbo-spoiler-player', 'bcc-player-1', 'bcc-player-2', 'bcc-player-3'];
+    ids.forEach(id => {
         const v = document.getElementById(id);
-        if (v) {
-            v.muted = false;
-            v.volume = 1.0;
-            if (!v.parentElement.classList.contains('hidden') && v.paused) {
-                v.play().catch(() => {});
-            }
+        if (!v) return;
+        v.muted = false;
+        v.volume = 1.0;
+        const isVisibile = !v.classList.contains('hidden') && !v.parentElement.classList.contains('hidden');
+        if (isVisibile) {
+            if (v.paused) v.play().catch(() => {});
+        } else if (!audioSbloccato) {
+            v.play().then(() => {
+                v.pause();
+                try { v.currentTime = 0; } catch (e) {}
+            }).catch(() => {});
         }
     });
+    audioSbloccato = true;
 });
 
 async function controllaRegia() {
@@ -778,27 +794,31 @@ function applicaModalita(mod) {
     const showBabboLocandina = document.getElementById('show-babbo-locandina');
     const showBccVideo = document.getElementById('show-bcc-video');
     const videoPlayer = document.getElementById('babbo-spoiler-player');
-    const bccVideoPlayer = document.getElementById('bcc-spot-player');
-    const bccVideoBg = document.getElementById('bcc-spot-bg');
+    const bccPlayers = [
+        document.getElementById('bcc-player-1'),
+        document.getElementById('bcc-player-2'),
+        document.getElementById('bcc-player-3')
+    ];
 
     if (pinoInterval) {
         clearInterval(pinoInterval);
         pinoInterval = null;
     }
 
-    // Ferma e azzera sempre i video quando si cambia schermata
+    fermaSfondoAmbientale();
+
+    // Ferma e nasconde tutti i player video prima di attivare la nuova modalità
     if (videoPlayer) {
         videoPlayer.pause();
         try { videoPlayer.currentTime = 0; } catch (e) {}
     }
-    if (bccVideoPlayer) {
-        bccVideoPlayer.pause();
-        try { bccVideoPlayer.currentTime = 0; } catch (e) {}
-    }
-    if (bccVideoBg) {
-        bccVideoBg.pause();
-        try { bccVideoBg.currentTime = 0; } catch (e) {}
-    }
+    bccPlayers.forEach(p => {
+        if (p) {
+            p.pause();
+            p.classList.add('hidden');
+            try { p.currentTime = 0; } catch (e) {}
+        }
+    });
 
     showPrincipale.classList.add('hidden');
     topBarLive.classList.add('hidden');
@@ -824,27 +844,23 @@ function applicaModalita(mod) {
         showDdm.classList.remove('hidden');
     } else if (mod === 'babbo_video') {
         showBabboVideo.classList.remove('hidden');
-        avviaVideoConAudio(videoPlayer, null);
+        avviaVideoConAudio(videoPlayer);
     } else if (mod === 'babbo_qr') {
         showBabboQr.classList.remove('hidden');
     } else if (mod === 'babbo_locandina') {
         showBabboLocandina.classList.remove('hidden');
     } else if (mod === 'bcc_video_1' || mod === 'bcc_video_2' || mod === 'bcc_video_3' || mod === 'bcc_video') {
-        let targetSpot = 'spot-bcc-1.mp4';
-        if (mod === 'bcc_video_2') targetSpot = 'spot-bcc-2.mp4';
-        if (mod === 'bcc_video_3') targetSpot = 'spot-bcc-3.mp4';
+        let idx = 0;
+        if (mod === 'bcc_video_2') idx = 1;
+        if (mod === 'bcc_video_3') idx = 2;
 
-        if (bccVideoPlayer && bccVideoPlayer.getAttribute('src') !== targetSpot) {
-            bccVideoPlayer.setAttribute('src', targetSpot);
-            bccVideoPlayer.load();
-        }
-        if (bccVideoBg && bccVideoBg.getAttribute('src') !== targetSpot) {
-            bccVideoBg.setAttribute('src', targetSpot);
-            bccVideoBg.load();
-        }
-
+        const targetPlayer = bccPlayers[idx];
         showBccVideo.classList.remove('hidden');
-        avviaVideoConAudio(bccVideoPlayer, bccVideoBg);
+        if (targetPlayer) {
+            targetPlayer.classList.remove('hidden');
+            avviaSfondoAmbientale(targetPlayer);
+            avviaVideoConAudio(targetPlayer);
+        }
     } else {
         showPrincipale.classList.remove('hidden');
     }
