@@ -107,6 +107,11 @@ html, body {
   object-fit: contain;
 }
 
+/* Adattamento specifico logo MAIN SPONSOR DX (BCC Terra di Lavoro) */
+.sponsor-slot img[src*="sponsor-fisso-dx.png"] {
+  transform: scale(1.18);
+}
+
 /* Adattamento specifico logo MORDIMI centrato senza tagli ai lati */
 .sponsor-slot img[src*="sponsor-sx-2.png"] {
   transform: scale(1.06);
@@ -505,7 +510,7 @@ html, body {
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-l-2 border-festive-yellow/60">
     <!-- 1. MAIN SPONSOR DESTRA -->
-    <div class="sponsor-slot sponsor-slot-fixed">
+    <div class="sponsor-slot sponsor-slot-fixed" style="padding: 4px;">
       <img src="sponsor-fisso-dx.png?v=2" alt="Main Sponsor Destra" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
       <span class="hidden font-title text-zinc-900 text-xl tracking-wider text-center leading-tight">MAIN SPONSOR DX</span>
     </div>
