@@ -505,13 +505,13 @@ html, body {
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODALITÀ 9: VIDEO SPOT MAIN SPONSOR BCC TERRA DI LAVORO   -->
+    <!-- MODALITÀ 9: 3 VIDEO SPOT MAIN SPONSOR BCC TERRA DI LAVORO -->
     <!-- ========================================================= -->
     <div id="show-bcc-video" class="hidden absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
       <!-- Sfondo video ambientale sincronizzato (elimina le bande nere sopra e sotto) -->
-      <video id="bcc-spot-bg" src="spot-bcc.mp4" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-95 pointer-events-none" muted playsinline loop preload="auto"></video>
+      <video id="bcc-spot-bg" src="spot-bcc-1.mp4" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-95 pointer-events-none" muted playsinline loop preload="metadata"></video>
       <!-- Spot principale nitido in proporzioni originali 100% -->
-      <video id="bcc-spot-player" src="spot-bcc.mp4" class="relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
+      <video id="bcc-spot-player" src="spot-bcc-1.mp4" class="relative z-10 w-full h-full object-contain" playsinline loop preload="metadata"></video>
     </div>
 
   </main>
@@ -696,12 +696,12 @@ let slideshowInterval = null;
 
 function avviaVideoConAudio(player, bgPlayer) {
     if (!player) return;
-    player.currentTime = 0;
+    try { player.currentTime = 0; } catch (e) {}
     player.muted = false;
     player.volume = 1.0;
 
     if (bgPlayer) {
-        bgPlayer.currentTime = 0;
+        try { bgPlayer.currentTime = 0; } catch (e) {}
         bgPlayer.muted = true;
         bgPlayer.play().catch(() => {});
     }
@@ -715,12 +715,12 @@ function avviaVideoConAudio(player, bgPlayer) {
     }
 }
 
-// Mantiene sincronizzato lo sfondo ambientale del video BCC
+// Mantiene sincronizzato lo sfondo ambientale dei video BCC
 const bccMainPlayer = document.getElementById('bcc-spot-player');
 const bccBgPlayer = document.getElementById('bcc-spot-bg');
 if (bccMainPlayer && bccBgPlayer) {
     bccMainPlayer.addEventListener('play', () => {
-        bccBgPlayer.currentTime = bccMainPlayer.currentTime;
+        try { bccBgPlayer.currentTime = bccMainPlayer.currentTime; } catch (e) {}
         bccBgPlayer.play().catch(() => {});
     });
     bccMainPlayer.addEventListener('pause', () => {
@@ -728,7 +728,7 @@ if (bccMainPlayer && bccBgPlayer) {
     });
     bccMainPlayer.addEventListener('timeupdate', () => {
         if (Math.abs(bccBgPlayer.currentTime - bccMainPlayer.currentTime) > 0.2) {
-            bccBgPlayer.currentTime = bccMainPlayer.currentTime;
+            try { bccBgPlayer.currentTime = bccMainPlayer.currentTime; } catch (e) {}
         }
     });
 }
@@ -789,15 +789,15 @@ function applicaModalita(mod) {
     // Ferma e azzera sempre i video quando si cambia schermata
     if (videoPlayer) {
         videoPlayer.pause();
-        videoPlayer.currentTime = 0;
+        try { videoPlayer.currentTime = 0; } catch (e) {}
     }
     if (bccVideoPlayer) {
         bccVideoPlayer.pause();
-        bccVideoPlayer.currentTime = 0;
+        try { bccVideoPlayer.currentTime = 0; } catch (e) {}
     }
     if (bccVideoBg) {
         bccVideoBg.pause();
-        bccVideoBg.currentTime = 0;
+        try { bccVideoBg.currentTime = 0; } catch (e) {}
     }
 
     showPrincipale.classList.add('hidden');
@@ -829,7 +829,20 @@ function applicaModalita(mod) {
         showBabboQr.classList.remove('hidden');
     } else if (mod === 'babbo_locandina') {
         showBabboLocandina.classList.remove('hidden');
-    } else if (mod === 'bcc_video') {
+    } else if (mod === 'bcc_video_1' || mod === 'bcc_video_2' || mod === 'bcc_video_3' || mod === 'bcc_video') {
+        let targetSpot = 'spot-bcc-1.mp4';
+        if (mod === 'bcc_video_2') targetSpot = 'spot-bcc-2.mp4';
+        if (mod === 'bcc_video_3') targetSpot = 'spot-bcc-3.mp4';
+
+        if (bccVideoPlayer && bccVideoPlayer.getAttribute('src') !== targetSpot) {
+            bccVideoPlayer.setAttribute('src', targetSpot);
+            bccVideoPlayer.load();
+        }
+        if (bccVideoBg && bccVideoBg.getAttribute('src') !== targetSpot) {
+            bccVideoBg.setAttribute('src', targetSpot);
+            bccVideoBg.load();
+        }
+
         showBccVideo.classList.remove('hidden');
         avviaVideoConAudio(bccVideoPlayer, bccVideoBg);
     } else {
