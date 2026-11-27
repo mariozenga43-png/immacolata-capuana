@@ -402,7 +402,7 @@ html, body {
     <div id="top-bar-live" class="hidden absolute top-3 left-0 right-0 z-40 flex justify-center pointer-events-none px-4">
       <div class="bg-black/95 border-[3px] border-festive-yellow rounded-2xl px-5 py-3 shadow-[0_0_35px_rgba(255,215,0,0.6)] flex items-center gap-5">
         <div class="bg-white p-2 rounded-xl flex-shrink-0 shadow-lg">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&margin=1&data=https%3A%2F%2Fmariozenga43-png.github.io%2Fimmacolata-capuana%2F%3Fpag%3Dphotolive%23photo-live" alt="QR Code Photo Live" class="w-40 h-40 md:w-44 md:h-44 object-contain block">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&margin=1&data=https%3A%2F%2Fimmacolatacapuana.it%2F%3Fpag%3Dphotolive%23photo-live" alt="QR Code Photo Live" class="w-40 h-40 md:w-44 md:h-44 object-contain block">
         </div>
         <div class="text-left pr-1">
           <span class="block font-title tracking-wide text-festive-yellow text-4xl text-glow-gold uppercase leading-none">Inquadra & Scatta!</span>
@@ -515,7 +515,7 @@ html, body {
     <!-- ========================================================= -->
     <div id="show-bcc-video" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
       <canvas id="bcc-ambient-canvas" width="24" height="24" class="gpu-layer absolute inset-0 w-full h-full object-cover scale-125 blur-xl opacity-95 pointer-events-none"></canvas>
-      <video id="bcc-player-1" src="spot-bcc-1.mp4" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='spot-bcc.mp4';}" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
+      <video id="bcc-player-1" src="spot-bcc-1.mp4" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='spot-bcc.mp4';this.load();precaricaPrimoFrameBcc(this);}" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
       <video id="bcc-player-2" src="spot-bcc-2.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
       <video id="bcc-player-3" src="spot-bcc-3.mp4" class="gpu-layer opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" muted playsinline webkit-playsinline loop preload="auto"></video>
     </div>
@@ -702,11 +702,29 @@ let currentIndex = 0;
 let slideshowInterval = null;
 
 // =========================================================================
-// GESTIONE AUDIO VILLAGGIO, VIDEO BCC MUTI & SFONDO AMBIENTALE LEGGERO
+// PRE-DECODIFICA GPU PRIMO FOTOGRAMMA (AVVIO 0ms SU SAFARI)
 // =========================================================================
 let activeBccVideo = null;
 let ambientTimer = null;
 const bccVideoIds = ['bcc-player-1', 'bcc-player-2', 'bcc-player-3'];
+
+function precaricaPrimoFrameBcc(v) {
+    if (!v || v.dataset.attivo === '1' || v.dataset.prewarmed === '1') return;
+    v.muted = true;
+    v.volume = 0;
+    const p = v.play();
+    if (p !== undefined) {
+        p.then(() => {
+            v.dataset.prewarmed = '1';
+            setTimeout(() => {
+                if (v.dataset.attivo !== '1') {
+                    v.pause();
+                    try { v.currentTime = 0.01; } catch (e) {}
+                }
+            }, 120);
+        }).catch(() => {});
+    }
+}
 
 function inizializzaVideoEAudio() {
     try {
@@ -730,29 +748,23 @@ function inizializzaVideoEAudio() {
                 p.then(() => {
                     if (babboVideo.dataset.attivo !== '1') {
                         babboVideo.pause();
-                        try { babboVideo.currentTime = 0; } catch (e) {}
+                        try { babboVideo.currentTime = 0.01; } catch (e) {}
                     }
                 }).catch(() => {});
             }
         }
     }
 
-    // I 3 video spot BCC restano sempre rigorosamente senza audio
+    // Pre-decodifica immediata dei 3 spot BCC muti
     bccVideoIds.forEach(id => {
         const v = document.getElementById(id);
         if (!v) return;
         v.muted = true;
         v.volume = 0;
-        if (v.dataset.attivo !== '1') {
-            const p = v.play();
-            if (p !== undefined) {
-                p.then(() => {
-                    if (v.dataset.attivo !== '1') {
-                        v.pause();
-                        try { v.currentTime = 0; } catch (e) {}
-                    }
-                }).catch(() => {});
-            }
+        if (v.dataset.attivo === '1') {
+            if (v.paused) v.play().catch(() => {});
+        } else {
+            precaricaPrimoFrameBcc(v);
         }
     });
 }
@@ -789,7 +801,11 @@ function fermaSfondoAmbientale() {
 function avviaVideo(player, conAudio = true) {
     if (!player) return;
     player.dataset.attivo = '1';
-    try { player.currentTime = 0; } catch (e) {}
+
+    // Evita di resettare il decoder se il primo frame è già pronto in GPU
+    if (player.currentTime > 0.25) {
+        try { player.currentTime = 0; } catch (e) {}
+    }
 
     if (!conAudio) {
         player.muted = true;
@@ -878,7 +894,7 @@ function applicaModalita(mod) {
     if (videoPlayer) {
         videoPlayer.dataset.attivo = '0';
         videoPlayer.pause();
-        try { videoPlayer.currentTime = 0; } catch (e) {}
+        try { videoPlayer.currentTime = 0.01; } catch (e) {}
     }
     bccPlayers.forEach(p => {
         if (p) {
@@ -888,7 +904,7 @@ function applicaModalita(mod) {
             p.pause();
             p.classList.add('opacity-0', 'pointer-events-none');
             p.classList.remove('opacity-100');
-            try { p.currentTime = 0; } catch (e) {}
+            try { p.currentTime = 0.01; } catch (e) {}
         }
     });
 
