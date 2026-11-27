@@ -497,10 +497,13 @@ html, body {
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODALITÀ 8: LOCANDINA VILLAGGIO DI BABBO NATALE (PIENA)   -->
+    <!-- MODALITÀ 8: LOCANDINA VILLAGGIO DI BABBO NATALE (2x2m)    -->
     <!-- ========================================================= -->
     <div id="show-babbo-locandina" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
-      <img src="locandina-babbo-natale.jpg" alt="Locandina Villaggio di Babbo Natale" class="w-full h-full object-fill block">
+      <!-- Sfondo ambientale sfocato con gli stessi colori della locandina (elimina le bande nere) -->
+      <img src="locandina-babbo-natale.jpg" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover scale-110 blur-xl brightness-50 pointer-events-none">
+      <!-- Locandina nitida in proporzioni originali 100% senza deformazioni -->
+      <img src="locandina-babbo-natale.jpg" alt="Locandina Villaggio di Babbo Natale" class="relative z-10 h-full w-auto max-w-full object-contain shadow-[0_0_45px_rgba(0,0,0,0.95)] border-x-2 border-festive-yellow/60 block">
     </div>
 
     <!-- ========================================================= -->
