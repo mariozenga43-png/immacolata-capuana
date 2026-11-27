@@ -2,191 +2,393 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Regia & Moderazione | Immacolata Capuana 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Regia Ledwall | Immacolata Capuana 2026</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  body { background: #120706; color: #fff; font-family: 'Quicksand', sans-serif; }
+  body {
+    background: radial-gradient(circle at top, #2c0b0a 0%, #0d0404 100%);
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+  }
   .font-title { font-family: 'Bebas Neue', sans-serif; }
+  .btn-regia {
+    transition: all 0.2s ease;
+    border: 2px solid rgba(255, 215, 0, 0.35);
+  }
+  .btn-regia:active {
+    transform: scale(0.97);
+  }
+  .btn-attivo {
+    border-color: #22c55e !important;
+    box-shadow: 0 0 22px rgba(34, 197, 94, 0.65) !important;
+    background: linear-gradient(135deg, #14532d 0%, #052e16 100%) !important;
+  }
 </style>
 </head>
-<body class="min-h-screen pb-16">
+<body class="pb-12">
 
-<header class="bg-black/90 border-b-2 border-yellow-400 px-4 py-3 sticky top-0 z-50 flex items-center justify-between">
-  <div>
-    <h1 class="font-title text-2xl tracking-wider text-yellow-400 leading-none">REGIA LEDWALL 3x2M</h1>
-    <p class="text-xs text-zinc-400">Immacolata Capuana 2026</p>
-  </div>
-  <span id="stato-attivo" class="text-xs font-bold uppercase px-3 py-1 rounded-full bg-yellow-400 text-black">
-    Caricamento...
-  </span>
-</header>
-
-<main class="max-w-xl mx-auto px-4 pt-5 space-y-6">
-
-  <!-- SEZIONE 1: CAMBIO MODALITÀ SCHERMO -->
-  <section class="bg-zinc-900/90 border border-yellow-500/40 rounded-2xl p-4">
-    <h2 class="font-title text-xl tracking-wider text-yellow-400 mb-3">1. Controllo Schermo in Piazza</h2>
-    <div class="grid grid-cols-2 gap-2.5">
-      <button onclick="cambiaModalita('principale')" id="btn-principale" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        🏛️ Gala Principale
-      </button>
-      <button onclick="cambiaModalita('live')" id="btn-live" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        📸 Photo Live Selfie
-      </button>
-      <button onclick="cambiaModalita('pino')" id="btn-pino" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        🎸 Tribute Pino Daniele
-      </button>
-      <button onclick="cambiaModalita('izzo')" id="btn-izzo" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        🎭 Biagio Izzo
-      </button>
-      <button onclick="cambiaModalita('ddm')" id="btn-ddm" class="mode-btn col-span-2 py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        🎧 Live Show DJ Set DDM
-      </button>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b-2 border-yellow-500/50 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="Logo immacolata tondo 2.png" alt="Logo" class="w-10 h-10 object-contain rounded-full border border-yellow-400">
+      <div>
+        <h1 class="font-title text-2xl tracking-wider text-yellow-400 leading-none">REGIA LEDWALL 3x2M</h1>
+        <p class="text-xs text-zinc-300 font-bold">Immacolata Capuana 2026</p>
+      </div>
     </div>
-
-    <!-- SOTTOSEZIONE VILLAGGIO DI BABBO NATALE -->
-    <h3 class="font-title text-lg tracking-wider text-red-400 mt-5 mb-2.5">Villaggio di Babbo Natale</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-      <button onclick="cambiaModalita('babbo_video')" id="btn-babbo_video" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        🎬 Video Spoiler (Audio)
-      </button>
-      <button onclick="cambiaModalita('babbo_qr')" id="btn-babbo_qr" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        📲 QR Instagram 2×2m
-      </button>
-      <button onclick="cambiaModalita('babbo_locandina')" id="btn-babbo_locandina" class="mode-btn py-3 px-3 rounded-xl font-bold text-sm border border-zinc-700 bg-zinc-800 hover:border-yellow-400 transition">
-        🎅 Locandina Villaggio
-      </button>
+    <div id="stato-connessione" class="flex items-center gap-1.5 bg-zinc-900 border border-yellow-500/40 px-3 py-1 rounded-full text-xs font-bold text-yellow-400">
+      <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+      <span id="label-mod-attiva">Caricamento...</span>
     </div>
+  </header>
 
-    <!-- SOTTOSEZIONE MAIN SPONSOR -->
-    <h3 class="font-title text-lg tracking-wider text-emerald-400 mt-5 mb-2.5">Main Sponsor</h3>
-    <div class="grid grid-cols-1 gap-2.5">
-      <button onclick="cambiaModalita('bcc_video')" id="btn-bcc_video" class="mode-btn w-full py-3 px-3 rounded-xl font-bold text-sm border border-emerald-500/60 bg-zinc-800 hover:border-yellow-400 transition">
-        🏦 Spot Video BCC (Audio)
-      </button>
-    </div>
-  </section>
+  <main class="max-w-xl mx-auto px-4 pt-5 space-y-6">
 
-  <!-- SEZIONE 2: MODERAZIONE FOTO IN ARRIVO -->
-  <section class="bg-zinc-900/90 border border-yellow-500/40 rounded-2xl p-4">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="font-title text-xl tracking-wider text-yellow-400">2. Selfie da Approvare</h2>
-      <button onclick="caricaTutteLeFoto()" class="text-xs bg-zinc-800 border border-zinc-600 px-3 py-1 rounded-lg">
-        Aggiorna
-      </button>
-    </div>
+    <!-- SEZIONE 1: SCHERMATE PRINCIPALI -->
+    <section>
+      <h2 class="font-title text-xl tracking-widest text-yellow-400 uppercase mb-2.5 flex items-center gap-2">
+        <i class="fa-solid fa-tv"></i> Schermate Principali
+      </h2>
+      <div class="grid grid-cols-1 gap-3">
+        <button id="btn-principale" onclick="impostaModalita('principale')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-red-600/20 border border-red-500 flex items-center justify-center text-yellow-400 text-xl">
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Schermata Principale di Gala</span>
+              <span class="block text-xs text-zinc-400">Logo Immacolata Capuana & Benvenuti</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
 
-    <div id="lista-da-approvare" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <p class="text-sm text-zinc-400 col-span-2">Controllo nuovi scatti...</p>
-    </div>
-  </section>
+        <button id="btn-live" onclick="impostaModalita('live')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-yellow-500/20 border border-yellow-400 flex items-center justify-center text-yellow-400 text-xl">
+              <i class="fa-solid fa-camera-retro"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Photo Live + QR Code Selfie</span>
+              <span class="block text-xs text-zinc-400">Proietta i selfie approvati dal pubblico</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
 
-  <!-- SEZIONE 3: FOTO GIÀ APPROVATE IN ONDA SUL LEDWALL -->
-  <section class="bg-zinc-900/90 border border-emerald-500/40 rounded-2xl p-4">
-    <h2 class="font-title text-xl tracking-wider text-emerald-400 mb-3">3. Approvate (Visibili sul Ledwall)</h2>
-    <div id="lista-approvate" class="grid grid-cols-2 gap-3">
-      <p class="text-sm text-zinc-400 col-span-2">Nessuna foto approvata.</p>
-    </div>
-  </section>
+        <button id="btn-pino" onclick="impostaModalita('pino')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-blue-500/20 border border-blue-400 flex items-center justify-center text-blue-300 text-xl">
+              <i class="fa-solid fa-guitar"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Tribute Live • Pino Daniele</span>
+              <span class="block text-xs text-zinc-400">Slideshow B&N con frasi e luci palco</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+      </div>
+    </section>
 
-</main>
+    <!-- SEZIONE 2: MAIN SPONSOR BCC TERRA DI LAVORO (3 SPOT VIDEO) -->
+    <section>
+      <h2 class="font-title text-xl tracking-widest text-emerald-400 uppercase mb-2.5 flex items-center gap-2">
+        <i class="fa-solid fa-building-columns"></i> Main Sponsor BCC (3 Spot Audio)
+      </h2>
+      <div class="grid grid-cols-1 gap-3">
+        <button id="btn-bcc_video_1" onclick="impostaModalita('bcc_video_1')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 text-xl">
+              <i class="fa-solid fa-play"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Spot Video BCC 1 (Audio)</span>
+              <span class="block text-xs text-zinc-400">File: spot-bcc-1.mp4 • Sfondo adattivo</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
 
+        <button id="btn-bcc_video_2" onclick="impostaModalita('bcc_video_2')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 text-xl">
+              <i class="fa-solid fa-play"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Spot Video BCC 2 (Audio)</span>
+              <span class="block text-xs text-zinc-400">File: spot-bcc-2.mp4 • Sfondo adattivo</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+
+        <button id="btn-bcc_video_3" onclick="impostaModalita('bcc_video_3')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 text-xl">
+              <i class="fa-solid fa-play"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Spot Video BCC 3 (Audio)</span>
+              <span class="block text-xs text-zinc-400">File: spot-bcc-3.mp4 • Sfondo adattivo</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SEZIONE 3: VILLAGGIO DI BABBO NATALE -->
+    <section>
+      <h2 class="font-title text-xl tracking-widest text-red-400 uppercase mb-2.5 flex items-center gap-2">
+        <i class="fa-solid fa-sleigh"></i> Villaggio di Babbo Natale
+      </h2>
+      <div class="grid grid-cols-1 gap-3">
+        <button id="btn-babbo_video" onclick="impostaModalita('babbo_video')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-red-500/20 border border-red-400 flex items-center justify-center text-red-300 text-xl">
+              <i class="fa-solid fa-film"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Video Spoiler Villaggio (Audio)</span>
+              <span class="block text-xs text-zinc-400">File: spoiler-babbo-natale.mp4</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+
+        <button id="btn-babbo_locandina" onclick="impostaModalita('babbo_locandina')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-xl">
+              <i class="fa-solid fa-image"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Locandina Villaggio di Babbo Natale</span>
+              <span class="block text-xs text-zinc-400">Grafica HD con sfondo sfocato</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+
+        <button id="btn-babbo_qr" onclick="impostaModalita('babbo_qr')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-white/15 border border-white/50 flex items-center justify-center text-white text-xl">
+              <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">QR Code Gigante 2x2m Instagram</span>
+              <span class="block text-xs text-zinc-400">Pagina ufficiale Villaggio di Babbo Natale</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SEZIONE 4: LOCANDINE SPETTACOLI -->
+    <section>
+      <h2 class="font-title text-xl tracking-widest text-yellow-400 uppercase mb-2.5 flex items-center gap-2">
+        <i class="fa-solid fa-masks-theater"></i> Locandine Spettacoli
+      </h2>
+      <div class="grid grid-cols-1 gap-3">
+        <button id="btn-izzo" onclick="impostaModalita('izzo')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 text-xl">
+              <i class="fa-solid fa-ticket"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Locandina Biagio Izzo</span>
+              <span class="block text-xs text-zinc-400">File: locandina-izzo.jpg</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+
+        <button id="btn-ddm" onclick="impostaModalita('ddm')" class="btn-regia w-full bg-zinc-900/90 hover:bg-zinc-800 rounded-2xl p-4 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-pink-500/20 border border-pink-400 flex items-center justify-center text-pink-300 text-xl">
+              <i class="fa-solid fa-compact-disc"></i>
+            </div>
+            <div>
+              <span class="block font-bold text-base text-white">Locandina Live Show DJ Set DDM</span>
+              <span class="block text-xs text-zinc-400">File: locandina-ddm.jpg</span>
+            </div>
+          </div>
+          <span class="badge-live hidden text-xs font-bold bg-green-500 text-black px-2.5 py-1 rounded-full uppercase">In Onda</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SEZIONE 5: MODERAZIONE SELFIE PHOTO LIVE -->
+    <section class="pt-2 border-t border-yellow-500/30">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-title text-xl tracking-widest text-yellow-400 uppercase flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved"></i> Moderazione Selfie Live
+        </h2>
+        <button onclick="caricaFotoModerazione()" class="text-xs bg-zinc-800 border border-yellow-500/40 text-yellow-400 px-3 py-1 rounded-lg font-bold">
+          <i class="fa-solid fa-rotate-right mr-1"></i> Aggiorna
+        </button>
+      </div>
+      <div id="lista-foto-moderazione" class="grid grid-cols-2 gap-3">
+        <p class="col-span-2 text-center text-xs text-zinc-400 py-4">Caricamento selfie in corso...</p>
+      </div>
+    </section>
+
+  </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = 'https://crmobnweejiepmsbteme.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_0h_Hv7yY6XMyI6-nQusLfw_EGv4I1TO';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-async function leggiModalita() {
-  const { data } = await _supabase.from('regia_ledwall').select('modalita').eq('id', 1).single();
-  if (data && data.modalita) {
-    document.getElementById('stato-attivo').textContent = 'IN ONDA: ' + data.modalita.toUpperCase();
-    document.querySelectorAll('.mode-btn').forEach(btn => {
-      btn.classList.remove('bg-yellow-400', 'text-black', 'border-yellow-400');
-      btn.classList.add('bg-zinc-800', 'text-white');
-    });
-    const attivo = document.getElementById('btn-' + data.modalita);
-    if (attivo) {
-      attivo.classList.remove('bg-zinc-800', 'text-white');
-      attivo.classList.add('bg-yellow-400', 'text-black', 'border-yellow-400');
-    }
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const nomiModalita = {
+  'principale': 'Gala Principale',
+  'live': 'Photo Live',
+  'pino': 'Pino Daniele',
+  'bcc_video_1': 'Spot BCC 1',
+  'bcc_video_2': 'Spot BCC 2',
+  'bcc_video_3': 'Spot BCC 3',
+  'bcc_video': 'Spot BCC 1',
+  'babbo_video': 'Video Villaggio',
+  'babbo_locandina': 'Locandina Villaggio',
+  'babbo_qr': 'QR Villaggio',
+  'izzo': 'Biagio Izzo',
+  'ddm': 'DJ Set DDM'
+};
+
+function aggiornaEvidenziazioneTasti(mod) {
+  document.querySelectorAll('.btn-regia').forEach(btn => {
+    btn.classList.remove('btn-attivo');
+    const badge = btn.querySelector('.badge-live');
+    if (badge) badge.classList.add('hidden');
+  });
+
+  const modNormalizzata = (mod === 'bcc_video') ? 'bcc_video_1' : mod;
+  const attivo = document.getElementById('btn-' + modNormalizzata);
+  if (attivo) {
+    attivo.classList.add('btn-attivo');
+    const badge = attivo.querySelector('.badge-live');
+    if (badge) badge.classList.remove('hidden');
+  }
+
+  const label = document.getElementById('label-mod-attiva');
+  if (label) {
+    label.textContent = 'ON AIR: ' + (nomiModalita[modNormalizzata] || modNormalizzata);
   }
 }
 
-async function cambiaModalita(nuovaMod) {
-  await _supabase.from('regia_ledwall').update({ modalita: nuovaMod }).eq('id', 1);
-  leggiModalita();
+async function leggiStatoAttuale() {
+  try {
+    const { data, error } = await _supabase
+      .from('regia_ledwall')
+      .select('modalita')
+      .eq('id', 1)
+      .single();
+
+    if (error) throw error;
+    if (data && data.modalita) {
+      aggiornaEvidenziazioneTasti(data.modalita);
+    }
+  } catch (err) {
+    console.error('Errore lettura stato regia:', err);
+  }
 }
 
-async function caricaTutteLeFoto() {
-  const [storageRes, approvateRes] = await Promise.all([
-    _supabase.storage.from('foto-evento').list('', { limit: 60, sortBy: { column: 'created_at', order: 'desc' } }),
-    _supabase.from('foto_approvate').select('*').order('created_at', { ascending: false })
-  ]);
+async function impostaModalita(nuovaModalita) {
+  aggiornaEvidenziazioneTasti(nuovaModalita);
+  try {
+    const { error } = await _supabase
+      .from('regia_ledwall')
+      .update({ modalita: nuovaModalita })
+      .eq('id', 1);
 
-  const files = (storageRes.data || []).filter(f => f.name && f.name !== '.emptyFolderPlaceholder');
-  const approvate = approvateRes.data || [];
-  const nomiApprovati = new Set(approvate.map(a => a.file_name));
+    if (error) throw error;
+  } catch (err) {
+    alert('Errore cambio schermata: ' + err.message);
+  }
+}
 
-  const daApprovare = files.filter(f => !nomiApprovati.has(f.name));
+async function caricaFotoModerazione() {
+  const container = document.getElementById('lista-foto-moderazione');
+  try {
+    const { data, error } = await _supabase
+      .from('foto_approvate')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(30);
 
-  const boxPending = document.getElementById('lista-da-approvare');
-  if (daApprovare.length === 0) {
-    boxPending.innerHTML = '<p class="text-sm text-zinc-400 col-span-2">Nessuna nuova foto in attesa di moderazione.</p>';
-  } else {
-    boxPending.innerHTML = daApprovare.map(file => {
-      const url = _supabase.storage.from('foto-evento').getPublicUrl(file.name).data.publicUrl;
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = '<p class="col-span-2 text-center text-xs text-zinc-400 py-4">Nessun selfie ricevuto finora.</p>';
+      return;
+    }
+
+    container.innerHTML = data.map(foto => {
+      const approvata = foto.stato === 'approvata';
       return `
-        <div class="bg-black border border-zinc-700 rounded-xl overflow-hidden flex flex-col">
-          <img src="${url}" class="w-full h-56 object-contain bg-zinc-950" alt="Selfie">
-          <div class="p-2.5 grid grid-cols-2 gap-2">
-            <button onclick="approvaFoto('${file.name}', '${url}')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg text-xs uppercase">
-              ✅ Approva
-            </button>
-            <button onclick="eliminaFoto('${file.name}')" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg text-xs uppercase">
-              ❌ Scarta
+        <div class="bg-zinc-900 border ${approvata ? 'border-green-500/60' : 'border-yellow-500/50'} rounded-xl overflow-hidden flex flex-col">
+          <div class="relative aspect-square bg-black">
+            <img src="${foto.public_url}" alt="Selfie" class="w-full h-full object-cover">
+            <span class="absolute top-1.5 right-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${approvata ? 'bg-green-500 text-black' : 'bg-yellow-400 text-black'}">
+              ${approvata ? 'In Onda' : 'In Attesa'}
+            </span>
+          </div>
+          <div class="p-2 flex gap-1.5">
+            ${!approvata ? `
+              <button onclick="approvaFoto(${foto.id})" class="flex-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-1.5 rounded-lg">
+                <i class="fa-solid fa-check"></i> Approva
+              </button>
+            ` : ''}
+            <button onclick="eliminaFoto(${foto.id})" class="flex-1 bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold py-1.5 rounded-lg">
+              <i class="fa-solid fa-trash"></i> Elimina
             </button>
           </div>
         </div>
       `;
     }).join('');
-  }
-
-  const boxApproved = document.getElementById('lista-approvate');
-  if (approvate.length === 0) {
-    boxApproved.innerHTML = '<p class="text-sm text-zinc-400 col-span-2">Nessuna foto ancora approvata.</p>';
-  } else {
-    boxApproved.innerHTML = approvate.map(item => `
-      <div class="bg-black border border-emerald-600/50 rounded-xl overflow-hidden flex flex-col">
-        <img src="${item.public_url}" class="w-full h-36 object-contain bg-zinc-950" alt="Approvata">
-        <button onclick="eliminaFoto('${item.file_name}')" class="bg-red-700 hover:bg-red-600 text-white font-bold py-1.5 text-xs uppercase">
-          Rimuovi dal Ledwall
-        </button>
-      </div>
-    `).join('');
+  } catch (err) {
+    console.error('Errore caricamento foto:', err);
   }
 }
 
-async function approvaFoto(fileName, publicUrl) {
-  await _supabase.from('foto_approvate').upsert({
-    file_name: fileName,
-    public_url: publicUrl,
-    stato: 'approvata'
-  }, { onConflict: 'file_name' });
-  caricaTutteLeFoto();
+async function approvaFoto(id) {
+  try {
+    const { error } = await _supabase
+      .from('foto_approvate')
+      .update({ stato: 'approvata' })
+      .eq('id', id);
+    if (error) throw error;
+    caricaFotoModerazione();
+  } catch (err) {
+    alert('Errore approvazione: ' + err.message);
+  }
 }
 
-async function eliminaFoto(fileName) {
-  await _supabase.from('foto_approvate').delete().eq('file_name', fileName);
-  await _supabase.storage.from('foto-evento').remove([fileName]);
-  caricaTutteLeFoto();
+async function eliminaFoto(id) {
+  try {
+    const { error } = await _supabase
+      .from('foto_approvate')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    caricaFotoModerazione();
+  } catch (err) {
+    alert('Errore eliminazione: ' + err.message);
+  }
 }
 
-leggiModalita();
-caricaTutteLeFoto();
-setInterval(caricaTutteLeFoto, 5000);
+leggiStatoAttuale();
+caricaFotoModerazione();
+setInterval(leggiStatoAttuale, 3000);
+setInterval(caricaFotoModerazione, 6000);
 </script>
 </body>
 </html>
