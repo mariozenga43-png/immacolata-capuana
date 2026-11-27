@@ -104,10 +104,11 @@
 <nav class="fixed w-full z-40 glass-panel border-b border-festive-red/30 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20 items-center">
-            <div class="flex-shrink-0 flex items-center gap-2.5 sm:gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+            <div class="flex-shrink-0 flex items-center gap-2.5 sm:gap-3.5 cursor-pointer" onclick="window.scrollTo(0,0)">
                 <img src="Logo immacolata tondo 2.png" alt="Logo Miniatura" class="h-9 w-9 sm:h-10 sm:w-10 object-contain flex-shrink-0">
                 <span class="font-title font-bold text-base sm:text-lg md:text-2xl text-white whitespace-nowrap">'Ngopp 'o Pont</span>
-                <img src="bcc-sito.jpg" alt="BCC Terra di Lavoro" class="h-7 sm:h-8 md:h-9 w-auto object-contain flex-shrink-0">
+                <span class="h-6 w-[1px] bg-festive-yellow/40 flex-shrink-0"></span>
+                <img id="bcc-nav-logo" src="bcc-sito.jpg" alt="BCC Terra di Lavoro" class="h-7 sm:h-8 md:h-9 w-auto object-contain flex-shrink-0 opacity-0 transition-opacity duration-200">
             </div>
             <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-6 items-center">
@@ -383,8 +384,94 @@
     </div>
 </footer>
 
-<!-- SCRIPT DI SISTEMA (CONTO ALLA ROVESCIA E NEVE) -->
+<!-- SCRIPT DI SISTEMA (TRASPARENZA LOGO BCC, CONTO ALLA ROVESCIA E NEVE) -->
 <script>
+    // --- RIMUOVE LO SFONDO BIANCO DAL LOGO BCC E ADATTA IL TESTO ALLA BARRA SCURA ---
+    (function() {
+        const imgEl = document.getElementById('bcc-nav-logo');
+        if (!imgEl) return;
+
+        const srcImg = new Image();
+        srcImg.onload = function() {
+            try {
+                const w = srcImg.naturalWidth;
+                const h = srcImg.naturalHeight;
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(srcImg, 0, 0);
+
+                const imgData = ctx.getImageData(0, 0, w, h);
+                const data = imgData.data;
+
+                let minX = w, minY = h, maxX = 0, maxY = 0;
+                let hasPixels = false;
+
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const i = (y * w + x) * 4;
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+
+                        const minRGB = Math.min(r, g, b);
+                        if (minRGB >= 232) {
+                            data[i + 3] = 0;
+                            continue;
+                        }
+
+                        let alpha = Math.round(255 * (232 - minRGB) / (232 - 35));
+                        if (alpha > 255) alpha = 255;
+                        if (alpha < 0) alpha = 0;
+
+                        if (b >= g) {
+                            data[i] = 255;
+                            data[i + 1] = 255;
+                            data[i + 2] = 255;
+                        } else {
+                            data[i] = 16;
+                            data[i + 1] = 185;
+                            data[i + 2] = 105;
+                        }
+                        data[i + 3] = alpha;
+
+                        if (alpha > 15) {
+                            hasPixels = true;
+                            if (x < minX) minX = x;
+                            if (x > maxX) maxX = x;
+                            if (y < minY) minY = y;
+                            if (y > maxY) maxY = y;
+                        }
+                    }
+                }
+
+                ctx.putImageData(imgData, 0, 0);
+
+                if (hasPixels && maxX > minX && maxY > minY) {
+                    const pad = 2;
+                    const sx = Math.max(0, minX - pad);
+                    const sy = Math.max(0, minY - pad);
+                    const sw = Math.min(w - sx, (maxX - minX + 1) + pad * 2);
+                    const sh = Math.min(h - sy, (maxY - minY + 1) + pad * 2);
+
+                    const trimmed = document.createElement('canvas');
+                    trimmed.width = sw;
+                    trimmed.height = sh;
+                    trimmed.getContext('2d').drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
+                    imgEl.src = trimmed.toDataURL('image/png');
+                } else {
+                    imgEl.src = canvas.toDataURL('image/png');
+                }
+            } catch (e) {}
+            imgEl.classList.remove('opacity-0');
+        };
+        srcImg.onerror = function() {
+            imgEl.classList.remove('opacity-0');
+        };
+        srcImg.src = 'bcc-sito.jpg';
+    })();
+
     // --- CONTO ALLA ROVESCIA (5 Dicembre 2026 ore 19:00) ---
     const eventStartDate = new Date('2026-12-05T19:00:00').getTime();
 
@@ -455,7 +542,6 @@
     const { createClient } = supabase;
     const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Ridimensiona e comprime la foto sul telefono (da ~8MB a ~200KB) prima dell'upload
     function comprimiFotoPrimaDellUpload(fileOriginale, maxLato = 1280, qualita = 0.78) {
         return new Promise((resolve) => {
             const objectUrl = URL.createObjectURL(fileOriginale);
@@ -495,7 +581,6 @@
         });
     }
 
-    // Carica nella galleria del sito le foto già approvate dalla regia
     async function caricaGalleriaApprovata() {
         try {
             const { data, error } = await _supabase
