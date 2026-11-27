@@ -132,12 +132,6 @@ html, body {
   transform: scale(1.16);
 }
 
-/* Casella McDonald's: sfondo verde uniforme senza stacchi + M vettoriale HD */
-.sponsor-slot-mcd {
-  background-color: #003b1f !important;
-  padding: 18px !important;
-}
-
 /* AREA VIDEO CENTRALE: 2,00m x 2,00m (66.6667% -> Quadrato 1:1) */
 #center-video-area {
   position: relative;
@@ -510,11 +504,10 @@ html, body {
   <!-- BARRA LATERALE DESTRA SPONSOR (4 RIQUADRI IDENTICI)       -->
   <!-- ========================================================= -->
   <aside class="sponsor-sidebar border-l-2 border-festive-yellow/60">
-    <!-- 1. MAIN SPONSOR DESTRA (McDonald's Vettoriale HD) -->
-    <div class="sponsor-slot sponsor-slot-fixed sponsor-slot-mcd">
-      <svg viewBox="0 0 260 200" class="w-full h-full max-w-[88%] max-h-[88%]" aria-label="McDonald's">
-        <path fill="#FFBC0D" d="M189.2 14.2c19.4 0 35.1 76.4 35.1 170.7h28.1C252.4 82.8 224.1 0 189.2 0c-19.9 0-37.6 24.8-49.2 63.6C128.4 24.8 110.7 0 90.8 0 55.9 0 27.6 82.8 27.6 184.9h28.1c0-94.3 15.7-170.7 35.1-170.7 19.4 0 35.1 70.6 35.1 157.6h28.1c0-87 15.8-157.6 35.2-157.6z"/>
-      </svg>
+    <!-- 1. MAIN SPONSOR DESTRA -->
+    <div class="sponsor-slot sponsor-slot-fixed">
+      <img src="sponsor-fisso-dx.png" alt="Main Sponsor Destra" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+      <span class="hidden font-title text-zinc-900 text-xl tracking-wider text-center leading-tight">MAIN SPONSOR DX</span>
     </div>
     <!-- 2. ROTANTE DESTRA A -->
     <div class="sponsor-slot">
