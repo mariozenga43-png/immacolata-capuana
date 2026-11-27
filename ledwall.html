@@ -316,6 +316,12 @@ html, body {
 <!-- SCHERMO INTERO 3,00m x 2,00m -->
 <div id="ledwall-stage">
 
+  <!-- PULSANTE SBLOCCO AUDIO SAFARI (Scompare appena cliccato) -->
+  <button id="btn-sblocca-audio" onclick="sbloccaTuttoAudio()" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] bg-festive-red hover:bg-red-600 text-white border-2 border-festive-yellow px-6 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-[0_0_30px_rgba(0,0,0,0.95)] flex items-center gap-3 animate-bounce cursor-pointer">
+    <i class="fa-solid fa-volume-high text-festive-yellow text-xl"></i>
+    <span>Clicca qui per attivare l'audio dei video</span>
+  </button>
+
   <!-- ========================================================= -->
   <!-- BARRA LATERALE SINISTRA SPONSOR (4 RIQUADRI IDENTICI)     -->
   <!-- ========================================================= -->
@@ -485,7 +491,7 @@ html, body {
     <!-- ========================================================= -->
     <!-- MODALITÀ 6: VIDEO SPOILER VILLAGGIO DI BABBO NATALE       -->
     <!-- ========================================================= -->
-    <div id="show-babbo-video" class="hidden absolute inset-0 z-50 bg-black flex items-center justify-center">
+    <div id="show-babbo-video" class="opacity-0 pointer-events-none absolute inset-0 z-50 bg-black flex items-center justify-center">
       <video id="babbo-spoiler-player" src="spoiler-babbo-natale.mp4" class="w-full h-full object-contain" playsinline loop preload="auto"></video>
     </div>
 
@@ -506,13 +512,13 @@ html, body {
 
     <!-- ========================================================= -->
     <!-- MODALITÀ 9: 3 VIDEO SPOT MAIN SPONSOR BCC TERRA DI LAVORO -->
-    <!-- (3 player dedicati precaricati + canvas ambientale fluido) -->
+    <!-- (Sempre montati con opacity per sblocco audio Safari 100%) -->
     <!-- ========================================================= -->
-    <div id="show-bcc-video" class="hidden absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
+    <div id="show-bcc-video" class="opacity-0 pointer-events-none absolute inset-0 z-50 bg-white flex items-center justify-center overflow-hidden">
       <canvas id="bcc-ambient-canvas" width="64" height="64" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-95 pointer-events-none"></canvas>
-      <video id="bcc-player-1" src="spot-bcc-1.mp4" class="hidden relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
-      <video id="bcc-player-2" src="spot-bcc-2.mp4" class="hidden relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
-      <video id="bcc-player-3" src="spot-bcc-3.mp4" class="hidden relative z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
+      <video id="bcc-player-1" src="spot-bcc-1.mp4" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='spot-bcc.mp4';}" class="opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
+      <video id="bcc-player-2" src="spot-bcc-2.mp4" class="opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
+      <video id="bcc-player-3" src="spot-bcc-3.mp4" class="opacity-0 pointer-events-none absolute inset-0 z-10 w-full h-full object-contain" playsinline loop preload="auto"></video>
     </div>
 
   </main>
@@ -696,10 +702,63 @@ let currentIndex = 0;
 let slideshowInterval = null;
 
 // =========================================================================
-// GESTIONE FLUIDA VIDEO & SFONDO AMBIENTALE CANVAS (ZERO SCATTI)
+// GESTIONE AUDIO & SFONDO AMBIENTALE CANVAS (COMPATIBILE SAFARI MAC)
 // =========================================================================
 let activeBccVideo = null;
 let ambientTimer = null;
+let audioSbloccato = false;
+const videoIds = ['babbo-spoiler-player', 'bcc-player-1', 'bcc-player-2', 'bcc-player-3'];
+
+function mostraAvvisoAudio(mostra) {
+    const btn = document.getElementById('btn-sblocca-audio');
+    if (!btn) return;
+    if (mostra) {
+        btn.classList.remove('hidden');
+    } else {
+        btn.classList.add('hidden');
+    }
+}
+
+function sbloccaTuttoAudio() {
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+            const ctx = new AudioCtx();
+            if (ctx.state === 'suspended') ctx.resume();
+        }
+    } catch (e) {}
+
+    videoIds.forEach(id => {
+        const v = document.getElementById(id);
+        if (!v) return;
+        v.muted = false;
+        v.volume = 1.0;
+
+        const isAttivo = v.dataset.attivo === '1';
+        if (isAttivo) {
+            v.play().catch(() => {});
+        } else {
+            // Sblocca il permesso audio del singolo elemento <video> in Safari senza mostrarlo
+            const p = v.play();
+            if (p !== undefined) {
+                p.then(() => {
+                    if (v.dataset.attivo !== '1') {
+                        v.pause();
+                        try { v.currentTime = 0; } catch (e) {}
+                    }
+                }).catch(() => {});
+            }
+        }
+    });
+
+    audioSbloccato = true;
+    mostraAvvisoAudio(false);
+}
+
+// Qualsiasi clic sullo schermo attiva subito l'audio
+document.addEventListener('click', () => {
+    sbloccaTuttoAudio();
+});
 
 function avviaSfondoAmbientale(videoEl) {
     activeBccVideo = videoEl;
@@ -728,40 +787,25 @@ function fermaSfondoAmbientale() {
 
 function avviaVideoConAudio(player) {
     if (!player) return;
+    player.dataset.attivo = '1';
     try { player.currentTime = 0; } catch (e) {}
     player.muted = false;
     player.volume = 1.0;
 
     const playPromise = player.play();
     if (playPromise !== undefined) {
-        playPromise.catch(() => {
+        playPromise.then(() => {
+            if (!player.muted) {
+                mostraAvvisoAudio(false);
+            }
+        }).catch(() => {
+            // Se Safari blocca l'audio automatico perché non c'è ancora stato un clic, avvia muto e mostra il pulsante di sblocco
             player.muted = true;
+            mostraAvvisoAudio(true);
             player.play().catch(err => console.error('Errore riproduzione video:', err));
         });
     }
 }
-
-// Sblocca tutti e 4 i player video al primo clic sullo schermo così ogni cambio successivo è istantaneo e con audio
-let audioSbloccato = false;
-document.addEventListener('click', () => {
-    const ids = ['babbo-spoiler-player', 'bcc-player-1', 'bcc-player-2', 'bcc-player-3'];
-    ids.forEach(id => {
-        const v = document.getElementById(id);
-        if (!v) return;
-        v.muted = false;
-        v.volume = 1.0;
-        const isVisibile = !v.classList.contains('hidden') && !v.parentElement.classList.contains('hidden');
-        if (isVisibile) {
-            if (v.paused) v.play().catch(() => {});
-        } else if (!audioSbloccato) {
-            v.play().then(() => {
-                v.pause();
-                try { v.currentTime = 0; } catch (e) {}
-            }).catch(() => {});
-        }
-    });
-    audioSbloccato = true;
-});
 
 async function controllaRegia() {
     try {
@@ -807,15 +851,18 @@ function applicaModalita(mod) {
 
     fermaSfondoAmbientale();
 
-    // Ferma e nasconde tutti i player video prima di attivare la nuova modalità
+    // Ferma e rende trasparenti tutti i player video mantenendoli montati nel DOM
     if (videoPlayer) {
+        videoPlayer.dataset.attivo = '0';
         videoPlayer.pause();
         try { videoPlayer.currentTime = 0; } catch (e) {}
     }
     bccPlayers.forEach(p => {
         if (p) {
+            p.dataset.attivo = '0';
             p.pause();
-            p.classList.add('hidden');
+            p.classList.add('opacity-0', 'pointer-events-none');
+            p.classList.remove('opacity-100');
             try { p.currentTime = 0; } catch (e) {}
         }
     });
@@ -826,10 +873,10 @@ function applicaModalita(mod) {
     showPino.classList.add('hidden');
     showIzzo.classList.add('hidden');
     showDdm.classList.add('hidden');
-    showBabboVideo.classList.add('hidden');
+    showBabboVideo.classList.add('opacity-0', 'pointer-events-none');
     showBabboQr.classList.add('hidden');
     showBabboLocandina.classList.add('hidden');
-    showBccVideo.classList.add('hidden');
+    showBccVideo.classList.add('opacity-0', 'pointer-events-none');
 
     if (mod === 'live') {
         topBarLive.classList.remove('hidden');
@@ -843,7 +890,7 @@ function applicaModalita(mod) {
     } else if (mod === 'ddm') {
         showDdm.classList.remove('hidden');
     } else if (mod === 'babbo_video') {
-        showBabboVideo.classList.remove('hidden');
+        showBabboVideo.classList.remove('opacity-0', 'pointer-events-none');
         avviaVideoConAudio(videoPlayer);
     } else if (mod === 'babbo_qr') {
         showBabboQr.classList.remove('hidden');
@@ -855,9 +902,10 @@ function applicaModalita(mod) {
         if (mod === 'bcc_video_3') idx = 2;
 
         const targetPlayer = bccPlayers[idx];
-        showBccVideo.classList.remove('hidden');
+        showBccVideo.classList.remove('opacity-0', 'pointer-events-none');
         if (targetPlayer) {
-            targetPlayer.classList.remove('hidden');
+            targetPlayer.classList.remove('opacity-0', 'pointer-events-none');
+            targetPlayer.classList.add('opacity-100');
             avviaSfondoAmbientale(targetPlayer);
             avviaVideoConAudio(targetPlayer);
         }
